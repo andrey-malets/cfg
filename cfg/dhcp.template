@@ -1,0 +1,54 @@
+ddns-update-style none;
+# always-broadcast true;
+# option definitions common to all supported networks...
+
+option space ipxe;
+option ipxe-encap-opts code 175 = encapsulate ipxe;
+option ipxe.keep-san   code 8   = unsigned integer 8;
+option ipxe.scriptlet  code 81  = string;
+
+option domain-name "runc.urgu.org";
+option domain-search "local", "runc.urgu.org", "urgu.org", "usu.local";
+
+option w-d code 135 = domain-list;
+option w-d "runc.urgu.org", "urgu.org", "usu.local";
+
+option classless-route code 121 = string;
+
+option domain-name-servers  194.226.244.126;
+option netbios-name-servers 172.16.10.250;
+option netbios-node-type 2; # node type
+                            # 1 = B-node ;netbios Broadcast only
+                            # 2 = P-node ;netbios unicast to the wins server
+                            # 4 = M-node ;netbios Mixed node (P and B)
+                            # 8 = H-node ;netbios Hybrids mode (Always P until fail then B)
+
+default-lease-time 3600;
+max-lease-time 3600;
+
+authoritative;
+
+log-facility local7;
+
+server-name "dijkstra.urgu.org";
+next-server 194.226.244.126;
+filename "runc.kpxe";
+{% for network in networks %}
+subnet {{ network.get_addr() }} netmask {{ network.get_mask() }} {
+    {% if network.get_dhcp() -%}
+    range {{ network.get_dhcp()[0] }} {{ network.get_dhcp()[1] }};
+    {% endif -%}
+    option routers {{ network.get_router() }};
+}
+{% endfor %}
+
+{%- for host in hosts %}
+host {{ host.name }} {
+    fixed-address             {{ host.addr }};
+    hardware ethernet         {{ host.mac }};
+    option host-name         "{{ host.hostname }}";
+    {%- for name, value in host.params.iteritems() %}
+    option {{ "%-17s"|format(name) }} "{{ value }}";
+    {%- endfor %}
+}
+{% endfor %}

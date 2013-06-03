@@ -1,0 +1,46 @@
+urgu.org.  36000   IN      SOA     dijkstra.urgu.org. uzer.hackerdom.ru. (
+                2013050900 36000 900 604800 36000 )
+	36000	IN	NS	ns0.urgu.org.
+	36000	IN	NS	ns1.urgu.org.
+	36000   IN      A	194.226.244.126
+	3600	IN	MX	1  ASPMX.L.GOOGLE.COM.
+	3600	IN	MX	5  ALT1.ASPMX.L.GOOGLE.COM.
+	3600	IN	MX	5  ALT2.ASPMX.L.GOOGLE.COM.
+	3600	IN	MX	10 ASPMX2.GOOGLEMAIL.COM.
+	3600	IN	MX	10 ASPMX3.GOOGLEMAIL.COM.
+
+$ORIGIN urgu.org.
+
+ns0		36000	IN	A	195.19.132.27
+ns1		36000	IN	A	194.226.244.126
+
+mail		3600	IN	CNAME	ghs.google.com.
+
+fb		36000	IN	NS	ns1
+runc		36000	IN	NS	dijkstra
+
+dijkstra	3600	IN	MX 10	dijkstra.urgu.org.
+puppet		3600	IN	CNAME	dijkstra
+ssl		3600	IN	A	194.226.244.126
+
+x._domainkey.dijkstra	IN	TXT	"v=DKIM1; k=rsa; p=MHwwDQYJKoZIhvcNAQEBBQADawAwaAJhANAF7WyY2zwE7fkW4VNzIZwlGwQBuY8i3PKAub56doiCtweVHR29TS7TjWSvPurT7aWeFGUuGKIPPw4AqZ3PL+9aV1tN2C5fGCca0STbHFo4qyWWQHS8H+6tAt8x/xrO8QIDAQAB"
+dijkstra	3600	IN	SPF	"v=spf1 a"
+dijkstra	3600	IN	TXT	"v=spf1 a"
+
+tigra		3600	IN	CNAME	tigra.usaaa.ru.
+licklider	3600	IN	CNAME	stor.math.usu.ru.
+
+mirrors		3600	IN	CNAME	mirror.yandex.ru.
+mirror		3600	IN	CNAME	mirror.yandex.ru.
+
+114             3600    IN      PTR     ms.urgu.org.
+115		3600	IN	PTR	airlab.math.usu.ru.
+126		3600	IN	PTR	dijkstra.urgu.org.
+
+{% for host in hosts %}
+{{ "%-16s"|format(host.name) }} IN A     {{ host.addr }}
+{%- for alias in host.aliases %}
+{{ "%-16s"|format(alias) }} IN CNAME {{ host.name }}
+{%- endfor -%}
+{%- endfor %}
+; vim: sw=8 ts=8 ft=none noexpandtab

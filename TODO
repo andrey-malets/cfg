@@ -1,0 +1,15 @@
+# TODO:
+# ? dhcp(multiple macs, custom options)
+#   dns(forward, reverse, CNAMEs, split zone)
+# 
+#   iptables(ports, users, access!)
+#   nagios(pings, services, parents)
+#   nginx(reverse-proxy, per-machine file access)
+#   wiki(descriptions, ip-map)
+#   get-free-ip-in-subnet
+#   ssh config
+#   puppet (public key list, exim, syslog, ...)
+#
+#   groups: priorities by topological sort?
+#   macs: short second, almost always one
+#   or two chars different from the first

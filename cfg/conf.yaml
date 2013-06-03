@@ -1,0 +1,205 @@
+people:
+- [ilya,    "Ilya Zelenchuk",     ilya@hackerdom.ru]
+- [uzer,    "Andrey Malets",      andrey.malets@gmail.com]
+- [znick,   "Nickolai Zhuravlev", znick@znick.ru]
+- [vsamun,  "Victor Samun",       victor.samun@gmail.com]
+
+networks:
+- [172.16.9/24,        172.16.9.253]
+- [172.16.10/24,       172.16.10.253,   {dhcp: '1-128'}]
+- [172.16.11/24,       172.16.11.253,   {dhcp: '40-252'}]
+- [172.16.12/24,       172.16.12.253,   {dhcp: '30-252'}]
+- [172.16.50/24,       172.16.50.254,   {dhcp: '1-240'}]
+- [194.226.244.112/28, 194.226.244.114]
+
+groups:
+- [servers,  '^(m|mm|h|t|r|l)$',                {services: [ssh], admin: uzer}]
+- [ssh,      '(uzer-pc.runc)',                  {services: [ssh]}]
+- [netboot,  '(uzer-pc.runc)',                  {dhcp: {ipxe.scriptlet: cow}}]
+- [switches, '.+-switch',                       {services: [http], admin: uzer}]
+- [hog-amt,  'h\d\d',                           {services: [amt]}]
+- [621-pcs,  '621-\d\d',                        {admin: vsamun}]
+- [hogs,     'hog(\d\d|-vm).runc',              {services: [ssh], admin: uzer, dhcp: {ipxe.scriptlet: cow-r}}]
+- [hs,       'h\d\d',                           {services: [amt], admin: uzer}]
+- [aps,      '(.+-ap|ap\d)',                    {services: [http], admin: uzer}]
+- [ipmi,     '.+-ipmi',                         {services: [ipmi]}]
+- [mplan,    '.+-mplan',                        {services: [mplan]}]
+- [embedded, [ipmi, aps, switches]]
+- [window$,  '^((stream-pc|cuda-pc)\.runc|l)$', {services: [mstsc]}]
+
+hosts:
+- [[621-switch, s6],      9.1,     001ec12d7240]
+- [ it2,                  9.2]     #?
+- [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {fb: [10.229, '11.240', '12.250']}]
+- [[mmarkov, mm],         9.4,     000c29dfeeff]
+- [[hamming, h],          9.5,    [000423d6896e, 000423d6896f]]
+- [[630-switch, bs],      9.6,     001b11c344e6]
+- [[hp-switch, hps],      9.7, ]   #?
+- [[hog-switch, hs],      9.8,     001ac1d1a981]
+- [[hog-ap, hap],         9.9,     00259c3171aa]
+- [[licklider, l],       '9.10']   #?
+- [[hog-ups, hu],         9.11,    00c0b7598b9d] 
+- [[neumann, n],          9.12,    001b211597b4]  #?
+- [[storage-mplan, s-m],  9.13]    #?
+- [[it2-mplan,it2-m],     9.14]    #?
+- [[it-mplan,it-m],       9.15]    #?
+- [[dell-mplan,dell-m],   9.16]    #?
+- [ ap0,                  9.17,    001225556be2]
+- [[markov-ipmi, m-i],    9.18,    0015176b9b3e]
+- [[hamming-ipmi, h-i],   9.19,    000423d68970]
+- [ ap1,                 '9.20',  '001225557506']
+- [[tesla, t],            9.21,    001e670fafcc]
+- [[tesla-ipmi, t-i],     9.22]
+- [[633-ups, bfu],        9.23,    00c0b731da0e]
+- [[airlab-switch, as],   9.24,    001b11c34547]
+- [[ritchie-ipmi, r-i],   9.25,    001e670fac42]
+- [[ritchie, r],          9.26]    #?
+#   dijkstra              9.254
+
+- [ anytask-back,         10.215,  001851ad5d74, {backend_for: anytask.urgu.org}]
+#   free                  10.216
+#   free                  10.217
+#   free                  10.218
+#   free                  10.219
+#   free                 '10.220'
+- [ znick-pc.runc,        10.221,  001cc0641451] #?
+- [ irc-back,             10.222,  001851bcb7a7, {backend_for: irc.hackerdom.ru}]
+- [ dc3.runc,             10.223,  00163a34f84d]
+#   free                  10.224
+- [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
+#   free                  10.226
+- [ uzer-dell,            10.227,  5cac4c986dc7]
+- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
+#   markov-fastbone       10.229
+- [ shad-cpp.runc,       '10.230', 000c38ad9962]
+#   free                  10.231
+#   free                  10.232
+#   free                  10.233
+- [ uzer-pc.runc,         10.234,  001b211597b4]
+- [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru}]
+- [ stream-pc.runc,       10.236,  001cc009f4af]
+- [ cuda-pc.runc,         10.237]
+- [ itanium,              10.238]  #?
+- [ itanium2,             10.239]  #?
+- [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru}]
+- [ tb,                   10.241,  001851d78a0a]
+- [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru}]
+- [ mysql.runc,           10.243,  0018512e4ea0]
+- [ 633-scanner,          10.244,  00c0ee25d6b1]
+- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: hackerdom.ru}]
+- [ 633-printer,          10.246,  00c0ee1c9a28]
+- [ hog.runc,             10.247,  000c29ad7767]
+#   licklider-fastbone    10.248
+- [ dc4.runc,             10.249,  00163a34f855]
+- [ class.runc,          '10.250', 000c292e076a]
+- [ codd.runc,            10.251,  00163a34e94d]
+- [ class-db,             10.252,  00163e45e63d] #?
+#   main-switch           10.253
+#   dijkstra              10.254
+
+- [[pioneer, p],          18.1]
+
+- [ dcimap-vm,            50.100,  000c29ad8762]
+- [ dcimap-scanner,       50.245,  00c0ee25d6ae]
+- [ dcimap-printer,       50.246,  00c0ee1c78a8]
+- [ dcimap-sheka,         50.248,  0019d17ebab2]
+- [ dcimap-webcam,        50.252,  0002d115a721]
+
+#   free                  194.226.244.113
+- [[main-switch, ms],     194.226.244.114, 001cc534d301]
+- [ airlab.math.usu.ru,   194.226.244.115, 000c29ad7662]
+#   free                  194.226.244.116
+#   free                  194.226.244.117
+#   free                  194.226.244.118
+#   free                  194.226.244.119
+#   free                 '194.226.244.120'
+#   free                  194.226.244.121
+#   free                  194.226.244.122
+- [ honeypot,             194.226.244.123, 000c29cbbcf7]
+#   free                  194.226.244.124
+#   free                  194.226.244.125
+- [[dijkstra, d, v, anytask, puppet, r4u, ssl, status, wiki],
+                          194.226.244.126, 0002a54f11c2]
+
+- [ babbage.usu.edu.ru,      194.226.235.251]
+- [ loa.imm.uran.ru ]
+- [ mx1.eunnet.net ]
+- [ ns.usu.ru,               194.226.235.22]
+- [ overclocking.usu.edu.ru, 194.226.235.187]
+- [ ructf.org,               194.226.235.189]
+- [ splinex.dyndns.org ]
+- [ um64.imm.uran.ru ]
+- [ usu-math.usu.ru,         194.226.235.254]
+
+- [ 621-01,  11.1,   001cc044c5fc]
+- [ 621-02,  11.2,   001cc044c7fc]
+- [ 621-03,  11.3,   001cc044c719]
+- [ 621-04,  11.4,   001cc044c707]
+- [ 621-05,  11.5,   001cc044c725]
+- [ 621-06,  11.6,   001cc044c5f6]
+- [ 621-07,  11.7,   001cc044c76e]
+- [ 621-08,  11.8,   001cc044c8b2]
+- [ 621-09,  11.9,   001cc044c622]
+- [ 621-10, '11.10', 001cc044c7de]
+- [ 621-11,  11.11,  001cc044c69a]
+- [ 621-12,  11.12,  001cc044c5e1]
+- [ 621-13,  11.13,  001cc044c911]
+- [ 621-14,  11.14,  001cc044c67d]
+
+- [ hog01.runc,   12.1,    0019d17ebcce]
+- [ hog02.runc,   12.2,    0019d17ebb9f]
+- [ hog03.runc,   12.3,    0019d17e9e1f]
+- [ hog04.runc,   12.4,    0019d17e94de]
+- [ hog05.runc,   12.5,    000c29ad7768, {dhcp: {ipxe.scriptlet: cow}}] # test vm
+- [ hog06.runc,   12.6,    0019d17e934c]
+- [ hog07.runc,   12.7,    0019d17e85a5]
+- [ hog08.runc,   12.8,    0019d17f037c]
+- [ hog09.runc,   12.9,    0019d17f049e]
+- [ hog10.runc,  '12.10',  0019d17eb922]
+- [ hog11.runc,   12.11,   0019d17ebcd5]
+- [ hog12.runc,   12.12,   0019d17e9dd4]
+- [ hog13.runc,   12.13,   0019d17f04d9]
+- [ hog14.runc,   12.14,   0019d17e9dc1]
+- [ hog15.runc,   12.15,   0019d17e9de4]
+- [ hog16.runc,   12.16,   0019d17f044c]
+- [ hog17.runc,   12.17,   0019d17e63c6]
+- [ hog18.runc,   12.18,   0019d17ebc09]
+- [ hog19.runc,   12.19,   0019d17ebcd3]
+- [ hog20.runc,  '12.20',  0019d17eb926]
+- [ hog21.runc,   12.21,   0019d17e9dbe]
+- [ hog22.runc,   12.22,   0019d17e97e4]
+- [ hog23.runc,   12.23,   0019d17f0420]
+- [ hog24.runc,   12.24,   0019d17f047c]
+- [ hog25.runc,   12.25,   0019d17e9de0]
+- [ hog26.runc,   12.26,   0019d17e9c6f]
+- [ hog27.runc,   12.27,   0019d17e9d99]
+- [ hog28.runc,   12.28,   0019d17e922d]
+- [ hog-vm.runc, '12.100', 000c29ad7762]
+
+- [ h01,  20.1,   0019d17ebccf ]
+- [ h02,  20.2,   0019d17ebba0 ]
+- [ h03,  20.3,   0019d17e9e20 ]
+- [ h04,  20.4,   0019d17e94e0 ]
+- [ h06,  20.6,   0019d17e934d ]
+- [ h07,  20.7,   0019d17e85a6 ]
+- [ h08,  20.8,   0019d17f037d ]
+- [ h09,  20.9,   0019d17f049f ]
+- [ h10, '20.10', 0019d17eb923 ] #?
+- [ h11,  20.11,  0019d17ebcd6 ]
+- [ h12,  20.12,  0019d17e9dd5 ]
+- [ h13,  20.13,  0019d17f04da ]
+- [ h14,  20.14,  0019d17e9dc3 ]
+- [ h15,  20.15,  0019d17e9de6 ]
+- [ h16,  20.16,  0019d17f044d ]
+- [ h17,  20.17,  0019d17e63c7 ]
+- [ h18,  20.18,  0019d17ebc0a ]
+- [ h19,  20.19,  0019d17ebcd4 ]
+- [ h20, '20.20', 0019d17eb927 ]
+- [ h21,  20.21,  0019d17e9dbf ]
+- [ h22,  20.22,  0019d17e97e5 ]
+- [ h23,  20.23,  0019d17f0421 ]
+- [ h24,  20.24,  0019d17f047d ]
+- [ h25,  20.25,  0019d17e9de1 ]
+- [ h26,  20.26,  0019d17e9c70 ]
+- [ h27,  20.27,  0019d17e922e ] #?
+- [ h28,  20.28,  000c29ad7763 ] #?
