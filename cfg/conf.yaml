@@ -69,7 +69,7 @@ hosts:
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
 #   free                  10.226
 - [ uzer-dell,            10.227,  5cac4c986dc7]
-- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
+# - [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
 - [ shad-cpp.runc,       '10.230', 000c38ad9962]
 #   free                  10.231
