@@ -1,5 +1,7 @@
 import re
+
 from util import ValueFromGroup, primitive
+import defaults
 
 class Host:
     @staticmethod
@@ -7,26 +9,21 @@ class Host:
         return '{}:{}:{}:{}:{}:{}'.format(mac[0:2], mac[2:4],  mac[4:6],
                                           mac[6:8], mac[8:10], mac[10:12])
     @staticmethod
-    def expand_name(name):
-        return ('%s.urgu.org' % name
-            if name.endswith('.runc') or '.' not in name
-            else name)
-
-    @staticmethod
     def get_type(name):
         for htype in ['ap', 'switch', 'ups', 'ipmi', 'amt']:
             if name.endswith('-%s' % htype): return htype
         return 'host'
 
     def __init__(self, data):
+        default = defaults.get()
         names = data.pop(0)
         if type(names) == list:
             self.sname    = names[0]
-            self.name     = Host.expand_name(names.pop(0))
-            self.aliases  = map(Host.expand_name, names)
+            self.name     = default.expand(names.pop(0))
+            self.aliases  = map(default.expand, names)
             self.saliases = names
         else:
-            self.name    = Host.expand_name(names)
+            self.name    = default.expand(names)
             self.sname   = names
             self.aliases = []
             self.saliases = []

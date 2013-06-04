@@ -4,6 +4,13 @@ people:
 - [znick,   "Nickolai Zhuravlev", znick@znick.ru]
 - [vsamun,  "Victor Samun",       victor.samun@gmail.com]
 
+defaults:
+  network_prefix: '172.16'
+  domains:
+    default: 'urgu.org'
+    '.runc': '.runc.urgu.org'
+    '.usu' : '.usu.edu.ru'
+
 networks:
 - [172.16.9/24,        172.16.9.253]
 - [172.16.10/24,       172.16.10.253,   {dhcp: '1-128'}]
