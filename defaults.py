@@ -1,3 +1,5 @@
+import re
+
 class Defaults:
     _instance = None
 
@@ -18,7 +20,7 @@ class Defaults:
             if key == 'default': self.def_domain = value
             else: self.domains[key] = value
 
-    def expand(self, host):
+    def expand_host(self, host):
         if '.' in host:
             for patt, subst in self.domains.iteritems():
                 if host.endswith(patt):
@@ -30,6 +32,11 @@ class Defaults:
         else:
             raise Exception(("""host "%s" with default domain but""" +
                              """no default domain configured""") % host)
+
+    def expand_ip(self, ip):
+        return ('%s.%s' % (self.network_prefix, ip)
+                if not re.match('^\d+\.\d+\.\d+\.\d+$', str(ip))
+                else ip)
 
 def init(data):
     Defaults._instance = Defaults(data)

@@ -19,24 +19,18 @@ class Host:
         names = data.pop(0)
         if type(names) == list:
             self.sname    = names[0]
-            self.name     = default.expand(names.pop(0))
-            self.aliases  = map(default.expand, names)
+            self.name     = default.expand_host(names.pop(0))
+            self.aliases  = map(default.expand_host, names)
             self.saliases = names
         else:
-            self.name    = default.expand(names)
+            self.name    = default.expand_host(names)
             self.sname   = names
             self.aliases = []
             self.saliases = []
 
         self.htype = Host.get_type(self.sname)
 
-        if len(data):
-            addr = data.pop(0)
-            self.addr    = ('172.16.%s' % addr
-                                if re.match('^\d+\.\d+$', str(addr))
-                                else addr)
-        else:
-            self.addr    = None
+        self.addr = default.expand_ip(data.pop(0)) if len(data) else None
 
         if len(data) and type(data[0]) is not dict:
             macs = data.pop(0)
@@ -75,7 +69,7 @@ class Host:
 
     def __str__(self):
         return '{}: {}, aliases: {}, address: {}, macs: {}, props: {}'.format(
-            self.htype, self.sname, self.aliases, self.addr, self.macs, self.props)
+            self.htype, self.name, self.aliases, self.addr, self.macs, self.props)
     def __repr__(self):
         return '{} "{}"'.format(self.htype, self.sname)
 
