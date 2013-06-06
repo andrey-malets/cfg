@@ -28,7 +28,8 @@ class Network:
     def __str__(self):
         return '%s/%s' % (self.get_addr(), self.get_mask())
 
-    def has(self, host): return Network.stoi(host.addr) & self.mask == self.addr
+    def has(self, host):
+        return Network.stoi(host.addr) & self.mask == self.addr if host.addr else False
 
     def get_addr(self): return Network.itos(self.addr)
 
