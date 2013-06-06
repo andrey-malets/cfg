@@ -3,7 +3,7 @@ import jinja2
 def gen_fwd(hosts, zone, template):
     params = []
     for host in hosts:
-        if host.name.find('.') == host.name.find(zone)-1:
+        if host.name.find('.') == host.name.find(zone) - 1:
             params.append({'name'    : host.name.split('.')[0],
                            'addr'    : host.addr,
                            'aliases' : host.saliases})
@@ -16,7 +16,7 @@ def get_rname(host, network):
 
 def gen_reverse(hosts, network, template):
     params = []
-    assert (network.count % 8) == 0, ('no supported for %d' % network.count)
+    assert (network.count % 8) == 0, ('not supported for %d' % network.count)
     for host in hosts:
         if host.addr != None and network.has(host):
             params.append({'name' : host.name,
