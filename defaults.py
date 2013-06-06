@@ -6,7 +6,7 @@ class Defaults:
 
     def __init__(self, data, errors):
         def check(data, item, descr):
-            if not item in data:
+            if type(data) is not dict or not item in data:
                 errors.append(ValidationError('no %s' % descr))
             else:
                 return data[item]
@@ -16,18 +16,21 @@ class Defaults:
         self.domains = {}
         self.def_domain = None
 
-        for key, value in check(data, 'domains', 'domain substitution rules').iteritems():
-            if key == 'default':
-                self.def_domain = value
-            else:
-                for oldkey in self.domains.iterkeys():
-                    if key.endswith(oldkey) or oldkey.endswith(key):
-                        errors.append(ValidationError('two keys in domain defaults config have ' +
-                            ('common suffix: %s and %s' % (key, oldkey))))
-                self.domains[key] = value
+        domains = check(data, 'domains', 'domain substitution rules')
 
-        if not self.def_domain:
-            errors.append(ValidationError('no default domain configured'))
+        if type(domains) == dict:
+            for key, value in domains.iteritems():
+                if key == 'default':
+                    self.def_domain = value
+                else:
+                    for oldkey in self.domains.iterkeys():
+                        if key.endswith(oldkey) or oldkey.endswith(key):
+                            errors.append(ValidationError('two keys in domain defaults config have ' +
+                                ('common suffix: %s and %s' % (key, oldkey))))
+                    self.domains[key] = value
+
+            if not self.def_domain:
+                errors.append(ValidationError('no default domain configured'))
 
     def expand_host(self, host):
         if '.' in host:
