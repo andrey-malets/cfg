@@ -17,6 +17,7 @@ class Network:
     def __init__(self, data):
         addr, mask  = data.pop(0).split('/')
         self.addr   = Network.stoi(addr)
+        self.count  = int(mask)
         self.mask   = -1 << (32-int(mask))
         self.router = Network.stoi(data.pop(0))
         self.props  = {} if not len(data) else data.pop(0)

@@ -27,12 +27,15 @@ if __name__ == '__main__':
         for error in errors: print >> sys.stderr, 'Error: %s' % error
         sys.exit(1)
     else:
-        with open('cfg/dhcp.template', 'r') as dhcpt:
-            template = dhcpt.read()
-        print dhcp.gen(hosts, networks, template)
+        #with open('cfg/dhcp.template', 'r') as dhcpt:
+        #    template = dhcpt.read()
+        #print dhcp.gen(hosts, networks, template)
         #with open('cfg/urgu.org.template', 'r') as dnst:
         #    template = dnst.read()
         #print dns.gen_fwd(hosts, 'urgu.org', template)
+        with open('cfg/adm.template', 'r') as dnst:
+            template = dnst.read()
+        print dns.gen_reverse(hosts, networks[0], template)
         #print ''.join(iptables.gen_ports(hosts, '194.226.244.126', 'server'))
         #print dns.gen_fwd(hosts, 'urgu.org')
         #for host in hosts: print host
