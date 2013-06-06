@@ -1,24 +1,33 @@
 import re
+from util import ValidationError
 
 class Defaults:
     _instance = None
 
-    @staticmethod
-    def check(data, item, descr):
-        if not item in data:
-            raise Exception('no %s' % descr)
-        else:
-            return data[item]
+    def __init__(self, data, errors):
+        def check(data, item, descr):
+            if not item in data:
+                errors.append(ValidationError('no %s' % descr))
+            else:
+                return data[item]
 
-    def __init__(self, data):
-        self.network_prefix = self.check(data, 'network_prefix', 'default network prefix')
+        self.network_prefix = check(data, 'network_prefix', 'default network prefix')
 
         self.domains = {}
         self.def_domain = None
 
-        for key, value in self.check(data, 'domains', 'domain substitution rules').iteritems():
-            if key == 'default': self.def_domain = value
-            else: self.domains[key] = value
+        for key, value in check(data, 'domains', 'domain substitution rules').iteritems():
+            if key == 'default':
+                self.def_domain = value
+            else:
+                for oldkey in self.domains.iterkeys():
+                    if key.endswith(oldkey) or oldkey.endswith(key):
+                        errors.append(ValidationError('two keys in domain defaults config have ' +
+                            ('common suffix: %s and %s' % (key, oldkey))))
+                self.domains[key] = value
+
+        if not self.def_domain:
+            errors.append(ValidationError('no default domain configured'))
 
     def expand_host(self, host):
         if '.' in host:
@@ -27,11 +36,7 @@ class Defaults:
                     return host[0:host.rindex(patt)] + subst
             return host
 
-        elif self.def_domain:
-            return '%s.%s' % (host, self.def_domain)
-        else:
-            raise Exception(("""host "%s" with default domain but""" +
-                             """no default domain configured""") % host)
+        return '%s.%s' % (host, self.def_domain)
 
     def expand_ip(self, ip):
         return ('%s.%s' % (self.network_prefix, ip)
@@ -39,7 +44,9 @@ class Defaults:
                 else ip)
 
 def init(data):
-    Defaults._instance = Defaults(data)
+    errors = []
+    Defaults._instance = Defaults(data, errors)
+    return errors
 
 def get():
     if Defaults._instance:

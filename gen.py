@@ -11,19 +11,20 @@ import dhcp, dns, iptables
 
 if __name__ == '__main__':
     cfg = yaml.load(sys.stdin)
-    defaults.init(cfg['defaults'])
+    errors = []
+    errors.extend(defaults.init(cfg['defaults']))
+
     hosts    = map(lambda data: Host(data),    cfg['hosts'])
     networks = map(lambda data: Network(data), cfg['networks'])
     groups   = map(lambda data: Group(data),   cfg['groups'] if 'groups' in cfg else [])
     users    = cfg['users'] if 'users' in cfg else []
 
-    errors = []
     errors.extend(check_hosts(hosts))
     errors.extend(expand_groups(groups, hosts))
     for host in hosts: host.clean()
 
     if len(errors):
-        for error in errors: print 'Error: %s' % error
+        for error in errors: print >> sys.stderr, 'Error: %s' % error
         sys.exit(1)
     else:
         with open('cfg/dhcp.template', 'r') as dhcpt:
