@@ -29,19 +29,19 @@ if __name__ == '__main__':
     else:
         #with open('cfg/dhcp.template', 'r') as dhcpt:
         #    template = dhcpt.read()
-        #print dhcp.gen(hosts, networks, template)
+        #print dhcp.gen(hosts, template, networks)
 
         #with open('cfg/urgu.org.template', 'r') as dnst:
         #    template = dnst.read()
-        #print dns.gen_fwd(hosts, 'urgu.org', template)
+        #print dns.gen_fwd(hosts, template, 'urgu.org')
 
-        with open('cfg/reverse.template', 'r') as rdnst:
-            template = rdnst.read()
-        print dns.gen_reverse(hosts, networks[0], template)
-
-        #with open('cfg/fb.template', 'r') as rdnst:
+        #with open('cfg/reverse.template', 'r') as rdnst:
         #    template = rdnst.read()
-        #print dns.gen_fb(hosts, networks[1], template)
+        #print dns.gen_reverse(hosts, template, networks[0])
+
+        with open('cfg/fb.template', 'r') as rdnst:
+            template = rdnst.read()
+        print dns.gen_fb(hosts, template, networks[2])
 
         #print ''.join(iptables.gen_ports(hosts, '194.226.244.126', 'server'))
 

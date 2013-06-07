@@ -1,6 +1,6 @@
 # TODO:
 # + dhcp(multiple macs, custom options)
-#   dns(forward, reverse, CNAMEs, split zone)
+# + dns(forward, reverse, CNAMEs, split zone)
 # 
 #   iptables(ports, users, access!)
 #   nagios(pings, services, parents)
@@ -10,6 +10,5 @@
 #   ssh config
 #   puppet (public key list, exim, syslog, ...)
 #
-#   groups: priorities by topological sort?
 #   macs: short second, almost always one
 #   or two chars different from the first
