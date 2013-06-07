@@ -31,7 +31,7 @@ class Host:
         self.htype = Host.get_type(self.sname)
 
         self.addr = default.expand_ip(data.pop(0)) if len(data) else None
-
+        
         if len(data) and type(data[0]) is not dict:
             macs = data.pop(0)
             self.macs = (map(Host.expand_mac, macs)
@@ -42,11 +42,11 @@ class Host:
 
         self.props = data[0] if len(data) else {}
 
-    def get_snames(self):
-        return [self.sname] + self.saliases
+        self.fb = map(default.expand_ip, self.props.get('fb', []))
 
-    def get_props(self):
-        return self.props
+    @property
+    def snames(self):
+        return [self.sname] + self.saliases
 
     def clean(self):
         def step(attr):
@@ -64,20 +64,15 @@ class Host:
                 assert False, "unknown type %s" % type(attr)
         self.props = step(self.props)
 
-    def get_name(self):
-        return self.sname
-
     def __str__(self):
         return '{}: {}, aliases: {}, address: {}, macs: {}, props: {}'.format(
             self.htype, self.name, self.aliases, self.addr, self.macs, self.props)
-    def __repr__(self):
-        return '{} "{}"'.format(self.htype, self.sname)
 
 def check_hosts(hosts):
     names = {}
     errors = []
     for host in hosts:
-        for sname in host.get_snames():
+        for sname in host.snames:
             if sname in names:
                 errors.append(Exception('duplicate name %s' % sname))
             names[sname] = host

@@ -18,7 +18,16 @@ def gen_reverse(hosts, network, template):
     params = []
     assert (network.count % 8) == 0, ('not supported for %d' % network.count)
     for host in hosts:
-        if network.has(host):
+        if network.has(host.addr):
             params.append({'name' : host.name,
                            'addr' : get_rname(host, network)})
+    return jinja2.Template(template).render(hosts=params)
+
+def gen_fb(hosts, network, template):
+    params = []
+    for host in hosts:
+        for addr in host.fb:
+            if network.has(addr):
+                params.append({'name' : host.name.split('.')[0],
+                               'addr' : addr})
     return jinja2.Template(template).render(hosts=params)

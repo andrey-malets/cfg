@@ -7,6 +7,8 @@ $TTL	86400
 			  86400 )	; Negative Cache TTL
 ;
 @	IN	NS	dijkstra.urgu.org.
+
+$ORIGIN fb.urgu.org.
 {% for host in hosts %}
-{{ host.addr }} IN PTR {{ "%-16s"|format(host.name) }}
+{{ "%-16s"|format(host.name) }} IN A {{ host.addr }}
 {%- endfor %}

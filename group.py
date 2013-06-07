@@ -4,32 +4,21 @@ from util import ValueFromGroup, ValidationError
 class Group:
     def __init__(self, data):
         self.name    = data.pop(0)
-        self.groups  = set(data.pop(0) if type(data[0]) == list else [])
+        self.childs  = set(data.pop(0) if type(data[0]) == list else [])
         self.pattern = (re.compile(data.pop(0))
             if len(data) and type(data[0]) == str else None)
         self.props   = data.pop(0) if len(data) else {}
 
     def __str__(self):
-        return '{}: groups: {}, pattern: {}'.format(
-            self.name, self.groups, self.pattern)
-    def __repr__(self):
-        return 'Group "%s"' % self.name
-
-    def get_name(self):
-        return self.name
-
-    def get_childs(self):
-        return self.groups
+        return '{}: childs: {}, pattern: {}'.format(
+            self.name, self.childs, self.pattern)
 
     def remove_childs(self, bad_childs):
-        self.groups = self.groups - set(bad_childs)
-
-    def get_props(self):
-        return self.props
+        self.childs = self.childs - set(bad_childs)
 
     def get_matching(self, hosts):
         return filter(lambda host: any(map(lambda name:
-            self.pattern.match(name), host.get_snames())), hosts) if self.pattern else []
+            self.pattern.match(name), host.snames)), hosts) if self.pattern else []
 
 class MergeError(Exception):
     def __init__(self, message):
@@ -64,8 +53,7 @@ def merge(src, dst):
                     errors.append(MergeError(
                         ('string value "%s" for "%s" has no value in "%s" but ' +
                          'came from two diffrent groups: "%s" and "%s", can\'t merge') %
-                        (prop, name, dst.get_name(), src.get_name(),
-                         dprops[name].source.get_name())))
+                        (prop, name, dst.name, src.name, dprops[name].source.name)))
             elif type(prop) == list:
                 dprops[name] = (list(set(dprops[name] + prop))
                     if name in dprops else prop)
@@ -77,14 +65,14 @@ def merge(src, dst):
                     (name, type(prop))))
         return dprops
 
-    step(src.get_props(), dst.get_props())
+    step(src.props, dst.props)
     return errors
 
 def expand_groups(groups, hosts):
     def fold_names(groups):
         rv = {}
         for group in groups:
-            name = group.get_name()
+            name = group.name
             if name in rv:
                 errors.append(ValidationError('duplicate group name "%s"' % name))
             else:
@@ -94,10 +82,10 @@ def expand_groups(groups, hosts):
     def check_cycles(group_names):
         def step(group, stack):
             bad_childs = []
-            for child_name in group.get_childs():
+            for child_name in group.childs:
                 if child_name not in group_names:
                     errors.append(ValidationError('no such group "%s" in childs of "%s"' %
-                        (child_name, group.get_name())))
+                        (child_name, group.name)))
                     bad_childs.append(child_name)
                 else:
                     child = group_names[child_name]
@@ -117,7 +105,7 @@ def expand_groups(groups, hosts):
 
     for group in groups: group.parents = set()
     for group in groups:
-        for child_name in group.get_childs():
+        for child_name in group.childs:
             group_names[child_name].parents.add(group)
 
     empty = filter(empty_parents, groups)
@@ -125,7 +113,7 @@ def expand_groups(groups, hosts):
         group = empty.pop()
         for host in group.get_matching(hosts):
             errors.extend(merge(group, host))
-        for child_name in group.get_childs():
+        for child_name in group.childs:
             child = group_names[child_name]
             child.parents.remove(group)
             if empty_parents(child):
