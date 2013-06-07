@@ -39,11 +39,11 @@ if __name__ == '__main__':
         #    template = rdnst.read()
         #print dns.gen_reverse(hosts, template, networks[0])
 
-        #with open('cfg/fb.template', 'r') as rdnst:
-        #    template = rdnst.read()
-        #print dns.gen_fb(hosts, template, networks[2])
+        with open('cfg/fb.template', 'r') as rdnst:
+            template = rdnst.read()
+        print dns.gen_fb(hosts, template, networks[2])
 
-        print ''.join(iptables.gen_ports(hosts, '194.226.244.126', 'server'))
+        #print ''.join(iptables.gen_ports(hosts, '194.226.244.126', 'server'))
 
         #for host in hosts: print host
         #for network in networks: print network; print network.get_dhcp()
