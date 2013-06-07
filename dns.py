@@ -18,7 +18,7 @@ def gen_reverse(hosts, network, template):
     params = []
     assert (network.count % 8) == 0, ('not supported for %d' % network.count)
     for host in hosts:
-        if host.addr != None and network.has(host):
+        if network.has(host):
             params.append({'name' : host.name,
                            'addr' : get_rname(host, network)})
     return jinja2.Template(template).render(hosts=params)

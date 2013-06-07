@@ -29,8 +29,8 @@ class Defaults:
                                 ('common suffix: %s and %s' % (key, oldkey))))
                     self.domains[key] = value
 
-            if not self.def_domain:
-                errors.append(ValidationError('no default domain configured'))
+        if not self.def_domain:
+            errors.append(ValidationError('no default domain configured'))
 
     def expand_host(self, host):
         if '.' in host:

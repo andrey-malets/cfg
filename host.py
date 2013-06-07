@@ -74,9 +74,6 @@ class Host:
         return '{} "{}"'.format(self.htype, self.sname)
 
 def check_hosts(hosts):
-    return fold_snames(hosts)
-
-def fold_snames(hosts):
     names = {}
     errors = []
     for host in hosts:
