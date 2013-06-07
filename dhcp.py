@@ -1,17 +1,17 @@
 import jinja2
+from itertools import chain
 
-def gen(hosts, networks, template):
+def gen(hosts, template, networks):
     def get_entries(host):
         if not host.addr or not len(host.macs): return
         def get_entry(host, name, mac):
             return {
                 'name'     : name,
-                'hostname' : host.sname.split('.')[0],
+                'hostname' : host.sname,
                 'mac'      : mac,
                 'addr'     : host.addr,
-                'params' : ({} if not 'dhcp' in host.props
-                            else host.props['dhcp'])
-            }
+                'params'   : host.props.get('dhcp', {})}
+
         if len(host.macs) == 1:
             yield get_entry(host, host.sname, host.macs[0])
         else:
@@ -19,8 +19,5 @@ def gen(hosts, networks, template):
                 yield get_entry(host, '%s-%d' %
                     (host.sname, i+1), host.macs[i])
 
-    entries = []
-    for host in hosts:
-        entries.extend(get_entries(host))
-    
-    return jinja2.Template(template).render(hosts=entries, networks=networks)
+    return jinja2.Template(template).render(networks=networks,
+        hosts=chain.from_iterable(map(get_entries, hosts)))

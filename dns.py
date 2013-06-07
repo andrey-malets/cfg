@@ -1,9 +1,6 @@
 import jinja2
 from itertools import chain
 
-def get_dns_name(host):
-    return host.name.split('.')[0]
-
 def get_rname(host, network):
     parts = host.addr.split('.')
     parts.reverse()
@@ -16,7 +13,7 @@ def all(fn):
 @all
 def gen_fwd(host, zone):
     if host.name.find('.') == host.name.find(zone) - 1:
-        yield {'name'    : get_dns_name(host),
+        yield {'name'    : host.sname,
                'addr'    : host.addr,
                'aliases' : host.saliases}
 
@@ -30,4 +27,4 @@ def gen_reverse(host, network):
 def gen_fb(host, network):
     for addr in host.fb:
         if network.has(addr):
-            yield {'name' : get_dns_name(host), 'addr' : addr}
+            yield {'name' : host.sname, 'addr' : addr}

@@ -3,6 +3,8 @@ import re
 from util import ValueFromGroup, primitive
 import defaults
 
+def get_sname(name): return name.split('.')[0]
+
 class Host:
     @staticmethod
     def expand_mac(mac):
@@ -18,19 +20,17 @@ class Host:
         default = defaults.get()
         names = data.pop(0)
         if type(names) == list:
-            self.sname    = names[0]
             self.name     = default.expand_host(names.pop(0))
             self.aliases  = map(default.expand_host, names)
             self.saliases = names
         else:
             self.name    = default.expand_host(names)
-            self.sname   = names
             self.aliases = []
             self.saliases = []
 
+        self.sname = get_sname(self.name)
         self.htype = Host.get_type(self.sname)
-
-        self.addr = default.expand_ip(data.pop(0)) if len(data) else None
+        self.addr  = default.expand_ip(data.pop(0)) if len(data) else None
         
         if len(data) and type(data[0]) is not dict:
             macs = data.pop(0)
