@@ -2,12 +2,12 @@
 
 import json, sys, yaml, re, copy
 
-from host     import Host, check_hosts
-from group    import Group, expand_groups
-from network  import Network
-import defaults
+from parse          import defaults
+from parse.host     import Host, check_hosts
+from parse.group    import Group, expand_groups
+from parse.network  import Network
 
-import dhcp, dns, iptables
+from gen import dhcp, dns, iptables
 
 if __name__ == '__main__':
     cfg = yaml.load(sys.stdin)
