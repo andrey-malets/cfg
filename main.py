@@ -14,14 +14,15 @@ if __name__ == '__main__':
     errors = []
     errors.extend(defaults.init(cfg['defaults']))
 
-    hosts    = map(lambda data: Host(data),    cfg['hosts'])
-    networks = map(lambda data: Network(data), cfg['networks'])
-    groups   = map(lambda data: Group(data),   cfg['groups'] if 'groups' in cfg else [])
+    hosts    = map(Host,    cfg['hosts'])
+    networks = map(Network, cfg['networks'])
+    groups   = map(Group,   cfg['groups'])
+
     users    = cfg['users'] if 'users' in cfg else []
 
     errors.extend(check_hosts(hosts))
     errors.extend(expand_groups(groups, hosts))
-    for host in hosts: host.clean()
+    map(Host.clean, hosts)
 
     if len(errors):
         for error in errors: print >> sys.stderr, 'Error: %s' % error
@@ -35,13 +36,13 @@ if __name__ == '__main__':
         #    template = dnst.read()
         #print dns.gen_fwd(hosts, template, 'urgu.org')
 
-        #with open('cfg/reverse.template', 'r') as rdnst:
-        #    template = rdnst.read()
-        #print dns.gen_reverse(hosts, template, networks[0])
-
-        with open('cfg/fb.template', 'r') as rdnst:
+        with open('cfg/reverse.template', 'r') as rdnst:
             template = rdnst.read()
-        print dns.gen_fb(hosts, template, networks[2])
+        print dns.gen_reverse(hosts, template, networks[0])
+
+        #with open('cfg/fb.template', 'r') as rdnst:
+        #    template = rdnst.read()
+        #print dns.gen_fb(hosts, template, networks[2])
 
         #print ''.join(iptables.gen_ports(hosts, '194.226.244.126', 'server'))
 

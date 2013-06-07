@@ -10,12 +10,6 @@ class Host:
     def expand_mac(mac):
         return '{}:{}:{}:{}:{}:{}'.format(mac[0:2], mac[2:4],  mac[4:6],
                                           mac[6:8], mac[8:10], mac[10:12])
-    @staticmethod
-    def get_type(name):
-        for htype in ['ap', 'switch', 'ups', 'ipmi', 'amt']:
-            if name.endswith('-%s' % htype): return htype
-        return 'host'
-
     def __init__(self, data):
         default = defaults.get()
         names = data.pop(0)
@@ -29,7 +23,6 @@ class Host:
             self.saliases = []
 
         self.sname = get_sname(self.name)
-        self.htype = Host.get_type(self.sname)
         self.addr  = default.expand_ip(data.pop(0)) if len(data) else None
         
         if len(data) and type(data[0]) is not dict:
@@ -65,8 +58,8 @@ class Host:
         self.props = step(self.props)
 
     def __str__(self):
-        return '{}: {}, aliases: {}, address: {}, macs: {}, props: {}'.format(
-            self.htype, self.name, self.aliases, self.addr, self.macs, self.props)
+        return 'host {}, aliases: {}, address: {}, macs: {}, props: {}'.format(
+            self.name, self.aliases, self.addr, self.macs, self.props)
 
 def check_hosts(hosts):
     names = {}
