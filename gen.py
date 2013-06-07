@@ -33,7 +33,7 @@ if __name__ == '__main__':
         #with open('cfg/urgu.org.template', 'r') as dnst:
         #    template = dnst.read()
         #print dns.gen_fwd(hosts, 'urgu.org', template)
-        with open('cfg/adm.template', 'r') as rdnst:
+        with open('cfg/reverse.template', 'r') as rdnst:
             template = rdnst.read()
         print dns.gen_reverse(hosts, networks[0], template)
         #print ''.join(iptables.gen_ports(hosts, '194.226.244.126', 'server'))
