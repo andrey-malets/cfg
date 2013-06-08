@@ -1,5 +1,5 @@
 urgu.org.  36000   IN      SOA     dijkstra.urgu.org. uzer.hackerdom.ru. (
-                2013050900 36000 900 604800 36000 )
+                {{ serial }} 36000 900 604800 36000 )
 	36000	IN	NS	ns0.urgu.org.
 	36000	IN	NS	ns1.urgu.org.
 	36000   IN      A	194.226.244.126

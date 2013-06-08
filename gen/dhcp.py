@@ -5,12 +5,11 @@ def gen(hosts, template, networks):
     def get_entries(host):
         if not host.addr or not len(host.macs): return
         def get_entry(host, name, mac):
-            return {
-                'name'     : name,
-                'hostname' : host.sname,
-                'mac'      : mac,
-                'addr'     : host.addr,
-                'params'   : host.props.get('dhcp', {})}
+            return { 'name'     : name,
+                     'hostname' : host.sname,
+                     'mac'      : mac,
+                     'addr'     : host.addr,
+                     'params'   : host.props.get('dhcp', {})}
 
         if len(host.macs) == 1:
             yield get_entry(host, host.sname, host.macs[0])

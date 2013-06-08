@@ -42,3 +42,12 @@ class Network:
         addr = self.get_addr()
         base = addr[0:addr.rindex('.')]
         return ('%s.%s' % (base, self.dhcp[0]), '%s.%s' % (base, self.dhcp[1]))
+
+def choose(nets, addr):
+    candidates = filter(lambda net: net.get_addr().startswith(addr), nets)
+    if len(candidates) == 1:
+        return candidates[0]
+    elif len(candidates) > 1:
+        raise Exception('multiple networks chosen for %s, clarify' % addr)
+    else:
+        raise Exception('no networks chosen for %s' % addr)

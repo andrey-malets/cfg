@@ -5,7 +5,7 @@ import json, sys, yaml, re, copy
 from parse          import defaults
 from parse.host     import Host, check_hosts
 from parse.group    import Group, expand_groups
-from parse.network  import Network
+from parse.network  import Network, choose
 
 from gen import dhcp, dns, iptables
 
@@ -36,13 +36,13 @@ if __name__ == '__main__':
         #    template = dnst.read()
         #print dns.gen_fwd(hosts, template, 'urgu.org')
 
-        with open('cfg/reverse.template', 'r') as rdnst:
-            template = rdnst.read()
-        print dns.gen_reverse(hosts, template, networks[0])
-
-        #with open('cfg/fb.template', 'r') as rdnst:
+        #with open('cfg/reverse.template', 'r') as rdnst:
         #    template = rdnst.read()
-        #print dns.gen_fb(hosts, template, networks[2])
+        #print dns.gen_reverse(hosts, template, 12345, choose(networks, '172.16.12'))
+
+        with open('cfg/fb.template', 'r') as rdnst:
+            template = rdnst.read()
+        print dns.gen_fb(hosts, template, 12345, choose(networks, '172.16.12'))
 
         #print ''.join(iptables.gen_ports(hosts, '194.226.244.126', 'server'))
 

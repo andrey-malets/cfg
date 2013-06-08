@@ -1,11 +1,12 @@
-$TTL	86400
-@	IN	SOA	dijkstra.urgu.org. uzer.hackerdom.ru. (
-		     2012110700	; Serial
-			 604800		; Refresh
-			  86400		; Retry
-			2419200		; Expire
-			  86400 )	; Negative Cache TTL
+$TTL    86400
+@   IN  SOA dijkstra.urgu.org. uzer.hackerdom.ru. (
+             {{ serial }}
+             604800
+              86400
+            2419200
+              86400 )
 ;
+
 @	IN	NS	dijkstra.urgu.org.
 {% for host in hosts %}
 {{ host.addr }} IN PTR {{ "%-16s"|format(host.name) }}

@@ -7,8 +7,10 @@ def get_rname(host, network):
     return '.'.join(parts[0:(32 - network.count) / 8])
 
 def all(fn):
-    return lambda hosts, template, *args: jinja2.Template(template).render(
-        hosts=chain.from_iterable(map(lambda host: fn(host, *args), hosts)))
+    return (lambda hosts, template, serial, *args:
+        jinja2.Template(template).render(
+            hosts=chain.from_iterable(map(lambda host: fn(host, *args), hosts)),
+            serial=serial))
 
 @all
 def gen_fwd(host, zone):
@@ -27,4 +29,6 @@ def gen_reverse(host, network):
 def gen_fb(host, network):
     for addr in host.fb:
         if network.has(addr):
-            yield {'name' : host.sname, 'addr' : addr}
+            yield {'name'    : host.sname,
+                   'addr'    : addr,
+                   'aliases' : host.saliases}
