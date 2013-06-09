@@ -2,14 +2,14 @@ class Network:
     @staticmethod
     def stoi(addr):
         octets = map(int, addr.split('.'))
-        octets.extend([0 for _ in range(0, 4-len(octets))])
+        octets.extend([0 for _ in range(4-len(octets))])
         fi, se, th, fo = octets
         return (fi << 24) | (se << 16) | (th << 8) | fo
 
     @staticmethod
     def itos(addr):
         octets = []
-        for octet in range(0,4):
+        for octet in range(4):
             octets.append('%d' % (addr & 0xff))
             addr = addr >> 8
         return '.'.join(reversed(octets))

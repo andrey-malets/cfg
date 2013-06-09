@@ -62,11 +62,7 @@ class Host:
             self.name, self.aliases, self.addr, self.macs, self.props)
 
 def check_hosts(hosts):
-    names = {}
-    errors = []
-    for host in hosts:
-        for sname in host.snames:
-            if sname in names:
-                errors.append(Exception('duplicate name %s' % sname))
-            names[sname] = host
-    return errors
+    names = set()
+    dups = set(name for host in hosts for name in host.snames
+        if name in names or names.add(name))
+    return map(lambda name: Exception('duplicate name %s' % name), dups)
