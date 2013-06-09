@@ -1,7 +1,9 @@
 import jinja2
 from itertools import chain
+from cmd import add_cmd
 
-def gen(hosts, template, networks):
+@add_cmd('dhcp', True, 0)
+def gen(state, template):
     def get_entries(host):
         def get_entry(name, mac):
             return {'name'     : name,
@@ -16,5 +18,5 @@ def gen(hosts, template, networks):
             for i in xrange(len(host.macs)):
                 yield get_entry('%s-%d' % (host.sname, i+1), host.macs[i])
 
-    return jinja2.Template(template).render(networks=networks,
-        hosts=chain.from_iterable(map(get_entries, hosts)))
+    return jinja2.Template(template).render(networks=state.networks,
+        hosts=chain.from_iterable(map(get_entries, state.hosts)))

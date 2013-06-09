@@ -2,8 +2,6 @@ import re
 from util import ValidationError
 
 class Defaults:
-    _instance = None
-
     def __init__(self, data, errors):
         def check(data, item, descr):
             if type(data) is not dict or not item in data:
@@ -45,14 +43,3 @@ class Defaults:
         return ('%s.%s' % (self.network_prefix, ip)
                 if not re.match('^\d+\.\d+\.\d+\.\d+$', str(ip))
                 else ip)
-
-def init(data):
-    errors = []
-    Defaults._instance = Defaults(data, errors)
-    return errors
-
-def get():
-    if Defaults._instance:
-        return Defaults._instance
-    else:
-        raise Exception('no defaults configured')

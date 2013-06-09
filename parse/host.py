@@ -1,7 +1,6 @@
 import re
 
 from util import ValueFromGroup, primitive
-import defaults
 
 def get_sname(name): return name.split('.')[0]
 
@@ -10,20 +9,19 @@ class Host:
     def expand_mac(mac):
         return '{}:{}:{}:{}:{}:{}'.format(mac[0:2], mac[2:4],  mac[4:6],
                                           mac[6:8], mac[8:10], mac[10:12])
-    def __init__(self, data):
-        default = defaults.get()
+    def __init__(self, data, defaults):
         names = data.pop(0)
         if type(names) == list:
-            self.name     = default.expand_host(names.pop(0))
-            self.aliases  = map(default.expand_host, names)
+            self.name     = defaults.expand_host(names.pop(0))
+            self.aliases  = map(defaults.expand_host, names)
             self.saliases = names
         else:
-            self.name    = default.expand_host(names)
+            self.name    = defaults.expand_host(names)
             self.aliases = []
             self.saliases = []
 
         self.sname = get_sname(self.name)
-        self.addr  = default.expand_ip(data.pop(0)) if len(data) else None
+        self.addr  = defaults.expand_ip(data.pop(0)) if len(data) else None
         
         if len(data) and type(data[0]) is not dict:
             macs = data.pop(0)
@@ -35,7 +33,7 @@ class Host:
 
         self.props = data[0] if len(data) else {}
 
-        self.fb = map(default.expand_ip, self.props.get('fb', []))
+        self.fb = map(defaults.expand_ip, self.props.get('fb', []))
 
     @property
     def snames(self):
