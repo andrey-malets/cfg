@@ -26,7 +26,6 @@ class Host:
         self.addr  = default.expand_ip(data.pop(0)) if len(data) else None
         
         if len(data) and type(data[0]) is not dict:
-            if not self.addr: raise Exception('have mac but no ip')
             macs = data.pop(0)
             self.macs = (map(Host.expand_mac, macs)
                             if type(macs) == list
