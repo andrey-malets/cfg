@@ -15,11 +15,9 @@ if __name__ == '__main__':
         print >> sys.stderr, 'usage: %s {get|inc} <cache_file>' % sys.argv[0]
         sys.exit(1)
     else:
+        cmd, fn = sys.argv[1:3]
         try:
-            cmd, fn = sys.argv[1:3]
-            if cmd == 'get':
-                print "%s%02d" % get(fn)
-            else:
+            if cmd == 'inc':
                 date, counter = datetime.datetime.now().strftime("%Y%m%d"), 0
                 try:
                     olddate, oldcounter = get(fn)
@@ -30,7 +28,7 @@ if __name__ == '__main__':
                 if counter == 100:
                     raise Exception('overflow for this day')
                 put(fn, (date, counter))
-                print "%s%02d" % get(fn)
+            print "%s%02d" % get(fn)
         except Exception as e:
             print >> sys.stderr, e
             sys.exit(1)
