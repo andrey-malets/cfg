@@ -22,17 +22,17 @@ networks:
 
 groups:
 - [servers,  '^(m|mm|h|t|r|l)$',        {services: [ssh], admin: uzer}]
-- [ssh,      '(uzer-pc)',               {services: [ssh]}]
+- [ssh,      '(uzer-pc)',               {services: [rssh]}]
 - [netboot,  '(uzer-pc)',               {dhcp: {ipxe.scriptlet: cow}}]
 - [switches, '.+-switch',               {services: [http], admin: uzer}]
 - [hog-amt,  'h\d\d',                   {services: [amt]}]
 - [621-pcs,  '621-\d\d',                {admin: vsamun}]
-- [hogs,     'hog(\d\d|-vm)',           {services: [ssh], admin: uzer, dhcp: {ipxe.scriptlet: cow-r}}]
+- [hogs,     'hog(\d\d|-vm)',           {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow-r}}]
 - [hs,       'h\d\d',                   {services: [amt], admin: uzer}]
 - [aps,      '(.+-ap|ap\d)',            {services: [http], admin: uzer}]
 - [ipmi,     '.+-ipmi',                 {services: [ipmi]}]
 - [mplan,    '.+-mplan',                {services: [mplan]}]
-- [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rdp]}]
+- [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rrdp]}]
 - [embedded, [ipmi, aps, switches]]
 
 hosts:

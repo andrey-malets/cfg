@@ -7,15 +7,11 @@ def get_pub_port(host):
 @add_cmd('ipt_ports', False, 2)
 def gen_ports(state, dst, chain):
     def matches(host):
-        return (host.addr != None
-            and host.addr.startswith('172.16.')
-            and (not host.addr.startswith('172.16.9.'))
-            and 'services' in host.props
-            and ('ssh' in host.props['services']
-              or 'rdp' in host.props['services']))
+        return (host.addr != None and 'services' in host.props and
+            ('rssh' in host.props['services'] or 'rrdp' in host.props['services']))
 
     def get_priv(host):
-        return 22 if 'ssh' in host.props['services'] else 3389
+        return 22 if 'rssh' in host.props['services'] else 3389
 
     lines = ["iptables -t nat -F %s" % chain]
     for host in filter(matches, state.hosts):
