@@ -27,6 +27,8 @@ if __name__ == '__main__':
                         counter = oldcounter + 1
                 except:
                     pass
+                if counter == 100:
+                    raise Exception('overflow for this day')
                 put(fn, (date, counter))
                 print "%s%02d" % get(fn)
         except Exception as e:
