@@ -24,6 +24,8 @@ class Network:
         self.dhcp   = None if 'dhcp' not in self.props else self.props['dhcp'].split('-')
         assert (self.addr & ~self.mask) == 0, 'invalid network %s' % self
         assert self.router & self.mask == self.addr, 'invalid router for %s' % self
+        assert self.is_classful() or 'rdns' not in self.props, ('rdns in classless net %s' %
+            self.get_addr())
 
     def __str__(self):
         return '%s/%s' % (self.get_addr(), self.get_mask())
@@ -39,6 +41,11 @@ class Network:
         return self.count % 8 == 0
 
     def get_router(self): return Network.itos(self.router)
+
+    def get_rdns_zone(self):
+        assert self.is_classful(), 'the net should be classful'
+        return '%s.in-addr.arpa' % '.'.join(reversed(
+            self.get_addr().split('.')[0:(self.count / 8)]))
 
     def get_dhcp(self):
         if not self.dhcp: return None

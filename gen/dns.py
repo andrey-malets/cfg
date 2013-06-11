@@ -11,7 +11,7 @@ def dns_fn(fn):
     return (lambda state, template, serial, *args:
         jinja2.Template(template).render(hosts=fn(state, *args), serial=serial))
 
-@add_cmd('dns_fwd', True, 2)
+@add_cmd('dns', True, 2)
 @dns_fn
 def gen_fwd(state, zone):
     for host in state.hosts:
@@ -20,7 +20,7 @@ def gen_fwd(state, zone):
                    'addr'    : host.addr,
                    'aliases' : host.saliases}
 
-@add_cmd('dns_reverse', True, 2)
+@add_cmd('rdns', True, 2)
 @dns_fn
 def gen_reverse(state, net_name):
     network = state.choose_net(net_name)
