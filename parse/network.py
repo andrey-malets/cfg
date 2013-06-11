@@ -35,6 +35,9 @@ class Network:
 
     def get_mask(self): return Network.itos(self.mask)
 
+    def is_classful(self):
+        return self.count % 8 == 0
+
     def get_router(self): return Network.itos(self.router)
 
     def get_dhcp(self):
