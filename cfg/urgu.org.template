@@ -20,15 +20,12 @@ fb		36000	IN	NS	ns1
 runc		36000	IN	NS	dijkstra
 
 dijkstra	3600	IN	MX 10	dijkstra.urgu.org.
-puppet		3600	IN	CNAME	dijkstra
-ssl		3600	IN	A	194.226.244.126
 
 x._domainkey.dijkstra	IN	TXT	"v=DKIM1; k=rsa; p=MHwwDQYJKoZIhvcNAQEBBQADawAwaAJhANAF7WyY2zwE7fkW4VNzIZwlGwQBuY8i3PKAub56doiCtweVHR29TS7TjWSvPurT7aWeFGUuGKIPPw4AqZ3PL+9aV1tN2C5fGCca0STbHFo4qyWWQHS8H+6tAt8x/xrO8QIDAQAB"
 dijkstra	3600	IN	SPF	"v=spf1 a"
 dijkstra	3600	IN	TXT	"v=spf1 a"
 
 tigra		3600	IN	CNAME	tigra.usaaa.ru.
-licklider	3600	IN	CNAME	stor.math.usu.ru.
 
 mirrors		3600	IN	CNAME	mirror.yandex.ru.
 mirror		3600	IN	CNAME	mirror.yandex.ru.

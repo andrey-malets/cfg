@@ -19,7 +19,7 @@ def list_nets(state):
 def rdns_cfg(state, template, patt, empty):
     nets = {}
     for n in range(16, 32):
-        nets['%d.16.172.in-addr.arpa' % n] = empty
+        nets['%d.172.in-addr.arpa' % n] = empty
     for net in filter_nets(state, 'rdns'):
         nets[net.get_rdns_zone()] = patt % net.get_addr()
-    return jinja2.Template(template).render(networks=nets)
+    return jinja2.Template(template).render(networks=nets,empty=empty)

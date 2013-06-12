@@ -8,4 +8,4 @@ zone "10.in-addr.arpa" {
 zone "{{ net }}" { type master; file "{{ file }}"; };
 {%- endfor %}
 
-zone "168.192.in-addr.arpa" { type master; file "/etc/bind/db.empty"; };
+zone "168.192.in-addr.arpa" { type master; file "{{ empty }}"; };
