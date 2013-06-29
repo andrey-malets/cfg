@@ -124,6 +124,8 @@ gen_puppet_ssh() {
             chown -R puppet.puppet $DIR
         fi
     done
+
+    cat $DATA/ssh/*/ssh_host_rsa_key.pub > /var/www/urgu.org/https/known_hosts
 }
 
 mkdir -p $DATA
