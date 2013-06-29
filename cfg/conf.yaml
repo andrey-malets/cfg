@@ -27,13 +27,14 @@ groups:
 - [switches, '.+-switch',               {services: [http], admin: uzer}]
 - [hog-amt,  'h\d\d',                   {services: [amt]}]
 - [621-pcs,  '621-\d\d',                {admin: vsamun}]
-- [hogs,     'hog(\d\d|-vm)',           {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow-r}}]
+- [hogs,     'hog(\d\d|-vm)',           {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}}]
 - [hs,       'h\d\d',                   {services: [amt], admin: uzer}]
 - [aps,      '(.+-ap|ap\d)',            {services: [http], admin: uzer}]
 - [ipmi,     '.+-ipmi',                 {services: [ipmi]}]
 - [mplan,    '.+-mplan',                {services: [mplan]}]
 - [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rrdp]}]
 - [embedded, [ipmi, aps, switches]]
+- [puppet-managed, [hogs], '(uzer|znick)-pc', {services: [puppet-ssh]}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]

@@ -1,1 +1,1 @@
-import dhcp, dns, iptables, util
+import dhcp, dns, iptables, puppet, util

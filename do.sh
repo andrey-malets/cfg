@@ -92,7 +92,45 @@ gen_dns() {
     fi
 }
 
+gen_puppet_cfg() {
+    local DIR=$DATA/puppet
+    mkdir -p $DIR
+
+    local CUR=/etc/puppet/manifests/site.pp
+    local NEW=$DIR/site.pp
+    $MAIN puppet_cfg cfg/puppet_cfg.template > $NEW
+    mv $NEW $CUR
+}
+
+gen_puppet_fileserver() {
+    local DIR=$DATA/puppet
+    mkdir -p $DIR
+
+    local CUR=/etc/puppet/fileserver.conf
+    local NEW=$DATA/fileserver.conf
+
+    $MAIN puppet_fileserver cfg/puppet_fileserver.template $DATA/ssh > $NEW
+    mv $NEW $CUR
+}
+
+gen_puppet_ssh() {
+    hosts=$($MAIN puppet_list)
+    for host in $hosts; do
+        local DIR=$DATA/ssh/$host
+        if ! [ -d $DIR ]; then
+            (umask 077; mkdir -p $DIR)
+            ssh-keygen -t rsa -C "root@$host" -f $DIR/ssh_host_rsa_key -N ""
+            ssh-keygen -t dsa -C "root@$host" -f $DIR/ssh_host_dsa_key -N ""
+            chown -R puppet.puppet $DIR
+        fi
+    done
+}
+
 mkdir -p $DATA
 
 gen_dhcp
 gen_dns
+
+gen_puppet_cfg
+gen_puppet_fileserver
+gen_puppet_ssh

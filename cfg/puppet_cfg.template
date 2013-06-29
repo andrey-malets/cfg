@@ -1,0 +1,44 @@
+class managed_ssh {
+    service { 'ssh':
+        ensure  => 'running',
+        enable  => 'true',
+    }
+
+    file { '/etc/ssh/ssh_host_dsa_key':
+        notify => Service['ssh'],
+        mode => 600,
+        owner => root,
+        group => root,
+        source => "puppet:///$hostname/ssh_host_dsa_key",
+    }
+
+    file { '/etc/ssh/ssh_host_dsa_key.pub':
+        notify => Service['ssh'],
+        mode => 644,
+        owner => root,
+        group => root,
+        source => "puppet:///$hostname/ssh_host_dsa_key.pub",
+    }
+
+    file { '/etc/ssh/ssh_host_rsa_key':
+        notify => Service['ssh'],
+        mode => 600,
+        owner => root,
+        group => root,
+        source => "puppet:///$hostname/ssh_host_rsa_key",
+    }
+
+    file { '/etc/ssh/ssh_host_rsa_key.pub':
+        notify => Service['ssh'],
+        mode => 644,
+        owner => root,
+        group => root,
+        source => "puppet:///$hostname/ssh_host_rsa_key.pub",
+    }
+}
+
+{% for host in hosts %}
+node '{{ host.name }}' {
+    include managed_ssh
+}
+{% endfor %}
