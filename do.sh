@@ -9,15 +9,18 @@ CFGDIR=$BASE/cfg
 
 export CFG=$CFGDIR/conf.yaml
 
+cmp_files() {
+    set +e; cmp -s $1 $2; local rv=$?; set -e
+    return $rv
+}
+
 gen_dhcp() {
     local CUR=/etc/dhcp/dhcpd.conf
     local NEW=$DATA/dhcpd.conf
 
     $MAIN dhcp $CFGDIR/dhcp.template > $NEW
 
-    set +e; cmp -s $CUR $NEW; rv=$?; set -e
-
-    if [ $rv -ne 0 ]; then
+    if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR
         /etc/init.d/isc-dhcp-server restart
     else
@@ -28,49 +31,39 @@ gen_dhcp() {
 gen_dns() {
     local ZONES="urgu.org"
     local RELOAD=0 RESTART=0
-    
-    for ZONE in $ZONES; do
-        SFILE=$DATA/$ZONE.serial
+
+    gen_zone() {
+        local ZONE=$1 CMD=$2 TEMPLATE=$3
+
+        local SFILE=$DATA/$ZONE.serial
+        local CUR=$DATA/$ZONE.master
+        local OLD=$CUR.old NEW=$CUR.new
+
         set +e; SOLD=$($SERIAL get $SFILE 2>/dev/null); rv=$?; set -e
         if [ $rv -ne 0 ]; then
             RELOAD=1
             local SNEW=$($SERIAL inc $SFILE)
-            $MAIN dns $CFGDIR/$ZONE.template $SNEW $ZONE > $DATA/$ZONE.master
+            $MAIN $CMD $TEMPLATE $SNEW $ZONE > $CUR
         else
-            $MAIN dns $CFGDIR/$ZONE.template $SOLD $ZONE > $DATA/$ZONE.master.old
-            set +e; cmp -s $DATA/$ZONE.master $DATA/$ZONE.master.old; rv=$?; set -e
-            if [ $rv -ne 0 ]; then
+            $MAIN $CMD $TEMPLATE $SOLD $ZONE > $OLD
+            if ! cmp_files $CUR $OLD; then
                 RELOAD=1
-                rm $DATA/$ZONE.master.old
+                rm $OLD
                 SNEW=$($SERIAL inc $SFILE)
-                $MAIN dns $CFGDIR/$ZONE.template $SNEW $ZONE > $DATA/$ZONE.master.new
-                mv $DATA/$ZONE.master.new $DATA/$ZONE.master
+                $MAIN $CMD $TEMPLATE $SNEW $ZONE > $NEW
+                mv $NEW $CUR
             else
-                rm $DATA/$ZONE.master.old
+                rm $OLD
             fi
         fi
+    }
+
+    for ZONE in $ZONES; do
+        gen_zone $ZONE dns $CFGDIR/$ZONE.template
     done
 
     for NET in $($MAIN rdns_nets); do
-        SFILE=$DATA/$NET.serial
-        set +e; SOLD=$($SERIAL get $SFILE 2>/dev/null); rv=$?; set -e
-        if [ $rv -ne 0 ]; then
-            RELOAD=1
-            local SNEW=$($SERIAL inc $SFILE)
-            $MAIN rdns $CFGDIR/reverse.template $SNEW $NET > $DATA/$NET.master
-        else
-            $MAIN rdns $CFGDIR/reverse.template $SOLD $NET > $DATA/$NET.master.old
-            set +e; cmp -s $DATA/$NET.master $DATA/$NET.master.old; rv=$?; set -e
-            if [ $rv -ne 0 ]; then
-                RELOAD=1
-                rm $DATA/$NET.master.old
-                SNEW=$($SERIAL inc $SFILE)
-                $MAIN rdns $CFGDIR/reverse.template $SNEW $NET > $DATA/$NET.master.new
-                mv $DATA/$NET.master.new $DATA/$NET.master
-            else
-                rm $DATA/$NET.master.old
-            fi
-        fi
+        gen_zone $NET rdns $CFGDIR/reverse.template
     done
 
     local CUR=$DATA/reverse.config
@@ -78,9 +71,7 @@ gen_dns() {
     
     $MAIN rdns_cfg $CFGDIR/rdns_cfg.template $DATA/%s.master /etc/bind/db.empty > $NEW
 
-    set +e; cmp -s $CUR $NEW; rv=$?; set -e
-
-    if [ $rv -ne 0 ]; then
+    if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR
         RESTART=1
     else
@@ -100,6 +91,7 @@ gen_puppet_cfg() {
 
     local CUR=/etc/puppet/manifests/site.pp
     local NEW=$DIR/site.pp
+
     $MAIN puppet_cfg $CFGDIR/puppet_cfg.template > $NEW
     mv $NEW $CUR
 }
