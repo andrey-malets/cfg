@@ -6,7 +6,7 @@ def get(state):
 
 @add_cmd('puppet_cfg', True, 0)
 def gen(state, template):
-    return jinja2.Template(template).render(hosts=get(state))
+    return jinja2.Template(template).render(hosts=state.hosts)
 
 @add_cmd('puppet_fileserver', True, 1)
 def gen(state, template, prefix):

@@ -1,4 +1,4 @@
-class managed_ssh {
+class managed-ssh {
     service { 'ssh':
         ensure  => 'running',
         enable  => 'true',
@@ -37,8 +37,29 @@ class managed_ssh {
     }
 }
 
+class nrpe-generic {
+    service { 'nagios-nrpe-server':
+        ensure  => 'running',
+        enable  => 'true',
+    }
+
+    file { '/etc/nagios/nrpe.cfg':
+        notify => Service['nagios-nrpe-server'],
+        mode => 644,
+        owner => root,
+        group => root,
+        source => "puppet:///files/nrpe-generic.cfg",
+    }
+}
+
 {% for host in hosts %}
 node '{{ host.name }}' {
-    include managed_ssh
+    {% if 'puppet-ssh' in host.services %}
+        include managed-ssh
+    {% endif %}
+
+    {% if 'unix' in host.services %}
+        include nrpe-generic
+    {% endif %}
 }
 {% endfor %}

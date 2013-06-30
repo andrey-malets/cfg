@@ -21,6 +21,8 @@ networks:
 - [194.226.244.112/28, 194.226.244.114]
 
 groups:
+- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$',
+                                        {services: [unix]}]
 - [servers,  '^(m|mm|h|t|r|l)$',        {services: [ssh], admin: uzer}]
 - [ssh,      '(uzer|znick)-pc',         {services: [rssh]}]
 - [netboot,  '(uzer|znick)-pc',         {dhcp: {ipxe.scriptlet: cow}}]
