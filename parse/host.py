@@ -39,6 +39,10 @@ class Host:
     def snames(self):
         return [self.sname] + self.saliases
 
+    @property
+    def services(self):
+        return self.props.get('services', [])
+
     def clean(self):
         def step(attr):
             if primitive(attr):
