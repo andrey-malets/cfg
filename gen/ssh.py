@@ -12,6 +12,8 @@ def gen(state, ext_host, ext_addr):
             names.append(host.name)
             names.append(host.sname)
             names.append(host.addr)
+            names.extend(host.aliases)
+            names.extend(host.saliases)
         if 'rssh' in host.services:
             names.append('[%s]:%s' % (ext_host, get_pub_port(host)))
             names.append('[%s]:%s' % (ext_addr, get_pub_port(host)))
