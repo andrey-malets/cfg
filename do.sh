@@ -135,9 +135,20 @@ gen_ssh_known_hosts() {
 }
 
 gen_nagios() {
-    DIR=$DATA/nagios
+    local DIR=$DATA/nagios
     mkdir -p $DIR
-    $MAIN nagios $CFGDIR/nagios.template > $DIR/nagios.cfg
+
+    local CUR=$DIR/nagios.cfg
+    local NEW=$DIR/nagios.cfg.new
+
+    $MAIN nagios $CFGDIR/nagios.template > $NEW
+
+    if ! cmp_files $CUR $NEW; then
+        mv $NEW $CUR
+        /etc/init.d/nagios3 reload
+    else
+        rm $NEW
+    fi
 }
 
 mkdir -p $DATA

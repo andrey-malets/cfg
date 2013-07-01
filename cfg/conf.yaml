@@ -23,7 +23,7 @@ networks:
 groups:
 - [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$',
                                         {services: [unix]}]
-- [servers,  '^(m|mm|h|t|r|l)$',        {services: [ssh], admin: uzer}]
+- [servers,  '^(m|mm|h|t|r|it)$',       {services: [ssh], admin: uzer}]
 - [ssh,      '(uzer|znick)-pc',         {services: [rssh]}]
 - [netboot,  '(uzer|znick)-pc',         {dhcp: {ipxe.scriptlet: cow}}]
 - [switches, '.+-switch',               {services: [http], admin: uzer}]
@@ -90,7 +90,7 @@ hosts:
 - [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237]
-- [ itanium,              10.238]  #?
+- [[itanium,it],          10.238]  #?
 - [ itanium2,             10.239]  #?
 - [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru}]
 - [ tb,                   10.241,  001851d78a0a]
