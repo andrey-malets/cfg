@@ -101,7 +101,7 @@ gen_puppet_fileserver() {
     mkdir -p $DIR
 
     local CUR=/etc/puppet/fileserver.conf
-    local NEW=$DATA/fileserver.conf
+    local NEW=$DIR/fileserver.conf
 
     $MAIN puppet_fileserver $CFGDIR/puppet_fileserver.template $DATA/ssh > $NEW
     mv $NEW $CUR
@@ -120,7 +120,7 @@ gen_puppet_ssh() {
     done
 }
 
-get_ssh_known_hosts() {
+gen_ssh_known_hosts() {
     (
         $MAIN ssh_known_hosts urgu.org 194.226.244.126 | while read name line; do
             local DIR=$DATA/ssh/$name
@@ -143,4 +143,4 @@ gen_puppet_cfg
 gen_puppet_fileserver
 gen_puppet_ssh
 
-get_ssh_known_hosts
+gen_ssh_known_hosts
