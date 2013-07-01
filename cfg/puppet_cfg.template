@@ -1,4 +1,6 @@
 class managed-ssh {
+    package { 'openssh-server': ensure => installed }
+
     service { 'ssh':
         ensure  => 'running',
         enable  => 'true',

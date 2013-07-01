@@ -148,11 +148,55 @@ define service {
 {% if 'http' in host.props['services'] %}
 define service {
     use                 generic-service
-    host_name           {{ host.sname }}
     service_description HTTP server
     check_command       check_http
+    host_name           {{ host.sname }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
 }
+{% endif %}
+
+{% if 'unix' in host.props['services'] %}
+define service {
+    use                 generic-service
+    service_description CPU load
+    check_command       check_nrpe_1arg!check_load
+    host_name           {{ host.sname }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+}
+
+define service {
+    use                 generic-service
+    service_description Disk usage
+    check_command       check_nrpe_1arg!check_disk
+    host_name           {{ host.sname }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+}
+
+define service {
+    use                 generic-service
+    service_description Process count
+    check_command       check_nrpe_1arg!check_total_procs
+    host_name           {{ host.sname }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+}
+
+define service {
+    use                 generic-service
+    service_description Zombie processes
+    check_command       check_nrpe_1arg!check_zombie_procs
+    host_name           {{ host.sname }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+}
+
+define service {
+    use                 generic-service
+    service_description APT package state
+    check_command       check_nrpe_1arg!check_apt
+    check_interval      3600
+    host_name           {{ host.sname }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+}
+
 {% endif %}
 
 {% endif %}

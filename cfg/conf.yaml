@@ -52,7 +52,7 @@ hosts:
 - [[hog-ap, hap],         9.9,     00259c3171aa]
 - [[licklider, l],       '9.10',        {admin: znick}]   #?
 - [[hog-ups, hu],         9.11,    00c0b7598b9d] 
-- [[neumann, n],          9.12,    001b211597b4]  #?
+- [[neumann, n],          9.12,    001b211597b4, {admin: uzer}]  #?
 - [[storage-mplan, s-m],  9.13]    #?
 - [[it2-mplan,it2-m],     9.14]    #?
 - [[it-mplan,it-m],       9.15]    #?
