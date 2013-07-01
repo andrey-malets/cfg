@@ -1,102 +1,124 @@
-# generic service template definition
-define service{
-        name                            generic-service ; The 'name' of this service template
-        active_checks_enabled           1       ; Active service checks are enabled
-        passive_checks_enabled          1       ; Passive service checks are enabled/accepted
-        parallelize_check               1       ; Active service checks should be parallelized (disabling this can lead to major performance problems)
-        obsess_over_service             1       ; We should obsess over this service (if necessary)
-        check_freshness                 0       ; Default is to NOT check service 'freshness'
-        notifications_enabled           1       ; Service notifications are enabled
-        event_handler_enabled           1       ; Service event handler is enabled
-        flap_detection_enabled          1       ; Flap detection is enabled
-        failure_prediction_enabled      1       ; Failure prediction is enabled
-        process_perf_data               1       ; Process performance data
-        retain_status_information       1       ; Retain status information across program restarts
-        retain_nonstatus_information    1       ; Retain non-status information across program restarts
-		notification_interval           0		; Only send notifications on status change by default.
-		is_volatile                     0
-		check_period                    24x7
-		normal_check_interval           5
-		retry_check_interval            1
-		max_check_attempts              4
-		notification_period             24x7
-		notification_options            w,u,c,r
-		contacts                        root
-        register                        0       ; DONT REGISTER THIS DEFINITION - ITS NOT A REAL SERVICE, JUST A TEMPLATE!
-        }
+define host {
+    name                            generic-host ; The name of this host template
+    notifications_enabled           1            ; Host notifications are enabled
+    event_handler_enabled           1            ; Host event handler is enabled
+    flap_detection_enabled          1            ; Flap detection is enabled
+    failure_prediction_enabled      1            ; Failure prediction is enabled
+    process_perf_data               1            ; Process performance data
+    retain_status_information       1            ; Retain status information across program restarts
+    retain_nonstatus_information    1            ; Retain non-status information across program restarts
+    check_command                   check-host-alive
+    max_check_attempts              10
+    notification_interval           0
+    notification_period             24x7
+    notification_options            d,u,r
+    register                        0
+    contacts                        default
+}
 
-define timeperiod{
-        timeperiod_name 24x7
-        alias           24 Hours A Day, 7 Days A Week
-        sunday          00:00-24:00
-        monday          00:00-24:00
-        tuesday         00:00-24:00
-        wednesday       00:00-24:00
-        thursday        00:00-24:00
-        friday          00:00-24:00
-        saturday        00:00-24:00
-        }
+define service {
+    name                            generic-service ; The 'name' of this service template
+    active_checks_enabled           1       ; Active service checks are enabled
+    passive_checks_enabled          1       ; Passive service checks are enabled/accepted
+    parallelize_check               1       ; Active service checks should be parallelized (disabling this can lead to major performance problems)
+    obsess_over_service             1       ; We should obsess over this service (if necessary)
+    check_freshness                 0       ; Default is to NOT check service 'freshness'
+    notifications_enabled           1       ; Service notifications are enabled
+    event_handler_enabled           1       ; Service event handler is enabled
+    flap_detection_enabled          1       ; Flap detection is enabled
+    failure_prediction_enabled      1       ; Failure prediction is enabled
+    process_perf_data               1       ; Process performance data
+    retain_status_information       1       ; Retain status information across program restarts
+    retain_nonstatus_information    1       ; Retain non-status information across program restarts
+    notification_interval           0       ; Only send notifications on status change by default.
+    is_volatile                     0
+    check_period                    24x7
+    normal_check_interval           5
+    retry_check_interval            1
+    max_check_attempts              4
+    notification_period             24x7
+    notification_options            w,u,c,r
+    contacts                        default
+    register                        0       ; DONT REGISTER THIS DEFINITION - ITS NOT A REAL SERVICE, JUST A TEMPLATE!
+}
 
-# Here is a slightly friendlier period during work hours
-define timeperiod{
-        timeperiod_name workhours
-        alias           Standard Work Hours
-        monday          09:00-17:00
-        tuesday         09:00-17:00
-        wednesday       09:00-17:00
-        thursday        09:00-17:00
-        friday          09:00-17:00
-        }
+define timeperiod {
+    timeperiod_name 24x7
+    alias           24 Hours A Day, 7 Days A Week
+    sunday          00:00-24:00
+    monday          00:00-24:00
+    tuesday         00:00-24:00
+    wednesday       00:00-24:00
+    thursday        00:00-24:00
+    friday          00:00-24:00
+    saturday        00:00-24:00
+}
 
-# The complement of workhours
-define timeperiod{
-        timeperiod_name nonworkhours
-        alias           Non-Work Hours
-        sunday          00:00-24:00
-        monday          00:00-09:00,17:00-24:00
-        tuesday         00:00-09:00,17:00-24:00
-        wednesday       00:00-09:00,17:00-24:00
-        thursday        00:00-09:00,17:00-24:00
-        friday          00:00-09:00,17:00-24:00
-        saturday        00:00-24:00
-        }
+define timeperiod {
+    timeperiod_name workhours
+    alias           Standard Work Hours
+    monday          09:00-17:00
+    tuesday         09:00-17:00
+    wednesday       09:00-17:00
+    thursday        09:00-17:00
+    friday          09:00-17:00
+}
 
-# This one is a favorite: never :)
-define timeperiod{
-        timeperiod_name never
-        alias           Never
-        }
+define timeperiod {
+    timeperiod_name nonworkhours
+    alias           Non-Work Hours
+    sunday          00:00-24:00
+    monday          00:00-09:00,17:00-24:00
+    tuesday         00:00-09:00,17:00-24:00
+    wednesday       00:00-09:00,17:00-24:00
+    thursday        00:00-09:00,17:00-24:00
+    friday          00:00-09:00,17:00-24:00
+    saturday        00:00-24:00
+}
 
-# end of file
+define timeperiod {
+    timeperiod_name never
+    alias           Never
+}
+
+{% if state.default_user %}
 define contact {
-    contact_name                    root
-    alias                           Root
+    contact_name                    default
+    alias                           {{ state.default_user.name }}
     service_notification_period     24x7
     host_notification_period        24x7
     service_notification_options    w,u,c,r
     host_notification_options       d,r
     service_notification_commands   notify-service-by-email
     host_notification_commands      notify-host-by-email
-    email                           root@localhost
+    email                           {{ state.default_user.email }}
 }
+{% else %}
+define contact {
+    contact_name                    nobody
+    alias                           Nobody
+    service_notification_period     never
+    host_notification_period        never
+    service_notification_options    w,u,c,r
+    host_notification_options       d,r
+    service_notification_commands   notify-service-by-email
+    host_notification_commands      notify-host-by-email
+}
+{% endif %}
 
-define host {
-    name                            generic-host    ; The name of this host template
-    notifications_enabled           1               ; Host notifications are enabled
-    event_handler_enabled           1               ; Host event handler is enabled
-    flap_detection_enabled          1               ; Flap detection is enabled
-    failure_prediction_enabled      1               ; Failure prediction is enabled
-    process_perf_data               1               ; Process performance data
-    retain_status_information       1               ; Retain status information across program restarts
-    retain_nonstatus_information    1               ; Retain non-status information across program restarts
-    check_command                   check-host-alive
-    max_check_attempts              10
-    notification_interval           0
-#    notification_period             24x7
-    notification_options            d,u,r
-    register                        0
-    contacts                        root
+{% for user in state.users %}
+define contact {
+    contact_name                    {{ user.nickname }}
+    alias                           {{ user.name }}
+    service_notification_period     24x7
+    host_notification_period        24x7
+    service_notification_options    w,u,c,r
+    host_notification_options       d,r
+    service_notification_commands   notify-service-by-email
+    host_notification_commands      notify-host-by-email
+    email                           {{ user.email }}
 }
+{% endfor %}
 
 {% for host in state.hosts %}
 define host {
@@ -108,15 +130,31 @@ define host {
     {% else %}
     address   {{ host.name }}
     {%- endif %}
+    contacts  {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
 }
 
-{% if 'services' in host.props and 'ssh' in host.props['services'] %}
+{% if 'services' in host.props %}
+
+{% if 'ssh' in host.props['services'] %}
 define service {
-    use                     generic-service
-    host_name               {{ host.sname }}
-    service_description     SSH server
-    check_command           check_ssh
-	notification_interval   0
+    use                 generic-service
+    host_name           {{ host.sname }}
+    service_description SSH server
+    check_command       check_ssh
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
 }
 {% endif %}
+
+{% if 'http' in host.props['services'] %}
+define service {
+    use                 generic-service
+    host_name           {{ host.sname }}
+    service_description HTTP server
+    check_command       check_http
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+}
+{% endif %}
+
+{% endif %}
+
 {% endfor %}

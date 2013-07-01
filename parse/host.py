@@ -33,6 +33,8 @@ class Host:
 
         self.props = data[0] if len(data) else {}
 
+        self.admin = self.props.get('admin', None)
+
         self.fb = map(defaults.expand_ip, self.props.get('fb', []))
 
     @property

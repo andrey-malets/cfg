@@ -1,8 +1,10 @@
 people:
-- [ilya,    "Ilya Zelenchuk",     ilya@hackerdom.ru]
-- [uzer,    "Andrey Malets",      andrey.malets@gmail.com]
-- [znick,   "Nickolai Zhuravlev", znick@znick.ru]
-- [vsamun,  "Victor Samun",       victor.samun@gmail.com]
+- [mon,    "Monitoring list",      monitoring@urgu.org] # this is the default
+- [ilya,   "Ilya Zelenchuk",       ilya@hackerdom.ru]
+- [kost,   "Konstantin Plotnikov", kost@hackerdom.ru]
+- [uzer,   "Andrey Malets",        andrey.malets@gmail.com]
+- [znick,  "Nickolai Zhuravlev",   znick@znick.ru]
+- [vsamun, "Victor Samun",         victor.samun@gmail.com]
 
 defaults:
   network_prefix: '172.16'
@@ -34,7 +36,7 @@ groups:
 - [aps,      '(.+-ap|ap\d)',            {services: [http], admin: uzer}]
 - [ipmi,     '.+-ipmi',                 {services: [ipmi]}]
 - [mplan,    '.+-mplan',                {services: [mplan]}]
-- [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rrdp]}]
+- [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rrdp], admin: kost}]
 - [embedded, [ipmi, aps, switches]]
 - [puppet-managed, [hogs], '(uzer|znick)-pc', {services: [puppet-ssh]}]
 
@@ -48,7 +50,7 @@ hosts:
 - [[hp-switch, hps],      9.7, ]   #?
 - [[hog-switch, hs],      9.8,     001ac1d1a981]
 - [[hog-ap, hap],         9.9,     00259c3171aa]
-- [[licklider, l],       '9.10']   #?
+- [[licklider, l],       '9.10',        {admin: znick}]   #?
 - [[hog-ups, hu],         9.11,    00c0b7598b9d] 
 - [[neumann, n],          9.12,    001b211597b4]  #?
 - [[storage-mplan, s-m],  9.13]    #?
@@ -129,11 +131,11 @@ hosts:
 #   free                  194.226.244.124
 #   free                  194.226.244.125
 - [[dijkstra, d, v, anytask, puppet, r4u, ssl, status, wiki],
-                          194.226.244.126, 0002a54f11c2]
+                          194.226.244.126, 0002a54f11c2, {admin: uzer}]
 
-- [ babbage.usu,      194.226.235.251]
+- [ babbage.usu,      194.226.235.251, {admin: znick}]
 - [ overclocking.usu, 194.226.235.187]
-- [ shannon.usu,      194.226.235.185]
+- [ shannon.usu,      194.226.235.185, {admin: znick}]
 
 - [ ructf.org,  194.226.235.189]
 - [ ructfe.org, 194.226.235.189]
