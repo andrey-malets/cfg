@@ -69,14 +69,14 @@ hosts:
 - [[ritchie, r],          9.26]    #?
 #   dijkstra              9.254
 
-- [ anytask-back,         10.215,  001851ad5d74, {backend_for: anytask.urgu.org}]
+- [ anytask-back,         10.215,  001851ad5d74, {backend_for: anytask.urgu.org, admin: znick}]
 #   free                  10.216
 #   free                  10.217
 #   free                  10.218
 #   free                  10.219
 #   free                 '10.220'
 - [ znick-pc.runc,        10.221,  001cc0641451] #?
-- [ irc-back,             10.222,  001851bcb7a7, {backend_for: irc.hackerdom.ru}]
+- [ irc-back,             10.222,  001851bcb7a7, {backend_for: irc.hackerdom.ru, admin: znick}]
 - [ dc3.runc,             10.223,  00163a34f84d]
 #   free                  10.224
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
@@ -89,17 +89,17 @@ hosts:
 #   free                  10.232
 #   free                  10.233
 - [ uzer-pc.runc,         10.234,  001b211597b4]
-- [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru}]
+- [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237]
 - [[itanium,it],          10.238]  #?
 - [ itanium2,             10.239]  #?
 - [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru}]
 - [ tb,                   10.241,  001851d78a0a]
-- [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru}]
+- [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
 - [ mysql.runc,           10.243,  0018512e4ea0]
 - [ 633-scanner,          10.244,  00c0ee25d6b1]
-- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: hackerdom.ru}]
+- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: hackerdom.ru}] # admin: domi?
 - [ 633-printer,          10.246,  00c0ee1c9a28]
 - [ hog.runc,             10.247,  000c29ad7767]
 #   licklider-fastbone    10.248
