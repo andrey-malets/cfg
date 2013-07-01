@@ -114,7 +114,6 @@ hosts:
 - [ dcimap-scanner,       50.245,  00c0ee25d6ae]
 - [ dcimap-printer,       50.246,  00c0ee1c78a8]
 - [ dcimap-sheka,         50.248,  0019d17ebab2]
-- [ dcimap-webcam,        50.252,  0002d115a721]
 
 #   free                  194.226.244.113
 - [[main-switch, ms],     194.226.244.114, 001cc534d301]
