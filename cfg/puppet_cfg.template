@@ -41,8 +41,11 @@ class managed-ssh {
 
 class nrpe-generic {
     service { 'nagios-nrpe-server':
-        ensure  => 'running',
-        enable  => 'true',
+        ensure     => 'running',
+        enable     => 'true',
+        hasrestart => 'true',
+        restart    => '/etc/init.d/nagios-nrpe-server restart',
+        pattern    => '/usr/sbin/nrpe',
     }
 
     file { '/etc/nagios/nrpe.cfg':
