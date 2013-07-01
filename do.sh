@@ -134,6 +134,12 @@ gen_ssh_known_hosts() {
     ) > /var/www/urgu.org/https/known_hosts
 }
 
+gen_nagios() {
+    DIR=$DATA/nagios
+    mkdir -p $DIR
+    $MAIN nagios $CFGDIR/nagios.template > $DIR/nagios.cfg
+}
+
 mkdir -p $DATA
 
 gen_dhcp
@@ -144,3 +150,5 @@ gen_puppet_fileserver
 gen_puppet_ssh
 
 gen_ssh_known_hosts
+
+gen_nagios
