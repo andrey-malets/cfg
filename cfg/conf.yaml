@@ -7,6 +7,7 @@ people:
 - [vsamun, "Victor Samun",         victor.samun@gmail.com]
 
 defaults:
+  nagios: 194.226.244.126
   network_prefix: '172.16'
   domains:
     default: 'urgu.org'
@@ -14,13 +15,15 @@ defaults:
     '.usu' : '.usu.edu.ru'
 
 networks:
-- [172.16.9/24,        172.16.9.253,    {rdns: 1}]
-- [172.16.10/24,       172.16.10.253,   {dhcp: '1-128', rdns: 1, fb: 1}]
-- [172.16.11/24,       172.16.11.253,   {dhcp: '40-252', rdns: 1, fb: 1}]
-- [172.16.12/24,       172.16.12.253,   {dhcp: '30-252', rdns: 1, fb: 1}]
-- [172.16.20/24,       172.16.20.254,   {rdns: 1}]
-- [172.16.50/24,       172.16.50.254,   {dhcp: '1-240', rdns: 1, fb: 1}]
-- [194.226.244.112/28, 194.226.244.114]
+- [172.16.9/24,        172.16.9.253,    {nagios: 9.254,  rdns: 1}]
+- [172.16.10/24,       172.16.10.253,   {nagios: 10.254, dhcp: '1-128', rdns: 1, fb: 1}]
+- [172.16.11/24,       172.16.11.253,   {nagios: 11.254, dhcp: '40-252', rdns: 1, fb: 1}]
+- [172.16.12/24,       172.16.12.253,   {nagios: 12.254, dhcp: '30-252', rdns: 1, fb: 1}]
+- [172.16.18/24,       172.16.18.1]
+- [172.16.20/24,       172.16.20.254,   {nagios: 20.254, rdns: 1}]
+- [172.16.50/24,       172.16.50.254,   {nagios: 50.254, dhcp: '1-240', rdns: 1, fb: 1}]
+- [194.226.235.128/25, 194.226.235.254]
+- [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.224.126}]
 
 groups:
 - [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$',
@@ -97,7 +100,7 @@ hosts:
 - [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru}]
 - [ tb,                   10.241,  001851d78a0a]
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
-- [ mysql.runc,           10.243,  0018512e4ea0]
+- [ mysql,                10.243,  0018512e4ea0]
 - [ 633-scanner,          10.244,  00c0ee25d6b1]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: hackerdom.ru}] # admin: domi?
 - [ 633-printer,          10.246,  00c0ee1c9a28]

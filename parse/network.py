@@ -22,6 +22,7 @@ class Network:
         self.router = Network.stoi(data.pop(0))
         self.props  = {} if not len(data) else data.pop(0)
         self.dhcp   = None if 'dhcp' not in self.props else self.props['dhcp'].split('-')
+        self.nagios = self.props.get('nagios', None)
         assert (self.addr & ~self.mask) == 0, 'invalid network %s' % self
         assert self.router & self.mask == self.addr, 'invalid router for %s' % self
         assert self.is_classful() or 'rdns' not in self.props, ('rdns in classless net %s' %
@@ -53,7 +54,10 @@ class Network:
         base = addr[0:addr.rindex('.')]
         return ('%s.%s' % (base, self.dhcp[0]), '%s.%s' % (base, self.dhcp[1]))
 
-def choose(nets, addr):
+    def get_nagios(self):
+        return self.nagios
+
+def choose_net(nets, addr):
     candidates = filter(lambda net: net.get_addr().startswith(addr), nets)
     if len(candidates) == 1:
         return candidates[0]
@@ -61,3 +65,12 @@ def choose(nets, addr):
         raise Exception('multiple networks chosen for %s, clarify' % addr)
     else:
         raise Exception('no networks chosen for %s' % addr)
+
+def get_nagios(nets, addr):
+    candidates = filter(lambda net: net.has(addr), nets)
+    if len(candidates) == 1:
+        return candidates[0].get_nagios()
+    elif len(candidates) > 1:
+        raise Exception('multiple networks chosen for %s, clarify' % addr)
+    else:
+        return None

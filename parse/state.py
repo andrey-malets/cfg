@@ -1,8 +1,10 @@
 from defaults import Defaults
 from host     import Host, check_hosts
 from group    import Group, expand_groups
-from network  import Network, choose
+from network  import Network
 from user     import User
+
+import network
 
 class State:
     def __init__(self, config):
@@ -23,4 +25,12 @@ class State:
         map(Host.clean, self.hosts)
 
     def choose_net(self, net_name):
-        return choose(self.networks, net_name)
+        return network.choose_net(self.networks, net_name)
+
+    def get_nagios(self, addr):
+        rv = self.defaults.nagios
+        if addr:
+            chosen = network.get_nagios(self.networks, addr)
+            if chosen:
+                rv = chosen
+        return self.defaults.expand_ip(rv)

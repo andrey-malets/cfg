@@ -23,3 +23,7 @@ def rdns_cfg(state, template, patt, empty):
     for net in filter_nets(state, 'rdns'):
         nets[net.get_rdns_zone()] = patt % net.get_addr()
     return jinja2.Template(template).render(networks=nets,empty=empty)
+
+@add_cmd('router', False, 1)
+def choose_router(state, addr):
+    return state.choose_router(addr)

@@ -3,7 +3,7 @@ from itertools import chain
 from cmd import add_cmd
 
 @add_cmd('dhcp', True, 0)
-def gen(state, template):
+def gen_dhcp(state, template):
     def get_entries(host):
         def get_entry(name, mac):
             return {'name'     : name,
