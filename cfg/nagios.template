@@ -188,6 +188,7 @@ define service {
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
 }
 
+{% if not 'managed' in host.props %}
 define service {
     use                 generic-service
     service_description APT package state
@@ -196,6 +197,7 @@ define service {
     host_name           {{ host.sname }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
 }
+{% endif %}
 
 {% endif %}
 

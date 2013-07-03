@@ -2,7 +2,7 @@ import jinja2
 from cmd import add_cmd
 
 def get(state):
-    return filter(lambda host: 'puppet-ssh' in host.services, state.hosts)
+    return filter(lambda host: 'managed' in host.props, state.hosts)
 
 @add_cmd('puppet_cfg', True, 0)
 def gen(state, template):

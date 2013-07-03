@@ -41,7 +41,7 @@ groups:
 - [mplan,    '.+-mplan',                {services: [mplan]}]
 - [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rrdp], admin: kost}]
 - [embedded, [ipmi, aps, switches]]
-- [puppet-managed, [hogs], '(uzer|znick)-pc', {services: [puppet-ssh]}]
+- [managed,  [hogs], '(uzer|znick)-pc', {managed: 'true'}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]

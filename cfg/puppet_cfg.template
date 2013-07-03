@@ -41,7 +41,7 @@ class managed-ssh {
 
 {% for host in state.hosts %}
 node '{{ host.name }}' {
-    {% if 'puppet-ssh' in host.services %}
+    {% if 'managed' in host.props %}
         include managed-ssh
     {% endif %}
 
@@ -51,6 +51,12 @@ node '{{ host.name }}' {
             $nrpe_listen = '{{ host.addr }}'
         {% else %}
             $nrpe_listen = '0.0.0.0'
+        {% endif %}
+
+        {% if 'managed' in host.props %}
+            $check_apt = 'false'
+        {% else %}
+            $check_apt = 'true'
         {% endif %}
         include nrpe
     {% endif %}
