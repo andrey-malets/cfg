@@ -1,5 +1,5 @@
 import re
-from util import ValueFromGroup, ValidationError
+from util import ValueFromGroup, ValidationError, primitive
 
 class Group:
     def __init__(self, data):
@@ -46,10 +46,12 @@ def merge(src, dst):
         for name, prop in sprops.iteritems():
             if not check(name, prop, dprops):
                 return
-            if type(prop) == str or type(prop) == ValueFromGroup:
+            if primitive(prop):
+                if name not in dprops: dprops[name] = ValueFromGroup(prop, src)
+            elif type(prop) == ValueFromGroup:
                 if name not in dprops:
-                    dprops[name] = ValueFromGroup(prop, src)
-                elif type(dprops[name]) == ValueFromGroup:
+                    dprops[name] = ValueFromGroup(prop.value, src)
+                else:
                     errors.append(MergeError(
                         ('string value "%s" for "%s" has no value in "%s" but ' +
                          'came from two diffrent groups: "%s" and "%s", can\'t merge') %
