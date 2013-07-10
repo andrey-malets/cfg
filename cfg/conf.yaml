@@ -28,20 +28,17 @@ networks:
 groups:
 - [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$',
                                         {services: [unix]}]
-- [servers,  '^(m|mm|h|t|r|it)$',       {services: [ssh], admin: uzer}]
-- [ssh,      '(uzer|znick)-pc',         {services: [rssh]}]
-- [netboot,  '(uzer|znick)-pc',         {dhcp: {ipxe.scriptlet: cow}}]
 - [switches, '.+-switch',               {services: [http], admin: uzer}]
 - [hog-amt,  'h\d\d',                   {services: [amt]}]
 - [621-pcs,  '621-\d\d',                {admin: vsamun}]
-- [hogs,     'hog\d\d',                 {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}}]
 - [hs,       'h\d\d',                   {services: [amt], admin: uzer}]
 - [aps,      '(.+-ap|ap\d)',            {services: [http], admin: uzer}]
 - [ipmi,     '.+-ipmi',                 {services: [ipmi]}]
 - [mplan,    '.+-mplan',                {services: [mplan]}]
 - [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rrdp], admin: kost}]
+- [hogs,     'hog\d\d']
+- [managed,  [hogs], '(uzer|znick)-pc', {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 'true'}]
 - [embedded, [ipmi, aps, switches]]
-- [managed,  [hogs], '(uzer|znick)-pc', {managed: 'true'}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]

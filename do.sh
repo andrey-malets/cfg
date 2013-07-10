@@ -151,6 +151,28 @@ gen_nagios() {
     fi
 }
 
+gen_ssh_known_hosts_updater() {
+    $MAIN ssh_known_hosts urgu.org 194.226.244.126 | while read name line; do
+        local DIR=$DATA/ssh/$name
+        if [ -d $DIR ]; then
+            read newtype newkey newcomment < $DIR/ssh_host_rsa_key.pub
+            echo $line | while read -d, item; do
+cat <<END
+have_key=0
+ssh-keygen -F $item | grep -v '#' | while read host type key comment; do
+    have_key=1
+    if [ \$key != $newkey ]; then echo "warning: key for $item has changed"; fi
+    echo "$item $newtype $newkey $newcomment"
+done
+if [ \$have_key -eq 0 ]; then
+    echo "$item $newtype $newkey $newcomment"
+fi
+END
+            done
+        fi
+    done
+}
+
 mkdir -p $DATA
 
 gen_dhcp
@@ -161,5 +183,6 @@ gen_puppet_fileserver
 gen_puppet_ssh
 
 gen_ssh_known_hosts
+#gen_ssh_known_hosts_updater
 
 gen_nagios

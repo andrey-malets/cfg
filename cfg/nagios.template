@@ -135,7 +135,7 @@ define host {
 
 {% if 'services' in host.props %}
 
-{% if 'ssh' in host.props['services'] %}
+{% if 'unix' in host.props['services'] or 'rssh' in host.props['services'] %}
 define service {
     use                 generic-service
     host_name           {{ host.sname }}
