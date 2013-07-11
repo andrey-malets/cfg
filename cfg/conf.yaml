@@ -1,10 +1,15 @@
 people:
-- [mon,    "Monitoring list",      monitoring@urgu.org] # this is the default
-- [ilya,   "Ilya Zelenchuk",       ilya@hackerdom.ru]
-- [kost,   "Konstantin Plotnikov", kost@hackerdom.ru]
-- [uzer,   "Andrey Malets",        andrey.malets@gmail.com]
-- [znick,  "Nickolai Zhuravlev",   znick@znick.ru]
-- [vsamun, "Victor Samun",         victor.samun@gmail.com]
+- [mon,           "Monitoring list",      monitoring@urgu.org] # this is the default
+- [andgein,       "Andrey Gein",          andgein@yandex.ru]
+- [ilya,          "Ilya Zelenchuk",       ilya@hackerdom.ru]
+- [kost,          "Konstantin Plotnikov", kost@hackerdom.ru]
+- [last,          "Sergey Azovskov",      last_g@hackerdom.ru]
+- [muzafarov,     "Maxim Muzafarov",      m.muzafarov@gmail.com]
+- [uzer,          "Andrey Malets",        andrey.malets@gmail.com]
+- [vsamun,        "Victor Samun",         victor.samun@gmail.com]
+- [yariksuperman, "Yaroslav Borcheninov", yariksuperman@gmail.com]
+- [znick,         "Nickolai Zhuravlev",   znick@znick.ru]
+- [ns,            "Nickolai Shturkin",    ns@splinex.com]
 
 defaults:
   nagios: 194.226.244.126
@@ -33,9 +38,9 @@ groups:
 - [621-pcs,  '621-\d\d',                {admin: vsamun}]
 - [hs,       'h\d\d',                   {services: [amt], admin: uzer}]
 - [aps,      '(.+-ap|ap\d)',            {services: [http], admin: uzer}]
-- [ipmi,     '.+-ipmi',                 {services: [ipmi]}]
-- [mplan,    '.+-mplan',                {services: [mplan]}]
-- [window$,  '^(stream-pc|cuda-pc|l)$', {services: [rrdp], admin: kost}]
+- [ipmi,     '.+-ipmi',                 {services: [ipmi]}, admin: uzer}]
+- [mplan,    '.+-mplan',                {services: [mplan]}, admin: uzer}]
+- [633-pcs,  '(stream|cuda)-pc',        {services: [rrdp], admin: kost}]
 - [hogs,     'hog\d\d']
 - [managed,  [hogs], '(uzer|znick)-pc', {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 'true'}]
 - [embedded, [ipmi, aps, switches]]
@@ -50,7 +55,7 @@ hosts:
 - [[hp-switch, hps],      9.7, ]   #?
 - [[hog-switch, hs],      9.8,     001ac1d1a981]
 - [[hog-ap, hap],         9.9,     00259c3171aa]
-- [[licklider, l],       '9.10',        {admin: znick}]   #?
+- [[licklider, l],       '9.10',                 {admin: znick}]   #?
 - [[hog-ups, hu],         9.11,    00c0b7598b9d] 
 - [[neumann, n],          9.12,    001b211597b4, {admin: uzer}]  #?
 - [[storage-mplan, s-m],  9.13]    #?
@@ -75,51 +80,51 @@ hosts:
 #   free                  10.218
 #   free                  10.219
 #   free                 '10.220'
-- [ znick-pc.runc,        10.221,  001cc0641451] #?
+- [ znick-pc.runc,        10.221,  001cc0641451]
 - [ irc-back,             10.222,  001851bcb7a7, {backend_for: irc.hackerdom.ru, admin: znick}]
 - [ dc3.runc,             10.223,  00163a34f84d]
 #   free                  10.224
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
 #   free                  10.226
-- [ uzer-dell,            10.227,  5cac4c986dc7]
+- [ uzer-dell,            10.227,  5cac4c986dc7, {admin: uzer}]
 # - [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
-- [ shad-cpp.runc,       '10.230', 000c38ad9962]
+- [ shad-cpp.runc,       '10.230', 000c38ad9962, {admin: uzer}]
 #   free                  10.231
 #   free                  10.232
 #   free                  10.233
 - [ uzer-pc.runc,         10.234,  001b211597b4]
 - [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
-- [ cuda-pc.runc,         10.237]
+- [ cuda-pc.runc,         10.237]  #?
 - [[itanium,it],          10.238]  #?
 - [ itanium2,             10.239]  #?
-- [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru}]
-- [ tb,                   10.241,  001851d78a0a]
+- [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru, admin: muzafarov}]
+- [ tb,                   10.241,  001851d78a0a, {admin: andgein}]
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
-- [ mysql,                10.243,  0018512e4ea0]
-- [ 633-scanner,          10.244,  00c0ee25d6b1]
+- [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
+- [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: hackerdom.ru}] # admin: domi?
-- [ 633-printer,          10.246,  00c0ee1c9a28]
-- [ hog.runc,             10.247,  000c29ad7767]
+- [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
+- [ hog.runc,             10.247,  000c29ad7767, {admin: uzer}]
 #   licklider-fastbone    10.248
 - [ dc4.runc,             10.249,  00163a34f855]
 - [ class.runc,          '10.250', 000c292e076a]
-- [ codd.runc,            10.251,  00163a34e94d]
+- [ codd.runc,            10.251,  00163a34e94d, {admin: uzer}]
 - [ class-db,             10.252,  00163e45e63d] #?
 #   main-switch           10.253
 #   dijkstra              10.254
 
-- [[pioneer, p],          18.1]
+- [[pioneer, p],          18.1, {admin: uzer}]
 
-- [ dcimap-vm,            50.100,  000c29ad8762]
-- [ dcimap-scanner,       50.245,  00c0ee25d6ae]
-- [ dcimap-printer,       50.246,  00c0ee1c78a8]
+- [ dcimap-vm,            50.100,  000c29ad8762, {admin: yariksuperman}]
+- [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
+- [ dcimap-printer,       50.246,  00c0ee1c78a8, {admin: yariksuperman}]
 - [ dcimap-sheka,         50.248,  0019d17ebab2]
 
 #   free                  194.226.244.113
 - [[main-switch, ms],     194.226.244.114, 001cc534d301]
-- [ airlab.math.usu.ru,   194.226.244.115, 000c29ad7662]
+- [ airlab.math.usu.ru,   194.226.244.115, 000c29ad7662, {admin: yariksuperman}]
 #   free                  194.226.244.116
 #   free                  194.226.244.117
 #   free                  194.226.244.118
@@ -127,7 +132,7 @@ hosts:
 #   free                 '194.226.244.120'
 #   free                  194.226.244.121
 #   free                  194.226.244.122
-- [ honeypot,             194.226.244.123, 000c29cbbcf7]
+- [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
 - [[dijkstra, d, v, anytask, puppet, r4u, ssl, status, wiki],
@@ -137,8 +142,8 @@ hosts:
 - [ overclocking.usu, 194.226.235.187]
 - [ shannon.usu,      194.226.235.185, {admin: znick}]
 
-- [ ructf.org,  194.226.235.189]
-- [ ructfe.org, 194.226.235.189]
+- [ ructf.org,  194.226.235.189, {admin: znick}]
+- [ ructfe.org, 194.226.235.189, {admin: znick}]
 
 - [ loa.imm.uran.ru ]
 - [ um64.imm.uran.ru ]
@@ -147,7 +152,7 @@ hosts:
 - [ usu-math.usu.ru, 194.226.235.254]
 - [ ns.usu.ru,       194.226.235.22]
 
-- [ splinex.dyndns.org ]
+- [ splinex.dyndns.org, {admin: ns}]
 
 #- [ 621-01,  11.1,   001cc044c5fc]
 #- [ 621-02,  11.2,   001cc044c7fc]
