@@ -25,7 +25,7 @@ def gen_fwd(state, zone):
 def gen_reverse(state, net_name):
     network = state.choose_net(net_name)
     assert network.is_classful(), ('not supported for classless mask /%d' % network.count)
-    for host in state.hosts:
+    for host in filter(lambda host: host.addr != None, state.hosts):
         if network.has(host.addr):
             yield {'name' : host.name, 'addr' : get_rname(host, network)}
 

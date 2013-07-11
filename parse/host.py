@@ -21,7 +21,8 @@ class Host:
             self.saliases = []
 
         self.sname = get_sname(self.name)
-        self.addr  = defaults.expand_ip(data.pop(0)) if len(data) else None
+        self.addr  = (defaults.expand_ip(data.pop(0))
+            if (len(data) and type(data[0]) is not dict) else None)
         
         if len(data) and type(data[0]) is not dict:
             macs = data.pop(0)
