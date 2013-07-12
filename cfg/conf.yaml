@@ -34,6 +34,7 @@ groups:
 - [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$',
                                         {services: [unix]}]
 - [switches, '.+-switch',               {services: [http], admin: uzer}]
+- [printers, '.+-(printer|scanner)',    {services: [http]}]
 - [hog-amt,  'h\d\d',                   {services: [amt]}]
 - [621-pcs,  '621-\d\d',                {admin: vsamun}]
 - [hs,       'h\d\d',                   {services: [amt], admin: uzer}]
