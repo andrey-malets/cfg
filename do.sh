@@ -152,25 +152,68 @@ gen_nagios() {
 }
 
 gen_ssh_known_hosts_updater() {
+    (
+    echo "#!/bin/bash"
+    echo -n '# Generated at '; date
+cat <<END
+
+if [ "\$1" != "" ]; then
+    known_hosts_file=\$1
+elif [ \$(whoami) == root ]; then
+    known_hosts_file=/etc/ssh/ssh_known_hosts
+else
+    known_hosts_file=~/.ssh/known_hosts
+fi
+
+# echo \$known_hosts_file
+
+declare -a script
+
+END
+
     $MAIN ssh_known_hosts urgu.org 194.226.244.126 | while read name line; do
         local DIR=$DATA/ssh/$name
         if [ -d $DIR ]; then
             read newtype newkey newcomment < $DIR/ssh_host_rsa_key.pub
             echo $line | while read -d, item; do
 cat <<END
-have_key=0
-ssh-keygen -F $item | grep -v '#' | while read host type key comment; do
-    have_key=1
-    if [ \$key != $newkey ]; then echo "warning: key for $item has changed"; fi
-    echo "$item $newtype $newkey $newcomment"
-done
-if [ \$have_key -eq 0 ]; then
-    echo "$item $newtype $newkey $newcomment"
-fi
+
+# echo working with $item
+script[\${#script[@]}]=\$(
+    ssh-keygen -F $item -f \$known_hosts_file | grep -v '#' | (
+        changed=0; seen=0;
+        while read host type key comment; do
+            seen=1
+            if [ \$type == $newtype ] && [ \$key != $newkey ]; then
+                changed=1
+            fi
+        done
+        if [ \$seen -ne 0 ]; then
+            if [ \$changed -ne 0 ]; then
+                # echo >&2 "warning: some key(s) for $item changed, replacing";
+                echo "ssh-keygen -R $item -f \$known_hosts_file; rm \${known_hosts_file}.old; \
+                    echo $item $newtype $newkey $newcomment >> \$known_hosts_file; "
+            fi
+        else
+            # echo >&2 "adding new key for $item $newtype $newkey $newcomment"
+            echo "echo $item $newtype $newkey $newcomment >> \$known_hosts_file; "
+        fi
+    )
+)
+
 END
             done
         fi
     done
+
+cat <<END
+
+bash -c "\${script[*]}"
+
+END
+
+    ) >      $DATA/known_hosts.sh
+    chmod +x $DATA/known_hosts.sh
 }
 
 mkdir -p $DATA
@@ -183,6 +226,6 @@ gen_puppet_fileserver
 gen_puppet_ssh
 
 gen_ssh_known_hosts
-#gen_ssh_known_hosts_updater
+gen_ssh_known_hosts_updater
 
 gen_nagios
