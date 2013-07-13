@@ -63,7 +63,10 @@ class Host:
         self.props = step(self.props)
 
     def __str__(self):
-        return 'host {}, aliases: {}, address: {}, macs: {}, props: {}'.format(
+        return self.name
+
+    def format(self):
+        return 'host {0}, aliases: {1}, address: {2}, macs: {3}, props: {4}'.format(
             self.name, self.aliases, self.addr, self.macs, self.props)
 
 def check_hosts(hosts):

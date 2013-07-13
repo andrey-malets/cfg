@@ -1,5 +1,5 @@
 import re
-from util import ValueFromGroup, ValidationError, primitive
+from util import ValueFromGroup, ValidationError, primitive, fromgroup
 
 class Group:
     def __init__(self, data):
@@ -10,7 +10,10 @@ class Group:
         self.props   = data.pop(0) if len(data) else {}
 
     def __str__(self):
-        return '{}: childs: {}, pattern: {}'.format(
+        return self.name
+
+    def format(self):
+        return '{0}: childs: {1}, pattern: {2}'.format(
             self.name, self.childs, self.pattern)
 
     def remove_childs(self, bad_childs):
@@ -46,16 +49,15 @@ def merge(src, dst):
         for name, prop in sprops.iteritems():
             if not check(name, prop, dprops):
                 return
-            if primitive(prop):
-                if name not in dprops: dprops[name] = ValueFromGroup(prop, src)
-            elif type(prop) == ValueFromGroup:
+            if primitive(prop) or fromgroup(prop):
+                value = prop if primitive(prop) else prop.value
                 if name not in dprops:
-                    dprops[name] = ValueFromGroup(prop.value, src)
+                    dprops[name] = ValueFromGroup(value, src)
                 elif type(dprops[name]) == ValueFromGroup:
                     errors.append(MergeError(
-                        ('string value "%s" for "%s" has no value in "%s" but ' +
+                        ('value for "%s" is absent in "%s" but ' +
                          'came from two diffrent groups: "%s" and "%s", can\'t merge') %
-                        (prop.value, name, dst.name, src.name, dprops[name])))
+                        (name, dst, src, dprops[name].source)))
             elif type(prop) == list:
                 dprops[name] = (list(set(dprops[name] + prop))
                     if name in dprops else prop)
