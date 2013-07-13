@@ -31,20 +31,22 @@ networks:
 - [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.224.126}]
 
 groups:
-- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$',
-                                        {services: [unix]}]
-- [switches, '.+-switch',               {services: [http], admin: uzer}]
-- [printers, '.+-(printer|scanner)',    {services: [http]}]
-- [hog-amt,  'h\d\d',                   {services: [amt]}]
-- [621-pcs,  '621-\d\d',                {admin: vsamun}]
-- [hs,       'h\d\d',                   {services: [amt], admin: uzer}]
-- [aps,      '(.+-ap|ap\d)',            {services: [http], admin: uzer}]
-- [ipmi,     '.+-ipmi',                 {services: [ipmi], admin: uzer}]
-- [mplan,    '.+-mplan',                {services: [mplan], admin: uzer}]
-- [633-pcs,  '(stream|cuda)-pc',        {services: [rrdp], admin: kost}]
+- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$', {services: [unix]}]
+- [windows,  [633-pcs], 'dc\d',           {services: [windows]}]
+
+- [aps,      '(.+-ap|ap\d)']
+- [ipmi,     '.+-ipmi',                   {services: [ipmi], admin: uzer}]
+- [mplan,    '.+-mplan',                  {services: [mplan], admin: uzer}]
+- [switches, '.+-switch']
+- [paper,    '.+-(printer|scanner)']
+- [ups,      '.+-ups']
+- [embedded, [aps, switches, paper, ups], {services: [http], admin: uzer}]
+
+- [621-pcs,  '621-\d\d',                  {admin: vsamun}]
+- [633-pcs,  '(stream|cuda)-pc',          {services: [rrdp], admin: kost}]
+- [hs,       'h\d\d',                     {services: [amt], admin: uzer}]
 - [hogs,     'hog\d\d']
-- [managed,  [hogs], '(uzer|znick)-pc', {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 'true'}]
-- [embedded, [ipmi, aps, switches]]
+- [managed,  [hogs], '(uzer|znick)-pc',   {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 'true'}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
@@ -208,7 +210,7 @@ hosts:
 - [ h07,  20.7,   0019d17e85a6 ]
 - [ h08,  20.8,   0019d17f037d ]
 #- [ h09,  20.9,   0019d17eb923 ]
-- [ h10, '20.10', 0019d17f049f ] #?
+- [ h10, '20.10', 0019d17f049f ]
 - [ h11,  20.11,  0019d17ebcd6 ]
 - [ h12,  20.12,  0019d17e9dd5 ]
 - [ h13,  20.13,  0019d17f04da ]
