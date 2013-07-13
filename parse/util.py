@@ -3,11 +3,11 @@ class ValueFromGroup(object):
         self.value = value
         self.source = source
 
-def primitive(value):
-    return type(value) in [str, float, int]
-
 def fromgroup(value):
     return type(value) == ValueFromGroup
+
+def primitive(value):
+    return type(value) in [str, float, int]
 
 class ValidationError(Exception):
     def __init__(self, msg):

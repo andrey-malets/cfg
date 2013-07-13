@@ -1,5 +1,5 @@
 import re
-from util import ValueFromGroup, ValidationError, primitive, fromgroup
+from util import ValueFromGroup, ValidationError, fromgroup, primitive
 
 class Group:
     def __init__(self, data):

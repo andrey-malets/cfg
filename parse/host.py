@@ -1,6 +1,6 @@
 import re
 
-from util import ValueFromGroup, primitive
+from util import fromgroup, primitive
 
 def get_sname(name): return name.split('.')[0]
 
@@ -50,7 +50,7 @@ class Host:
         def step(attr):
             if primitive(attr):
                 return attr
-            elif type(attr) == ValueFromGroup:
+            elif fromgroup(attr):
                 return attr.value
             elif type(attr) == list:
                 return map(step, attr)
