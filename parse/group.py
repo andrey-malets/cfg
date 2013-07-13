@@ -51,11 +51,11 @@ def merge(src, dst):
             elif type(prop) == ValueFromGroup:
                 if name not in dprops:
                     dprops[name] = ValueFromGroup(prop.value, src)
-                else:
+                elif type(dprops[name]) == ValueFromGroup:
                     errors.append(MergeError(
                         ('string value "%s" for "%s" has no value in "%s" but ' +
                          'came from two diffrent groups: "%s" and "%s", can\'t merge') %
-                        (prop, name, dst.name, src.name, dprops[name].source.name)))
+                        (prop.value, name, dst.name, src.name, dprops[name])))
             elif type(prop) == list:
                 dprops[name] = (list(set(dprops[name] + prop))
                     if name in dprops else prop)
