@@ -153,9 +153,8 @@ gen_nagios() {
 
 gen_ssh_known_hosts_updater() {
     (
-    echo "#!/bin/bash"
-    echo -n '# Generated at '; date
 cat <<END
+#!/bin/bash
 
 args=\$(getopt yf: \$*)
 set -- \$args
@@ -245,6 +244,8 @@ END
 
     ) >      $DATA/known_hosts.sh
     chmod +x $DATA/known_hosts.sh
+
+    cp -f $DATA/known_hosts.sh /etc/puppet/files
 }
 
 mkdir -p $DATA

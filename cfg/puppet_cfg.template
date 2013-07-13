@@ -39,6 +39,36 @@ class managed-ssh {
     }
 }
 
+class startcom {
+    file { 'startcom.crt':
+        path => '/usr/local/share/ca-certificates/startcom.crt',
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/startcom.crt',
+    }
+
+    exec { '/usr/sbin/update-ca-certificates -f':
+        subscribe => File['startcom.crt'],
+        refreshonly => true,
+    }
+}
+
+class known_hosts {
+    file { 'known_hosts.sh':
+        path => '/usr/local/bin/known_hosts.sh',
+        mode => 500,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/known_hosts.sh'
+    }
+
+    exec { '/usr/local/bin/known_hosts.sh -y':
+        subscribe => File['known_hosts.sh'],
+        refreshonly => true,
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'managed' in host.props %}
@@ -58,7 +88,11 @@ node '{{ host.name }}' {
         {% else %}
             $check_apt = 'true'
         {% endif %}
+
         include nrpe
+        include startcom
+        include known_hosts
+
     {% endif %}
 }
 {% endfor %}
