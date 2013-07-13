@@ -157,15 +157,36 @@ gen_ssh_known_hosts_updater() {
     echo -n '# Generated at '; date
 cat <<END
 
-if [ "\$1" != "" ]; then
-    known_hosts_file=\$1
-elif [ \$(whoami) == root ]; then
+args=\$(getopt yf: \$*)
+set -- \$args
+
+auto=0
+
+if [ \$(whoami) == root ]; then
     known_hosts_file=/etc/ssh/ssh_known_hosts
 else
     known_hosts_file=~/.ssh/known_hosts
 fi
 
-# echo \$known_hosts_file
+for arg in \$args; do
+    case "\$arg" in
+        -y)
+            auto=1
+            shift ;;
+        -f)
+            known_hosts_file=\$2
+            shift ;;
+    esac
+done
+
+echo >&2 working with \$known_hosts_file
+
+temp_file=\${known_hosts_file}.new
+if [ -r \$known_hosts_file ]; then
+    cp \$known_hosts_file \$temp_file
+else
+    touch \$temp_file
+fi
 
 declare -a script
 
@@ -180,7 +201,7 @@ cat <<END
 
 # echo working with $item
 script[\${#script[@]}]=\$(
-    ssh-keygen -F $item -f \$known_hosts_file | grep -v '#' | (
+    ssh-keygen -F $item -f \$temp_file | grep -v '#' | (
         changed=0; seen=0;
         while read host type key comment; do
             seen=1
@@ -190,13 +211,13 @@ script[\${#script[@]}]=\$(
         done
         if [ \$seen -ne 0 ]; then
             if [ \$changed -ne 0 ]; then
-                # echo >&2 "warning: some key(s) for $item changed, replacing";
-                echo "ssh-keygen -R $item -f \$known_hosts_file; rm \${known_hosts_file}.old; \
-                    echo $item $newtype $newkey $newcomment >> \$known_hosts_file; "
+                echo >&2 "warning: some $newtype key(s) for $item changed, replacing";
+                echo "ssh-keygen -R $item -f \$temp_file 2>/dev/null; rm \${temp_file}.old; \
+                    echo $item $newtype $newkey $newcomment >> \$temp_file; "
             fi
         else
-            # echo >&2 "adding new key for $item $newtype $newkey $newcomment"
-            echo "echo $item $newtype $newkey $newcomment >> \$known_hosts_file; "
+            echo >&2 "info: adding new $newtype key for $item"
+            echo "echo $item $newtype $newkey $newcomment >> \$temp_file; "
         fi
     )
 )
@@ -208,7 +229,17 @@ END
 
 cat <<END
 
-bash -c "\${script[*]}"
+bash -ec "\${script[*]}"
+
+if [ \$auto -ne 0 ]; then
+    mv \$temp_file \$known_hosts_file
+else
+    read -p 'Commit? ' y
+    case \$y in
+        [Yy]*)  mv \$temp_file \$known_hosts_file ;;
+        *)      rm \$temp_file ;;
+    esac
+fi
 
 END
 
