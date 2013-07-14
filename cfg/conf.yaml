@@ -120,7 +120,7 @@ hosts:
 
 - [[pioneer, p],          18.1, {admin: uzer}]
 
-- [ dcimap-vm,            50.100,  000c29ad8762, {admin: yariksuperman}]
+- [ dcimap-vm,           '50.100', 000c29ad8762, {admin: yariksuperman}]
 - [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
 - [ dcimap-printer,       50.246,  00c0ee1c78a8, {admin: yariksuperman}]
 - [ dcimap-sheka,         50.248,  0019d17ebab2]
