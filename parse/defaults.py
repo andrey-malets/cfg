@@ -46,7 +46,10 @@ class Defaults:
             for patt, subst in self.domains.iteritems():
                 if hostname.endswith(subst):
                     return hostname[0:hostname.rindex(subst)]
-            return hostname
+            if hostname.endswith(self.def_domain):
+                return hostname[0:hostname.rindex('.%s' % self.def_domain)]
+            else:
+                return hostname
         else:
             return hostname
 
