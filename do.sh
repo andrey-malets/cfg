@@ -85,6 +85,11 @@ gen_dns() {
     fi
 }
 
+gen_iptables_ports() {
+    $MAIN ipt_ports 194.226.244.126 server | while read line; do $line; done
+    /etc/init.d/iptables save active
+}
+
 gen_puppet_cfg() {
     local DIR=$DATA/puppet
     mkdir -p $DIR
@@ -252,6 +257,7 @@ mkdir -p $DATA
 
 gen_dhcp
 gen_dns
+gen_iptables_ports
 
 gen_puppet_cfg
 gen_puppet_fileserver

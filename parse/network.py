@@ -15,14 +15,15 @@ class Network:
         return '.'.join(reversed(octets))
         
     def __init__(self, data):
-        addr, mask  = data.pop(0).split('/')
-        self.addr   = Network.stoi(addr)
-        self.count  = int(mask)
-        self.mask   = -1 << (32-int(mask))
-        self.router = Network.stoi(data.pop(0))
-        self.props  = {} if not len(data) else data.pop(0)
-        self.dhcp   = None if 'dhcp' not in self.props else self.props['dhcp'].split('-')
-        self.nagios = self.props.get('nagios', None)
+        addr, mask   = data.pop(0).split('/')
+        self.addr    = Network.stoi(addr)
+        self.count   = int(mask)
+        self.mask    = -1 << (32-int(mask))
+        self.router  = Network.stoi(data.pop(0))
+        self.props   = {} if not len(data) else data.pop(0)
+        self.dhcp    = None if 'dhcp' not in self.props else self.props['dhcp'].split('-')
+        self.nagios  = self.props.get('nagios', None)
+        self.private = self.props.get('private', 0)
         assert (self.addr & ~self.mask) == 0, 'invalid network %s' % self
         assert self.router & self.mask == self.addr, 'invalid router for %s' % self
         assert self.is_classful() or 'rdns' not in self.props, ('rdns in classless net %s' %
@@ -65,6 +66,14 @@ def choose_net(nets, addr):
         raise Exception('multiple networks chosen for %s, clarify' % addr)
     else:
         raise Exception('no networks chosen for %s' % addr)
+
+def belongs_to(nets, host):
+    if host.addr != None:
+        candidates = filter(lambda net: net.has(host.addr), nets)
+        assert len(candidates) < 2, 'overlapping networks'
+        return candidates[0] if len(candidates) else None
+    else:
+        return None
 
 def get_nagios(nets, addr):
     candidates = filter(lambda net: net.has(addr), nets)

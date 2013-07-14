@@ -1,7 +1,7 @@
 from defaults import Defaults
 from host     import Host, check_hosts
 from group    import Group, expand_groups
-from network  import Network
+from network  import Network, belongs_to
 from user     import User
 
 import network
@@ -37,3 +37,9 @@ class State:
             if chosen:
                 rv = chosen
         return self.defaults.expand_ip(rv)
+
+    def belongs_to(self, host):
+        return belongs_to(self.networks, host)
+
+    def is_gray(self, host):
+        return host.addr != None and host.addr.startswith(self.defaults.network_prefix)

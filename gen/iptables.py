@@ -6,22 +6,33 @@ def get_pub_port(host):
 
 @add_cmd('ipt_ports', False, 2)
 def gen_ports(state, dst, chain):
-    def matches(host):
-        return (host.addr != None and
-            ('rssh' in host.services or 'rrdp' in host.services))
+    def tcp_forwardings(host):
+        rv = host.props.get('tcp_fwd', {})
+        if 'rssh' in host.services or 'unix' in host.services: rv[get_pub_port(host)] = 22
+        if 'rrdp' in host.services: rv[get_pub_port(host)] = 3389
+        return rv
 
-    def get_priv(host):
-        return 22 if 'rssh' in host.services else 3389
+    def udp_forwardings(host):
+        return host.props.get('udp_fwd', {})
 
     lines = ["iptables -t nat -F %s" % chain]
-    for host in filter(matches, state.hosts):
+    def add(proto, srcport, dstport):
         lines.append("iptables -t nat -A %(chain)s\
-                         -d %(dst)s --dport %(pub)d\
-                         -p tcp -m state --state NEW\
-                         -j DNAT --to-destination %(ip)s:%(priv)d"
-                % { 'chain' : chain,
-                    'dst'   : dst,
-                    'pub'   : get_pub_port(host),
-                    'ip'    : host.addr,
-                    'priv'  : get_priv(host) })
+                          -p %(proto)s -m state --state NEW \
+                          -d %(dst)s --dport %(srcport)d\
+                          -j DNAT --to-destination %(ip)s:%(dstport)d"
+                           % { 'chain'   : chain,
+                               'dst'     : dst,
+                               'srcport' : srcport,
+                               'proto'   : proto,
+                               'ip'      : host.addr,
+                               'dstport' : dstport })
+
+    def matches(host):
+        return state.is_gray(host) and not state.belongs_to(host).private
+
+    for host in filter(matches, state.hosts):
+        for srcport, dstport in tcp_forwardings(host).iteritems(): add('tcp', srcport, dstport)
+        for srcport, dstport in udp_forwardings(host).iteritems(): add('udp', srcport, dstport)
+
     return '\n'.join(lines)

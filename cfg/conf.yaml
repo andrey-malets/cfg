@@ -20,18 +20,18 @@ defaults:
     '.usu' : '.usu.edu.ru'
 
 networks:
-- [172.16.9/24,        172.16.9.253,    {nagios: 9.254,  rdns: 1}]
+- [172.16.9/24,        172.16.9.253,    {nagios: 9.254,  rdns: 1, private: 1}]
 - [172.16.10/24,       172.16.10.253,   {nagios: 10.254, dhcp: '1-128', rdns: 1, fb: 1}]
 - [172.16.11/24,       172.16.11.253,   {nagios: 11.254, dhcp: '40-252', rdns: 1, fb: 1}]
 - [172.16.12/24,       172.16.12.253,   {nagios: 12.254, dhcp: '30-252', rdns: 1, fb: 1}]
-- [172.16.18/24,       172.16.18.1]
-- [172.16.20/24,       172.16.20.254,   {nagios: 20.254, rdns: 1}]
+- [172.16.18/24,       172.16.18.1,     {private: 1}]
+- [172.16.20/24,       172.16.20.254,   {nagios: 20.254, rdns: 1, private: 1}]
 - [172.16.50/24,       172.16.50.254,   {nagios: 50.254, dhcp: '1-240', rdns: 1, fb: 1}]
 - [194.226.235.128/25, 194.226.235.254]
 - [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.224.126}]
 
 groups:
-- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|t|tb|r|it)$', {services: [unix]}]
+- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|r|shad-cpp|t|tb|it)$', {services: [unix]}]
 - [windows,  [633-pcs], 'dc\d',           {services: [windows]}]
 
 - [aps,      '(.+-ap|ap\d)']
@@ -83,7 +83,7 @@ hosts:
 #   free                  10.218
 #   free                  10.219
 #   free                 '10.220'
-- [ znick-pc.runc,        10.221,  001cc0641451]
+- [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
 - [ irc-back,             10.222,  001851bcb7a7, {backend_for: irc.hackerdom.ru, admin: znick}]
 - [ dc3.runc,             10.223,  00163a34f84d]
 #   free                  10.224
@@ -96,7 +96,7 @@ hosts:
 #   free                  10.231
 #   free                  10.232
 #   free                  10.233
-- [ uzer-pc.runc,         10.234,  001b211597b4]
+- [ uzer-pc.runc,         10.234,  001b211597b4, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
 - [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237]  #?
