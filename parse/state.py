@@ -27,6 +27,9 @@ class State:
     def choose_net(self, net_name):
         return network.choose_net(self.networks, net_name)
 
+    def get_canonical_hostname(self, host):
+        return self.defaults.get_canonical_hostname(host.name)
+
     def get_nagios(self, addr):
         rv = self.defaults.nagios
         if addr:

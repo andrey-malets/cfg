@@ -41,6 +41,15 @@ class Defaults:
 
         return '%s.%s' % (host, self.def_domain)
 
+    def get_canonical_hostname(self, hostname):
+        if '.' in hostname:
+            for patt, subst in self.domains.iteritems():
+                if hostname.endswith(subst):
+                    return hostname[0:hostname.rindex(subst)]
+            return hostname
+        else:
+            return hostname
+
     def expand_ip(self, ip):
         return ('%s.%s' % (self.network_prefix, ip)
                 if not re.match('^\d+\.\d+\.\d+\.\d+$', str(ip))

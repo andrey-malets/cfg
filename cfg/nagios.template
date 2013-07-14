@@ -123,8 +123,8 @@ define contact {
 {% for host in state.hosts %}
 define host {
     use       generic-host
-    host_name {{ host.sname }}
-    alias     {{ host.sname }}
+    host_name {{ state.get_canonical_hostname(host) }}
+    alias     {{ state.get_canonical_hostname(host) }}
     {%- if host.addr %}
     address   {{ host.addr }}
     {% else %}
