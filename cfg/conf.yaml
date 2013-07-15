@@ -32,7 +32,7 @@ networks:
 - [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.224.126}]
 
 groups:
-- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|r|shad-cpp|t|tb|it)$', {services: [unix]}]
+- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|h|hog|mysql|m|mm|n|r|t|tb|ts|it)$', {services: [unix]}]
 - [windows,  [633-pcs], 'dc\d',           {services: [windows]}]
 
 - [aps,      '(.+-ap|ap\d)']
@@ -93,7 +93,7 @@ hosts:
 - [ uzer-dell,            10.227,  5cac4c986dc7, {admin: uzer}]
 # - [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
-- [ shad-cpp.runc,       '10.230', 000c38ad9962, {admin: uzer}]
+- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22}, admin: uzer}]
 #   free                  10.231
 #   free                  10.232
 #   free                  10.233
