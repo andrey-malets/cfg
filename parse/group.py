@@ -111,12 +111,15 @@ def expand_groups(groups, hosts):
     for group in groups:
         for child_name in group.childs:
             group_names[child_name].parents.add(group)
+    for group in groups: group.parents0 = set(group.parents)
 
     empty = filter(empty_parents, groups)
     while len(empty):
         group = empty.pop()
         for host in group.get_matching(hosts):
             errors.extend(merge(group, host))
+            host.groups += group.parents0
+            host.groups += [group]
         for child_name in group.childs:
             child = group_names[child_name]
             child.parents.remove(group)

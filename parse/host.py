@@ -38,6 +38,8 @@ class Host:
 
         self.fb = map(defaults.expand_ip, self.props.get('fb', []))
 
+        self.groups = []
+
     @property
     def snames(self):
         return [self.sname] + self.saliases

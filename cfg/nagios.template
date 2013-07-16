@@ -120,17 +120,27 @@ define contact {
 }
 {% endfor %}
 
+{% for group in state.groups %}
+define hostgroup {
+    hostgroup_name  {{ group.name }}
+    alias           {{ group.name }}
+}
+{% endfor %}
+
 {% for host in state.hosts %}
 define host {
-    use       generic-host
-    host_name {{ state.get_canonical_hostname(host) }}
-    alias     {{ state.get_canonical_hostname(host) }}
-    {%- if host.addr %}
-    address   {{ host.addr }}
-    {% else %}
-    address   {{ host.name }}
+    use        generic-host
+    host_name  {{ state.get_canonical_hostname(host) }}
+    alias      {{ state.get_canonical_hostname(host) }}
+    {%- if host.groups %}
+    hostgroups {{ host.groups|join(',') }}
     {%- endif %}
-    contacts  {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    {%- if host.addr %}
+    address    {{ host.addr }}
+    {%- else %}
+    address    {{ host.name }}
+    {%- endif %}
+    contacts   {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
 }
 
 {% if 'services' in host.props %}
