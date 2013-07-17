@@ -99,7 +99,7 @@ hosts:
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
 #   free                  10.232
 #   free                  10.233
-- [ uzer-pc.runc,         10.234,  001b211597b4, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
+- [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
 - [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237]  #?
