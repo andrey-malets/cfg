@@ -24,7 +24,9 @@ networks:
 - [172.16.10/24,       172.16.10.253,   {nagios: 10.254, dhcp: '1-128', rdns: 1, fb: 1}]
 - [172.16.11/24,       172.16.11.253,   {nagios: 11.254, dhcp: '40-252', rdns: 1, fb: 1}]
 - [172.16.12/24,       172.16.12.253,   {nagios: 12.254, dhcp: '30-252', rdns: 1, fb: 1}]
+- [172.16.16/24,       172.16.16.254,   {nagios: 16.254, rdns: 1, private: 1}]
 - [172.16.18/24,       172.16.18.1,     {nagios: 21.254, rdns: 1, private: 1}]
+- [172.16.19/24,       172.16.19.1,     {nagios: 19.254, rdns: 1, private: 1}]
 - [172.16.20/24,       172.16.20.254,   {nagios: 20.254, rdns: 1, private: 1}]
 - [172.16.21/24,       172.16.21.254,   {nagios: 21.254, rdns: 1, private: 1}]
 - [172.16.50/24,       172.16.50.254,   {nagios: 50.254, dhcp: '1-240', rdns: 1, fb: 1}]
@@ -47,7 +49,7 @@ groups:
 - [633-pcs,  '(stream|cuda)-pc',          {services: [rrdp], admin: kost}]
 - [hs,       'h\d\d',                     {services: [amt], admin: uzer}]
 - [hogs,     'hog\d\d']
-- [managed,  [hogs], '(uzer|znick)-pc',   {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 'true'}]
+- [managed,  [hogs], '(uzer|znick)-pc',   {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 1}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
@@ -94,7 +96,7 @@ hosts:
 # - [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
 - [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22}, admin: uzer}]
-#   free                  10.231
+- [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
 #   free                  10.232
 #   free                  10.233
 - [ uzer-pc.runc,         10.234,  001b211597b4, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
