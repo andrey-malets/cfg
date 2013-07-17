@@ -86,8 +86,18 @@ gen_dns() {
 }
 
 gen_iptables_ports() {
-    $MAIN ipt_ports 194.226.244.126 server | while read line; do $line; done
-    /etc/init.d/iptables save active
+    local CUR=$DATA/ipt_ports.sh
+    local NEW=$CUR.new
+
+    $MAIN ipt_ports 194.226.244.126 server > $NEW
+
+    if ! cmp_files $CUR $NEW; then
+        mv $NEW $CUR
+        bash $CUR
+        /etc/init.d/iptables save active
+    else
+        rm $NEW
+    fi
 }
 
 gen_puppet_cfg() {
