@@ -247,11 +247,16 @@ bash -ec "\${script[*]}"
 
 if [ \$auto -ne 0 ]; then
     mv \$temp_file \$known_hosts_file
+    chmod 644 \$known_hosts_file
 else
     read -p 'Commit? ' y
     case \$y in
-        [Yy]*)  mv \$temp_file \$known_hosts_file ;;
-        *)      rm \$temp_file ;;
+        [Yy]*)  mv \$temp_file \$known_hosts_file
+                chmod 644 \$known_hosts_file
+        ;;
+
+        *)      rm \$temp_file
+        ;;
     esac
 fi
 
