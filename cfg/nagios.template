@@ -150,7 +150,11 @@ define service {
     use                 generic-service
     host_name           {{ state.get_canonical_hostname(host) }}
     service_description SSH server
+    {%- if 'ssh_port' in host.props %}
+    check_command       check_ssh_port!{{ host.props['ssh_port']}}
+    {%- else %}
     check_command       check_ssh
+    {%- endif %}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
 }
 {% endif %}
