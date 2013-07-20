@@ -98,7 +98,7 @@ hosts:
 - [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22}, admin: uzer}]
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
 #   free                  10.232
-- [ tmp-pc,               10.233,  0019d17e922d]
+#   free                  10.233
 - [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
 - [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
@@ -141,7 +141,7 @@ hosts:
 - [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
-- [[dijkstra, d, v, anytask, puppet, r4u, ssl, status, wiki],
+- [[dijkstra, d, v, anytask, hadoop, puppet, r4u, ssl, status, wiki],
                           194.226.244.126, 0002a54f11c2, {admin: uzer, ssh_port: 1022}]
 
 - [ babbage.usu,      194.226.235.251, {admin: znick}]
