@@ -8,7 +8,7 @@ def gen(state, ext_host, ext_addr):
     lines = []
     for host in state.hosts:
         names = []
-        if 'ssh' in host.services or 'rssh' in host.services:
+        if 'ssh' in host.services or 'rssh' in host.services or 'unix' in host.services:
             names.append(host.name)
             names.append(host.sname)
             names.append(host.addr)

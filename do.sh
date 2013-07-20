@@ -135,20 +135,6 @@ gen_puppet_ssh() {
     done
 }
 
-gen_ssh_known_hosts() {
-    (
-        $MAIN ssh_known_hosts urgu.org 194.226.244.126 | while read name line; do
-            local DIR=$DATA/ssh/$name
-            if [ -d $DIR ]; then
-                echo -n "$line "
-                cut -f1-2 -d' ' $DIR/ssh_host_rsa_key.pub
-                echo -n "$line "
-                cut -f1-2 -d' ' $DIR/ssh_host_dsa_key.pub
-            fi
-        done
-    ) > /var/www/urgu.org/https/known_hosts
-}
-
 gen_nagios() {
     local DIR=$DATA/nagios
     mkdir -p $DIR
@@ -164,6 +150,41 @@ gen_nagios() {
     else
         rm $NEW
     fi
+}
+
+gen_ssh_known_hosts() {
+    (
+        $MAIN ssh_known_hosts urgu.org 194.226.244.126 | while read name line; do
+            local DIR=$DATA/ssh/$name
+            if [ -d $DIR ]; then
+                echo -n "$line "
+                cut -f1-2 -d' ' $DIR/ssh_host_rsa_key.pub
+                echo -n "$line "
+                cut -f1-2 -d' ' $DIR/ssh_host_dsa_key.pub
+            fi
+        done
+    ) > /var/www/urgu.org/https/known_hosts
+}
+
+gather_ssh_known_hosts() {
+    local URL='https://dijkstra.urgu.org:8140/production'
+    local WGET="wget -O-
+        --header=Accept:yaml
+        --certificate /var/lib/puppet/ssl/certs/dijkstra.urgu.org.pem
+        --private-key /var/lib/puppet/ssl/private_keys/dijkstra.urgu.org.pem
+        --ca-certificate /var/lib/puppet/ssl/certs/ca.pem"
+
+    $WGET $URL/facts_search/search 2>/dev/null | awk '{print $2}' | while read host; do
+        local DIR=/var/lib/cfg/ssh/$host
+        if ! [ -d $DIR ]; then
+            mkdir -p $DIR
+            $WGET $URL/facts/$host 2>/dev/null | grep sshrsakey |\
+                awk "{print \"ssh-rsa\",\$2,\"root@$host\"}" > $DIR/ssh_host_rsa_key.pub
+            $WGET $URL/facts/$host 2>/dev/null | grep sshdsakey |\
+                awk "{print \"ssh-dss\",\$2,\"root@$host\"}" > $DIR/ssh_host_dsa_key.pub
+            chown -R puppet.puppet $DIR
+        fi
+    done
 }
 
 gen_ssh_known_hosts_updater() {
@@ -210,7 +231,7 @@ END
         local DIR=$DATA/ssh/$name
         if [ -d $DIR ]; then
             read newtype newkey newcomment < $DIR/ssh_host_rsa_key.pub
-            echo $line | while read -d, item; do
+            echo "$line," | while read -d, item; do
 cat <<END
 
 # echo working with $item
@@ -279,6 +300,7 @@ gen_puppet_fileserver
 gen_puppet_ssh
 
 gen_ssh_known_hosts
+gather_ssh_known_hosts
 gen_ssh_known_hosts_updater
 
 gen_nagios
