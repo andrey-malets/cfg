@@ -9,6 +9,9 @@ CFGDIR=$BASE/cfg
 
 export CFG=$CFGDIR/conf.yaml
 
+ROUTER_HOST=dijkstra.urgu.org
+ROUTER_IP=194.226.244.126
+
 cmp_files() {
     set +e; cmp -s $1 $2; local rv=$?; set -e
     return $rv
@@ -89,7 +92,7 @@ gen_iptables_ports() {
     local CUR=$DATA/ipt_ports.sh
     local NEW=$CUR.new
 
-    $MAIN ipt_ports 194.226.244.126 server > $NEW
+    $MAIN ipt_ports $ROUTER_IP server > $NEW
 
     if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR
@@ -154,7 +157,7 @@ gen_nagios() {
 
 gen_ssh_known_hosts() {
     (
-        $MAIN ssh_known_hosts urgu.org 194.226.244.126 | while read name line; do
+        $MAIN ssh_known_hosts $ROUTER_HOST $ROUTER_IP | while read name line; do
             local DIR=$DATA/ssh/$name
             if [ -d $DIR ]; then
                 echo -n "$line "
@@ -167,11 +170,11 @@ gen_ssh_known_hosts() {
 }
 
 gather_ssh_known_hosts() {
-    local URL='https://dijkstra.urgu.org:8140/production'
+    local URL="https://$ROUTER_HOST:8140/production"
     local WGET="wget -O-
         --header=Accept:yaml
-        --certificate /var/lib/puppet/ssl/certs/dijkstra.urgu.org.pem
-        --private-key /var/lib/puppet/ssl/private_keys/dijkstra.urgu.org.pem
+        --certificate /var/lib/puppet/ssl/certs/$ROUTER_HOST.pem
+        --private-key /var/lib/puppet/ssl/private_keys/$ROUTER_HOST.pem
         --ca-certificate /var/lib/puppet/ssl/certs/ca.pem"
 
     $WGET $URL/facts_search/search 2>/dev/null | awk '{print $2}' | while read host; do
@@ -227,7 +230,7 @@ declare -a script
 
 END
 
-    $MAIN ssh_known_hosts urgu.org 194.226.244.126 | while read name line; do
+    $MAIN ssh_known_hosts $ROUTER_HOST $ROUTER_IP | while read name line; do
         local DIR=$DATA/ssh/$name
         if [ -d $DIR ]; then
             read newtype newkey newcomment < $DIR/ssh_host_rsa_key.pub
