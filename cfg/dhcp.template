@@ -7,8 +7,7 @@ option ipxe-encap-opts code 175 = encapsulate ipxe;
 option ipxe.keep-san   code 8   = unsigned integer 8;
 option ipxe.scriptlet  code 81  = string;
 
-option domain-name "runc.urgu.org";
-option domain-search "local", "runc.urgu.org", "urgu.org", "usu.local";
+option domain-search "runc.urgu.org", "urgu.org", "usu.local";
 
 option w-d code 135 = domain-list;
 option w-d "runc.urgu.org", "urgu.org", "usu.local";
@@ -47,6 +46,7 @@ host {{ host.name }} {
     fixed-address             {{ host.addr }};
     hardware ethernet         {{ host.mac }};
     option host-name         "{{ host.hostname }}";
+    option domain-name       "{{ host.domain }}";
     {%- for name, value in host.params.iteritems() %}
     option {{ "%-17s"|format(name) }} "{{ value }}";
     {%- endfor %}

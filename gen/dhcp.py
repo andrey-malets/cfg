@@ -8,6 +8,7 @@ def gen_dhcp(state, template):
         def get_entry(name, mac):
             return {'name'     : name,
                     'hostname' : host.sname,
+                    'domain'   : host.name[len(host.sname)+1:],
                     'mac'      : mac,
                     'addr'     : host.addr,
                     'params'   : host.props.get('dhcp', {})}
