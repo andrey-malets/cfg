@@ -75,6 +75,10 @@ node '{{ host.name }}' {
         include managed-ssh
     {% endif %}
 
+    package { 'ntp':
+        ensure => installed,
+    }
+
     {% if 'unix' in host.services %}
         $nagios_host = '{{ state.get_nagios(host.addr) }}'
         {% if host.addr %}
