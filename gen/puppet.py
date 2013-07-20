@@ -12,6 +12,6 @@ def gen(state, template):
 def gen(state, template, prefix):
     return jinja2.Template(template).render(hosts=get(state), prefix=prefix)
 
-@add_cmd('puppet_list', False, 0)
+@add_cmd('puppet_managed', False, 0)
 def gen(state):
     return '\n'.join(map(lambda host: host.name, get(state)))

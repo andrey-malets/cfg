@@ -126,7 +126,7 @@ gen_puppet_fileserver() {
 }
 
 gen_puppet_ssh() {
-    local hosts=$($MAIN puppet_list)
+    local hosts=$($MAIN puppet_managed)
     for host in $hosts; do
         local DIR=$DATA/ssh/$host
         if ! [ -d $DIR ]; then
