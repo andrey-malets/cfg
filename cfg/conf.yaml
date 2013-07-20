@@ -1,5 +1,4 @@
 people:
-- [mon,           "Monitoring list",      monitoring@urgu.org] # this is the default
 - [andgein,       "Andrey Gein",          andgein@yandex.ru]
 - [ilya,          "Ilya Zelenchuk",       ilya@hackerdom.ru]
 - [kost,          "Konstantin Plotnikov", kost@hackerdom.ru]
@@ -12,6 +11,7 @@ people:
 - [ns,            "Nickolai Shturkin",    ns@splinex.com]
 
 defaults:
+  mon: monitoring@urgu.org
   nagios: 194.226.244.126
   network_prefix: '172.16'
   domains:

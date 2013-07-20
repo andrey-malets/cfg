@@ -81,30 +81,17 @@ define timeperiod {
     alias           Never
 }
 
-{% if state.default_user %}
 define contact {
     contact_name                    default
-    alias                           {{ state.default_user.name }}
+    alias                           "Default monitoring list"
     service_notification_period     24x7
     host_notification_period        24x7
     service_notification_options    w,u,c,r
     host_notification_options       d,r
     service_notification_commands   notify-service-by-email
     host_notification_commands      notify-host-by-email
-    email                           {{ state.default_user.email }}
+    email                           {{ state.defaults.mon }}
 }
-{% else %}
-define contact {
-    contact_name                    nobody
-    alias                           Nobody
-    service_notification_period     never
-    host_notification_period        never
-    service_notification_options    w,u,c,r
-    host_notification_options       d,r
-    service_notification_commands   notify-service-by-email
-    host_notification_commands      notify-host-by-email
-}
-{% endif %}
 
 {% for user in state.users %}
 define contact {
@@ -140,7 +127,7 @@ define host {
     {%- else %}
     address    {{ host.name }}
     {%- endif %}
-    contacts   {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts   {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 
 {% if 'services' in host.props %}
@@ -155,7 +142,7 @@ define service {
     {%- else %}
     check_command       check_ssh
     {%- endif %}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 {% endif %}
 
@@ -165,7 +152,7 @@ define service {
     service_description HTTP server
     check_command       check_http
     host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 {% endif %}
 
@@ -175,7 +162,7 @@ define service {
     service_description CPU load
     check_command       check_nrpe_1arg!check_load
     host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 
 define service {
@@ -183,7 +170,7 @@ define service {
     service_description Disk usage
     check_command       check_nrpe_1arg!check_disk
     host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 
 define service {
@@ -191,7 +178,7 @@ define service {
     service_description Process count
     check_command       check_nrpe_1arg!check_total_procs
     host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 
 define service {
@@ -199,7 +186,7 @@ define service {
     service_description Zombie processes
     check_command       check_nrpe_1arg!check_zombie_procs
     host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 
 {% if not 'managed' in host.props %}
@@ -209,7 +196,7 @@ define service {
     check_command       check_nrpe_1arg!check_apt
     check_interval      3600
     host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }}{% else %}default{% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 {% endif %}
 

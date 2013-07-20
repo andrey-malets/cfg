@@ -17,7 +17,6 @@ class State:
         self.networks = map(Network, config['networks'])
 
         self.users    = map(User, config['people'])
-        self.default_user = self.users[0] if len(self.users) else None
 
         self.errors.extend(check_hosts(self.hosts))
         self.errors.extend(expand_groups(self.groups, self.hosts))

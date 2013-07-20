@@ -9,6 +9,7 @@ class Defaults:
             else:
                 return data[item]
 
+        self.mon    = check(data, 'mon', 'monitoring mail list')
         self.nagios = check(data, 'nagios', 'default nagios host')
 
         self.network_prefix = check(data, 'network_prefix', 'default network prefix')
