@@ -299,8 +299,8 @@ gen_puppet_cfg
 gen_puppet_fileserver
 gen_puppet_ssh
 
-gen_ssh_known_hosts
 gather_ssh_known_hosts
+gen_ssh_known_hosts
 gen_ssh_known_hosts_updater
 
 gen_nagios
