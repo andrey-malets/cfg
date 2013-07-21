@@ -1,3 +1,38 @@
+class slurm {
+    package { 'munge':      ensure => installed }
+    package { 'slurm-llnl': ensure => installed }
+
+    file { '/etc/munge/munge.key':
+        require => Package['munge'],
+        notify => Service['munge'],
+        mode => 400,
+        owner => munge,
+        group => munge,
+        source => "puppet:///files/munge.key",
+    }
+
+    service { 'munge':
+        ensure => 'running',
+        enable => 'true',
+        require => File['/etc/munge/munge.key'],
+    }
+
+    file { '/etc/slurm-llnl/slurm.conf':
+        require => Package['slurm-llnl'],
+        notify => Service['slurm-llnl'],
+        mode => 644,
+        owner => root,
+        group => root,
+        source => "puppet:///files/slurm.conf",
+    }
+
+    service { 'slurm-llnl':
+        require => [File['/etc/munge/munge.key'], Service['munge']],
+        ensure => 'running',
+        enable => 'true',
+    }
+}
+
 class managed-ssh {
     package { 'openssh-server': ensure => installed }
 
@@ -96,6 +131,7 @@ node '{{ host.name }}' {
         include nrpe
         include startcom
         include known_hosts
+        include slurm
 
     {% endif %}
 }

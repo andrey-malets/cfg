@@ -294,6 +294,11 @@ END
     cp -f $DATA/known_hosts.sh /etc/puppet/files
 }
 
+gen_slurm() {
+    $MAIN slurm $CFGDIR/slurm.template > $DATA/slurm.conf
+    cp -f $DATA/slurm.conf /etc/puppet/files
+}
+
 mkdir -p $DATA
 
 gen_dhcp
@@ -309,3 +314,4 @@ gen_ssh_known_hosts
 gen_ssh_known_hosts_updater
 
 gen_nagios
+gen_slurm
