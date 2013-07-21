@@ -149,14 +149,14 @@ class hadoop_base {
 
     file { '/place/hadoop':
         ensure => directory,
-        mode => 700,
+        mode => 770,
         owner => hdfs,
         group => hadoop,
     }
 
     file { '/place/hadoop/tmp':
         ensure => directory,
-        mode => 700,
+        mode => 770,
         owner => hdfs,
         group => hadoop,
     }
@@ -207,6 +207,15 @@ class hadoop_slave inherits hadoop_base {
             File['/etc/hadoop/core-site.xml'],
             File['/etc/hadoop/hdfs-site.xml'],
             File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
         ],
 
         require => [
@@ -215,6 +224,53 @@ class hadoop_slave inherits hadoop_base {
             File['/etc/hadoop/core-site.xml'],
             File['/etc/hadoop/hdfs-site.xml'],
             File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
+        ]
+    }
+
+    service { 'hadoop-tasktracker':
+        ensure => running,
+        enable => true,
+        subscribe => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
+        ],
+
+        require => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
         ]
     }
 }
@@ -229,6 +285,15 @@ class hadoop_master inherits hadoop_base {
             File['/etc/hadoop/core-site.xml'],
             File['/etc/hadoop/hdfs-site.xml'],
             File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
         ],
 
         require => [
@@ -237,6 +302,53 @@ class hadoop_master inherits hadoop_base {
             File['/etc/hadoop/core-site.xml'],
             File['/etc/hadoop/hdfs-site.xml'],
             File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
+        ]
+    }
+
+    service { 'hadoop-jobtracker':
+        ensure => running,
+        enable => true,
+        subscribe => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
+        ],
+
+        require => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+
+            File['/place'],
+            File['/place/hadoop'],
+            File['/place/hadoop/tmp'],
+            File['/place/hadoop/name'],
+            File['/place/hadoop/data'],
+            File['/place/hadoop/pid'],
+            File['/place/hadoop/run'],
+            File['/place/hadoop/logs'],
         ]
     }
 }
