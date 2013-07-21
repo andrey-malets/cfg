@@ -149,7 +149,7 @@ gen_nagios() {
 
     if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR
-        /etc/init.d/nagios3 reload
+        /etc/init.d/nagios3 restart
     else
         rm $NEW
     fi
@@ -194,6 +194,8 @@ gen_ssh_known_hosts_updater() {
     (
 cat <<END
 #!/bin/bash
+
+# usage (e.g. in crontab): [curl|wget -O-] https://ssl.urgu.org/known_hosts.sh | sh -s -- -y
 
 args=\$(getopt yf: \$*)
 set -- \$args

@@ -50,6 +50,7 @@ groups:
 - [hs,       'h\d\d',                     {services: [amt], admin: uzer}]
 - [hogs,     'hog\d\d']
 - [managed,  [hogs], '(hewlett|packard|(uzer|znick)-pc)', {services: [unix], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 1}]
+- [volatile, '(hewlett|packard)', {volatile: 1}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
