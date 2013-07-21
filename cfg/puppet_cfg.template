@@ -104,10 +104,152 @@ class known_hosts {
     }
 }
 
+class hadoop_base {
+    file { '/etc/hadoop/hadoop-env.sh':
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/hadoop/hadoop-env.sh',
+    }
+
+    file { '/etc/hadoop/masters':
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/hadoop/masters',
+    }
+
+    file { '/etc/hadoop/core-site.xml':
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/hadoop/core-site.xml',
+    }
+
+    file { '/etc/hadoop/hdfs-site.xml':
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/hadoop/hdfs-site.xml',
+    }
+
+    file { '/etc/hadoop/mapred-site.xml':
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/hadoop/mapred-site.xml',
+    }
+
+    file { '/place':
+        ensure => directory,
+        mode => '+t,ug+rwx,o-rw,o+x',
+        owner => root,
+        group => place,
+    }
+
+    file { '/place/hadoop':
+        ensure => directory,
+        mode => 700,
+        owner => hdfs,
+        group => hadoop,
+    }
+
+    file { '/place/hadoop/tmp':
+        ensure => directory,
+        mode => 700,
+        owner => hdfs,
+        group => hadoop,
+    }
+
+    file { '/place/hadoop/name':
+        ensure => directory,
+        mode => 700,
+        owner => hdfs,
+        group => hadoop,
+    }
+
+    file { '/place/hadoop/data':
+        ensure => directory,
+        mode => 755,
+        owner => hdfs,
+        group => hadoop,
+    }
+
+    file { '/place/hadoop/pid':
+        ensure => directory,
+        mode => 775,
+        owner => hdfs,
+        group => hadoop,
+    }
+
+    file { '/place/hadoop/run':
+        ensure => directory,
+        mode => 775,
+        owner => mapred,
+        group => hadoop,
+    }
+
+    file { '/place/hadoop/logs':
+        ensure => directory,
+        mode => 775,
+        owner => mapred,
+        group => hadoop,
+    }
+}
+
+class hadoop_slave inherits hadoop_base {
+    service { 'hadoop-datanode':
+        ensure => running,
+        enable => true,
+        subscribe => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+        ],
+
+        require => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+        ]
+    }
+}
+
+class hadoop_master inherits hadoop_base {
+    service { 'hadoop-namenode':
+        ensure => running,
+        enable => true,
+        subscribe => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+        ],
+
+        require => [
+            File['/etc/hadoop/hadoop-env.sh'],
+            File['/etc/hadoop/masters'],
+            File['/etc/hadoop/core-site.xml'],
+            File['/etc/hadoop/hdfs-site.xml'],
+            File['/etc/hadoop/mapred-site.xml'],
+        ]
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'managed' in host.props %}
         include managed-ssh
+        include hadoop_slave
+    {% endif %}
+
+    {% if 'hadoop-namenode' in host.props['services'] %}
+        include hadoop_master
     {% endif %}
 
     package { 'ntp':

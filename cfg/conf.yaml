@@ -12,7 +12,7 @@ people:
 
 defaults:
   mon: monitoring@urgu.org
-  slurm : managed
+  slurm: managed
   nagios: 194.226.244.126
   network_prefix: '172.16'
   domains:
@@ -98,7 +98,7 @@ hosts:
 - [ uzer-dell,            10.227,  5cac4c986dc7, {admin: uzer}]
 # - [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
-- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22}, admin: uzer}]
+- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22}, admin: uzer, services: [hadoop-namenode]}]
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
 - [ hewlett,              10.232 , b499ba5732e9 ]
 - [ packard,              10.233 , b499ba5684d1 ]
