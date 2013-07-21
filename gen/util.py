@@ -27,3 +27,14 @@ def rdns_cfg(state, template, patt, empty):
 @add_cmd('router', False, 1)
 def choose_router(state, addr):
     return state.choose_router(addr)
+
+@add_cmd('etherwake', False, 1)
+def etherwake(state, hostname):
+    host = state.find(hostname)
+    if host != None and len(host.macs):
+        network = state.belongs_to(host)
+        if network and network.iface:
+            return 'etherwake -i %s %s' % (network.iface, host.macs[0])
+        raise Exception('could not find network')
+    else:
+        raise Exception('could not find host')

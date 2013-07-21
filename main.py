@@ -17,8 +17,8 @@ if __name__ == '__main__':
         for error in state.errors: print >> sys.stderr, 'Error: %s' % error
         sys.exit(1)
     else:
-        #try:
-        print Cmd.execute(state, sys.argv[1:])
-        #except Exception as e:
-        #    print >> sys.stderr, e
-        #    sys.exit(1)
+        try:
+            print Cmd.execute(state, sys.argv[1:])
+        except Exception as e:
+            print >> sys.stderr, e
+            sys.exit(1)

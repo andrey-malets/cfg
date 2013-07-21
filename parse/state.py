@@ -40,5 +40,10 @@ class State:
     def belongs_to(self, host):
         return belongs_to(self.networks, host)
 
+    def find(self, hostname):
+        candidates = filter(lambda host: (hostname in [host.name, host.sname]
+            + host.aliases + host.saliases), self.hosts)
+        return candidates[0] if len(candidates) == 1 else None
+
     def is_gray(self, host):
         return host.addr != None and host.addr.startswith(self.defaults.network_prefix)

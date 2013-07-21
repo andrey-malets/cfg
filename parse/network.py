@@ -21,6 +21,7 @@ class Network:
         self.mask    = -1 << (32-int(mask))
         self.router  = Network.stoi(data.pop(0))
         self.props   = {} if not len(data) else data.pop(0)
+        self.iface   = self.props.get('iface', None)
         self.dhcp    = None if 'dhcp' not in self.props else self.props['dhcp'].split('-')
         self.nagios  = self.props.get('nagios', None)
         self.private = self.props.get('private', 0)
