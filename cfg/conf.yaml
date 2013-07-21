@@ -34,7 +34,7 @@ networks:
 - [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.224.126}]
 
 groups:
-- [unix,     [hogs], '^((uzer|znick)-pc|.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it)$', {services: [unix]}]
+- [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it)$', {services: [unix]}]
 - [windows,  [633-pcs], 'dc\d',           {services: [windows]}]
 
 - [aps,      '(.+-ap|ap\d)']
@@ -49,7 +49,7 @@ groups:
 - [633-pcs,  '(stream|cuda)-pc',          {services: [rrdp], admin: kost}]
 - [hs,       'h\d\d',                     {services: [amt], admin: uzer}]
 - [hogs,     'hog\d\d']
-- [managed,  [hogs], '(hewlett|packard|(tmp|uzer|znick)-pc)', {services: [rssh], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 1}]
+- [managed,  [hogs], '(hewlett|packard|(uzer|znick)-pc)', {services: [unix], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 1}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
