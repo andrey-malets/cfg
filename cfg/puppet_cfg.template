@@ -360,7 +360,7 @@ node '{{ host.name }}' {
         include hadoop_slave
     {% endif %}
 
-    {% if 'hadoop-namenode' in host.props['services'] %}
+    {% if 'hadoop-master' in host.props['services'] %}
         include hadoop_master
     {% endif %}
 
