@@ -36,7 +36,7 @@ networks:
 
 groups:
 - [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it)$', {services: [unix]}]
-- [windows,  [633-pcs], 'dc\d',           {services: [windows]}]
+- [windows,  [633-pcs], 'dc\d',           {services: [windows, rrdp]}]
 
 - [aps,      '(.+-ap|ap\d)']
 - [ipmi,     '.+-ipmi',                   {services: [ipmi], admin: uzer}]
@@ -46,12 +46,12 @@ groups:
 - [ups,      '.+-ups']
 - [embedded, [aps, switches, paper, ups], {services: [http], admin: uzer}]
 
-- [621-pcs,   '621-\d\d',                  {admin: vsamun}]
+#- [621-pcs,   '621-\d\d',                  {admin: vsamun}]
 - [633-pcs,   '(stream|cuda)-pc',          {services: [rrdp], admin: kost}]
 - [hs,        'h\d\d',                     {services: [amt], admin: uzer}]
 - [hogs,      'hog\d\d']
 - [managed,   [hogs, notebooks], '(uzer|znick)-pc', {services: [unix], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 1}]
-- [notebooks, '(hewlett|packard)']
+- [notebooks, '(canion|hewlett|packard)']
 - [volatile,  [notebooks], {volatile: 1}]
 
 hosts:
@@ -94,7 +94,7 @@ hosts:
 - [ dc3.runc,             10.223,  00163a34f84d]
 #   free                  10.224
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
-#   free                  10.226
+- [ canion,               10.226,  001eec2cf0f2 ]
 - [ uzer-dell,            10.227,  5cac4c986dc7, {admin: uzer}]
 # - [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
