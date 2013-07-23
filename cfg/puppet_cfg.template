@@ -368,6 +368,25 @@ node '{{ host.name }}' {
         ensure => installed,
     }
 
+#    package { 'chntpw':
+#        ensure => absent,
+#    }
+#
+    file { '/var/local/chntpw_0.99.5-0+nmu1_i386.deb':
+        ensure => present,
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/chntpw_0.99.5-0+nmu1_i386.deb',
+    }
+
+    package { 'chntpw':
+        require => File['/var/local/chntpw_0.99.5-0+nmu1_i386.deb'],
+        ensure => installed,
+        provider => dpkg,
+        source => '/var/local/chntpw_0.99.5-0+nmu1_i386.deb',
+    }
+
     {% if 'unix' in host.services %}
         $nagios_host = '{{ state.get_nagios(host.addr) }}'
         {% if host.addr %}
