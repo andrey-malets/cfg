@@ -388,7 +388,8 @@ node '{{ host.name }}' {
     }
 
     {% if 'unix' in host.services %}
-        $nagios_host = '{{ state.get_nagios(host.addr) }}'
+        $nrpe_allowed = '{{ ([state.get_nagios(host.addr)]
+            + host.props.get('nrpe_allowed', []))|join(',') }}'
         {% if host.addr %}
             $nrpe_listen = '{{ host.addr }}'
         {% else %}
@@ -399,6 +400,12 @@ node '{{ host.name }}' {
             $check_apt = 'false'
         {% else %}
             $check_apt = 'true'
+        {% endif %}
+
+        {% if 'nagios' in host.services %}
+            $check_nagios = 'true'
+        {% else %}
+            $check_nagios = 'false'
         {% endif %}
 
         include nrpe

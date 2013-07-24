@@ -8,7 +8,7 @@ def get_pub_port(host):
 def gen_ports(state, dst, chain):
     def tcp_forwardings(host):
         rv = host.props.get('tcp_fwd', {})
-        if 'rssh' in host.services or 'unix' in host.services: rv[get_pub_port(host)] = 22
+        if 'ssh' in host.services or 'unix' in host.services: rv[get_pub_port(host)] = 22
         if 'rrdp' in host.services: rv[get_pub_port(host)] = 3389
         return rv
 
