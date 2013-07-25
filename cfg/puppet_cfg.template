@@ -27,7 +27,7 @@ class slurm {
     }
 
     service { 'slurm-llnl':
-        require => [File['/etc/munge/munge.key'], Service['munge']],
+        require => Service['munge'],
         ensure => 'running',
         enable => 'true',
     }
@@ -385,6 +385,11 @@ node '{{ host.name }}' {
         ensure => installed,
         provider => dpkg,
         source => '/var/local/chntpw_0.99.5-0+nmu1_i386.deb',
+    }
+
+    exec { '/usr/bin/aptitude hold chntpw':
+        require => Package['chntpw'],
+        refreshonly => true,
     }
 
     {% if 'unix' in host.services %}
