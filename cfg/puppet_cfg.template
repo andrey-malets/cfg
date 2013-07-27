@@ -359,7 +359,13 @@ class distcc {
     }
 
     cron { 'distcc-hosts':
-        command => "/usr/bin/sinfo -hNr -o '\%n' -p {{ state.defaults.slurm }} > /etc/distcc/hosts",
+        command => "/usr/bin/sinfo -hNr -o '\%n' -p {{ state.defaults.slurm }} > \
+            /etc/distcc/hosts.list; cat \
+              /etc/distcc/hosts.list \
+              /etc/distcc/hosts.list \
+              /etc/distcc/hosts.list \
+              /etc/distcc/hosts.list \
+            > /etc/distcc/hosts",
         user => root,
         hour => '*',
         minute => '*',
