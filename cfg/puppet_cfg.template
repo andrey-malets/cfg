@@ -353,6 +353,20 @@ class hadoop_master inherits hadoop_base {
     }
 }
 
+class distcc {
+    package { 'distcc':
+        ensure => installed,
+    }
+
+    cron { 'distcc-hosts':
+        command => "/usr/bin/sinfo -hNr -o '\%n' -p {{ state.defaults.slurm }} > /etc/distcc/hosts",
+        user => root,
+        hour => '*',
+        minute => '*',
+        require => [Package['distcc'], Service['slurm-llnl']],
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'managed' in host.props %}
@@ -417,6 +431,7 @@ node '{{ host.name }}' {
         include startcom
         include known_hosts
         include slurm
+        include distcc
 
     {% endif %}
 }
