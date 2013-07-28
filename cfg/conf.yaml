@@ -61,22 +61,22 @@ hosts:
 - [[mmarkov, mm],         9.4,     000c29dfeeff]
 - [[hamming, h],          9.5,    [000423d6896e, 000423d6896f]]
 - [[630-switch, bs],      9.6,     001b11c344e6]
-- [[hp-switch, hps],      9.7, ]   #?
+- [[hp-switch, hps],      9.7,     001ec1831c01]
 - [[hog-switch, hs],      9.8,     001ac1d1a981]
 - [[hog-ap, hap],         9.9,     00259c3171aa]
-- [[licklider, l],       '9.10',                 {admin: znick}]   #?
+- [ l,                   '9.10',   001a4bec0cec, {admin: znick}]
 - [[hog-ups, hu],         9.11,    00c0b7598b9d] 
-- [[neumann, n],          9.12,    001b211597b4, {admin: uzer}]  #?
-- [[storage-mplan, s-m],  9.13]    #?
-- [[it2-mplan,it2-m],     9.14]    #?
-- [[it-mplan,it-m],       9.15]    #?
+- [[neumann, n],          9.12,    001b211597b5, {admin: uzer}]  #?
+- [[storage-mplan, s-m],  9.13,    001a4bec0cee]
+- [[it2-mplan,it2-m],     9.14,    001b789f92a6]
+- [[it-mplan,it-m],       9.15,    002b789fa22f]
 - [[dell-mplan,dell-m],   9.16]    #?
 - [ ap0,                  9.17,    001225556be2]
 - [[markov-ipmi, m-i],    9.18,    0015176b9b3e]
 - [[hamming-ipmi, h-i],   9.19,    000423d68970]
 - [ ap1,                 '9.20',  '001225557506']
 - [[tesla, t],            9.21,    001e670fafcc]
-- [[tesla-ipmi, t-i],     9.22]
+- [[tesla-ipmi, t-i],     9.22,    001e670fafce]
 - [[633-ups, bfu],        9.23,    00c0b731da0e]
 - [[airlab-switch, as],   9.24,    001b11c34547]
 - [[ritchie-ipmi, r-i],   9.25,    001e670fac42]
@@ -95,8 +95,8 @@ hosts:
 #   free                  10.224
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
 - [ canion,               10.226,  001eec2cf0f2 ]
-- [ uzer-dell,            10.227,  5cac4c986dc7, {admin: uzer}]
-# - [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
+#   free                  10.227
+#- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
 - [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22}, admin: uzer, services: [hadoop-master]}]
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
@@ -116,20 +116,19 @@ hosts:
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: hackerdom.ru}] # admin: domi?
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
 - [ hog.runc,             10.247,  000c29ad7767, {admin: uzer}]
-#   licklider-fastbone    10.248
-- [ dc4.runc,             10.249,  00163a34f855]
-- [ class.runc,          '10.250', 000c292e076a]
+- [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
+- [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
+#   free                  10.250
 - [ codd.runc,            10.251,  00163a34e94d, {admin: uzer}]
-- [ class-db,             10.252,  00163e45e63d] #?
+#   free                  10.252
 #   main-switch           10.253
 #   dijkstra              10.254
 
 - [[pioneer, p],          18.1, {admin: uzer}]
 
-- [ dcimap-vm,           '50.100', 000c29ad8762, {admin: yariksuperman}]
+- [ dcimap-vm,           '50.100', 000c29ad8762, {admin: andgein}]
 - [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
 - [ dcimap-printer,       50.246,  00c0ee1c78a8, {admin: yariksuperman}]
-- [ dcimap-sheka,         50.248,  0019d17ebab2]
 
 #   free                  194.226.244.113
 - [[main-switch, ms],     194.226.244.114, 001cc534d301]
