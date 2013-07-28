@@ -177,8 +177,9 @@ gather_ssh_known_hosts() {
         --private-key /var/lib/puppet/ssl/private_keys/$ROUTER_HOST.pem
         --ca-certificate /var/lib/puppet/ssl/certs/ca.pem"
 
-    $WGET $URL/facts_search/search 2>/dev/null | awk '{print $2}' | while read host; do
-        local DIR=/var/lib/cfg/ssh/$host
+    $WGET $URL/facts_search/search 2>/dev/null | awk '{print $2}' | grep -v '^$' |\
+    while read host; do
+        local DIR=$DATA/ssh/$host
         if ! [ -d $DIR ]; then
             mkdir -p $DIR
             $WGET $URL/facts/$host 2>/dev/null | grep sshrsakey |\
@@ -188,6 +189,24 @@ gather_ssh_known_hosts() {
             chown -R puppet.puppet $DIR
         fi
     done
+}
+
+refresh_facts() {
+    local URL="https://$ROUTER_HOST:8140/production"
+    local WGET="wget
+        --header=Accept:yaml
+        --certificate /var/lib/puppet/ssl/certs/$ROUTER_HOST.pem
+        --private-key /var/lib/puppet/ssl/private_keys/$ROUTER_HOST.pem
+        --ca-certificate /var/lib/puppet/ssl/certs/ca.pem"
+
+    local DIR=$DATA/facts
+    mkdir -p $DIR
+
+    $WGET -O - $URL/facts_search/search 2>/dev/null | awk '{print $2}' | grep -v '^$' |\
+    while read host; do
+        $WGET -O $DIR/$host $URL/facts/$host 2>/dev/null
+    done
+    chown -R puppet.puppet $DIR
 }
 
 gen_ssh_known_hosts_updater() {
@@ -310,8 +329,11 @@ gen_puppet_fileserver
 gen_puppet_ssh
 
 gather_ssh_known_hosts
+
 gen_ssh_known_hosts
 gen_ssh_known_hosts_updater
+
+#refresh_facts
 
 gen_nagios
 gen_slurm
