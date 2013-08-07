@@ -373,6 +373,29 @@ class distcc {
     }
 }
 
+class btsync {
+    if $architecture == 'amd64' {
+        file { 'btsync':
+            path => '/usr/local/bin/btsync',
+            ensure => present,
+            mode => '755',
+            owner => root,
+            group => root,
+            source => 'puppet:///files/btsync_amd64',
+        }
+    }
+    elsif $architecture == 'i386' {
+        file { 'btsync':
+            path => '/usr/local/bin/btsync',
+            ensure => present,
+            mode => '755',
+            owner => root,
+            group => root,
+            source => 'puppet:///files/btsync_i386',
+        }
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'managed' in host.props %}
@@ -409,11 +432,12 @@ node '{{ host.name }}' {
             $check_nagios = 'false'
         {% endif %}
 
-        include nrpe
-        include startcom
-        include known_hosts
-        include slurm
+        include btsync
         include distcc
+        include known_hosts
+        include nrpe
+        include slurm
+        include startcom
 
     {% endif %}
 }
