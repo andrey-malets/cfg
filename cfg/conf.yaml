@@ -119,7 +119,7 @@ hosts:
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
 #   free                  10.250
-- [ codd.runc,            10.251,  00163a34e94d, {admin: uzer}]
+#   free                  10.251
 #   free                  10.252
 #   main-switch           10.253
 #   dijkstra              10.254
@@ -158,6 +158,7 @@ hosts:
 
 - [ mx1.eunnet.net,  194.226.255.33]
 - [ usu-math.usu.ru, 194.226.235.254]
+- [ codd.runc,       194.226.235.240,  00163a34e94d, {admin: uzer}]
 - [ ns.usu.ru,       194.226.235.22]
 
 - [ splinex.dyndns.org, {admin: ns}]
