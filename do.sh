@@ -5,6 +5,7 @@ MAIN="python $BASE/main.py"
 SERIAL="python $BASE/util/serial.py"
 DATA=/var/lib/cfg
 
+FACTS=$DATA/facts
 CFGDIR=$BASE/cfg
 
 export CFG=$CFGDIR/conf.yaml
@@ -192,21 +193,25 @@ gather_ssh_known_hosts() {
 }
 
 refresh_facts() {
-    local URL="https://$ROUTER_HOST:8140/production"
-    local WGET="wget
-        --header=Accept:yaml
-        --certificate /var/lib/puppet/ssl/certs/$ROUTER_HOST.pem
-        --private-key /var/lib/puppet/ssl/private_keys/$ROUTER_HOST.pem
-        --ca-certificate /var/lib/puppet/ssl/certs/ca.pem"
+    get_wget() {
+        echo "wget
+            --header=Accept:$2
+            --certificate /var/lib/puppet/ssl/certs/$1.pem
+            --private-key /var/lib/puppet/ssl/private_keys/$1.pem
+            --ca-certificate /var/lib/puppet/ssl/certs/ca.pem"
+    }
 
-    local DIR=$DATA/facts
-    mkdir -p $DIR
+    local URL="https://$ROUTER_HOST:8140/production"
+    local WGET=$(get_wget $ROUTER_HOST yaml)
+
+    mkdir -p $FACTS
 
     $WGET -O - $URL/facts_search/search 2>/dev/null | awk '{print $2}' | grep -v '^$' |\
     while read host; do
-        $WGET -O $DIR/$host $URL/facts/$host 2>/dev/null
+        WGET=$(get_wget $ROUTER_HOST pson)
+        $WGET -O $FACTS/$host $URL/facts/$host 2>/dev/null
     done
-    chown -R puppet.puppet $DIR
+    chown -R puppet.puppet $FACTS
 }
 
 gen_ssh_known_hosts_updater() {
@@ -314,7 +319,7 @@ END
 }
 
 gen_slurm() {
-    $MAIN slurm $CFGDIR/slurm.template > $DATA/slurm.conf
+    $MAIN slurm $CFGDIR/slurm.template $FACTS > $DATA/slurm.conf
     cp -f $DATA/slurm.conf /etc/puppet/files
 }
 

@@ -154,7 +154,11 @@ SlurmdLogFile=/var/log/slurm-llnl/slurmd.log
 # 
 # COMPUTE NODES 
 {%- for host in hosts %}
-NodeName={{ host }}
+NodeName={{ host.sname }} {% if host.facts -%}
+                                CPUs={{-
+                                host.facts['values']['processorcount'] }} RealMemory={{-
+                                parse_mem(host.facts['values']['memorytotal']) }}
+                          {%- endif -%}
 {%- endfor %}
 
 {%- for group, hosts in groups.iteritems() %}
