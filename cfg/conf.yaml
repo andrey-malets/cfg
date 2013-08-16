@@ -37,6 +37,7 @@ networks:
 groups:
 - [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it)$', {services: [unix]}]
 - [windows,  [633-pcs], 'dc\d',           {services: [windows, rrdp]}]
+- [xen,      '^(m|t|h)$',                 {services: [xen]}]
 
 - [aps,      '(.+-ap|ap\d)']
 - [ipmi,     '.+-ipmi',                   {services: [ipmi], admin: uzer}]
@@ -81,6 +82,8 @@ hosts:
 - [[airlab-switch, as],   9.24,    001b11c34547]
 - [[ritchie-ipmi, r-i],   9.25,    001e670fac42]
 - [[ritchie, r],          9.26]    #?
+- [ hp-high-ups,          9.27,    00c0b798608d]
+- [ hp-low-ups,           9.28,    00c0b72f2677]
 #   dijkstra              9.254
 
 - [ anytask-back,         10.215,  001851ad5d74, {backend_for: anytask.urgu.org, admin: znick}]
