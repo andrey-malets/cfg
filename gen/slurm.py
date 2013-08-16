@@ -4,7 +4,7 @@ from cmd import add_cmd
 def parse_mem(pretty):
     multipliers = { 'MB': 1, 'GB': 1024 }
     volume, suffix = pretty.split(' ')
-    return int(float(volume) * multipliers[suffix])
+    return int(float(volume) * multipliers[suffix]) - 10
 
 @add_cmd('slurm', True, 1)
 def gen_slurm(state, template, facts_path):
