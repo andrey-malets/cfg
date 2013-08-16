@@ -359,13 +359,7 @@ class distcc {
     }
 
     cron { 'distcc-hosts':
-        command => "/usr/bin/sinfo -hNr -o '\%n' -p {{ state.defaults.slurm }} > \
-            /etc/distcc/hosts.list; cat \
-              /etc/distcc/hosts.list \
-              /etc/distcc/hosts.list \
-              /etc/distcc/hosts.list \
-              /etc/distcc/hosts.list \
-            > /etc/distcc/hosts",
+        command => "echo > /etc/distcc/hosts",
         user => root,
         hour => '*',
         minute => '*',
@@ -393,6 +387,16 @@ class btsync {
             group => root,
             source => 'puppet:///files/btsync_i386',
         }
+    }
+}
+
+class xen {
+    file { '/etc/default/xendomains':
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/xendomains',
     }
 }
 
@@ -430,6 +434,10 @@ node '{{ host.name }}' {
             $check_nagios = 'true'
         {% else %}
             $check_nagios = 'false'
+        {% endif %}
+
+        {% if 'xen' in host.services %}
+            include xen
         {% endif %}
 
         include btsync
