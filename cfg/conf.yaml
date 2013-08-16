@@ -21,7 +21,7 @@ defaults:
     '.usu' : '.usu.edu.ru'
 
 networks:
-- [172.16.9/24,        172.16.9.253,    {nagios: 9.254,  iface: eth1, rdns: 1, private: 1}]
+- [172.16.9/24,        172.16.9.254,    {nagios: 9.254,  iface: eth1, rdns: 1, private: 1}]
 - [172.16.10/24,       172.16.10.253,   {nagios: 10.254, iface: bond0.3, dhcp: '1-128', rdns: 1, fb: 1}]
 - [172.16.11/24,       172.16.11.253,   {nagios: 11.254, iface: bond0.4, dhcp: '40-252', rdns: 1, fb: 1}]
 - [172.16.12/24,       172.16.12.253,   {nagios: 12.254, iface: bond0.8, dhcp: '30-252', rdns: 1, fb: 1}]
