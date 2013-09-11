@@ -410,6 +410,16 @@ class userqwer {
     }
 }
 
+class ldap {
+    file { '/etc/ssl/dc3.cer':
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/dc3.cer',
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'managed' in host.props %}
@@ -460,6 +470,7 @@ node '{{ host.name }}' {
         include nrpe
         include slurm
         include startcom
+        include ldap
 
     {% endif %}
 }

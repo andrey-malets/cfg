@@ -148,6 +148,11 @@ define service {
     check_command       check_ssh
     {%- endif %}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
 }
 {% endif %}
 
@@ -158,6 +163,11 @@ define service {
     check_command       check_http
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
 }
 {% endif %}
 
@@ -168,6 +178,11 @@ define service {
     check_command       check_nrpe_1arg!check_load
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
 }
 
 define service {
@@ -176,6 +191,11 @@ define service {
     check_command       check_nrpe_1arg!check_disk
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
 }
 
 define service {
@@ -184,6 +204,11 @@ define service {
     check_command       check_nrpe_1arg!check_total_procs
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
 }
 
 define service {
@@ -192,6 +217,11 @@ define service {
     check_command       check_nrpe_1arg!check_zombie_procs
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
 }
 
 {% if not 'managed' in host.props %}
@@ -202,6 +232,11 @@ define service {
     check_interval      3600
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
 }
 {% endif %}
 
