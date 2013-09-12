@@ -420,6 +420,23 @@ class ldap {
     }
 }
 
+class nvidia {
+    file { '/etc/X11/xorg.conf':
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/nvidia.xorg.conf',
+    }
+
+    service { 'gdm':
+        ensure => running,
+        enable => true,
+        require => File['/etc/X11/xorg.conf'],
+        subscribe => File['/etc/X11/xorg.conf'],
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'managed' in host.props %}
@@ -462,6 +479,10 @@ node '{{ host.name }}' {
 
         {% if 'userqwer' in host.services %}
             include userqwer
+        {% endif %}
+
+        {% if 'nvidia' in host.services %}
+            include nvidia
         {% endif %}
 
         include btsync
