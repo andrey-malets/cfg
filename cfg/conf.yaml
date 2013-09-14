@@ -109,7 +109,7 @@ hosts:
 - [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237]  #?
-- [[itanium,it],          10.238,  001b789f0091]
+- [[itanium,it],          10.238,  001b789f0090, 001b789f0091]
 #- [ itanium2,             10.239]  #?
 - [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru, admin: muzafarov}]
 - [ tb,                   10.241,  001851d78a0a, {admin: andgein}]
