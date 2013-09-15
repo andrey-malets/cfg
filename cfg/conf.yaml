@@ -35,7 +35,7 @@ networks:
 - [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.244.126, iface: 'bond0.2'}]
 
 groups:
-- [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it)$', {services: [unix]}]
+- [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it|it2)$', {services: [unix]}]
 - [windows,  [633-pcs], 'dc3',            {services: [windows, rrdp]}]
 - [xen,      '^(m|t|h)$',                 {services: [xen]}]
 
@@ -57,7 +57,7 @@ groups:
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
-- [ it2,                  9.2,     0017a4abf41f]
+# - [ it2,                  9.2,     0017a4abf41f]
 - [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {fb: [10.229, '11.240', '12.250']}]
 - [[mmarkov, mm],         9.4,     000c29dfeeff]
 - [[hamming, h],          9.5,    [000423d6896e, 000423d6896f]]
@@ -110,7 +110,7 @@ hosts:
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237]  #?
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091]]
-#- [ itanium2,             10.239]  #?
+- [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e]]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru, admin: muzafarov}]
 - [ tb,                   10.241,  001851d78a0a, {admin: andgein}]
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
