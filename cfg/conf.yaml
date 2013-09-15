@@ -36,7 +36,7 @@ networks:
 
 groups:
 - [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it)$', {services: [unix]}]
-- [windows,  [633-pcs], 'dc\d',           {services: [windows, rrdp]}]
+- [windows,  [633-pcs], 'dc3',            {services: [windows, rrdp]}]
 - [xen,      '^(m|t|h)$',                 {services: [xen]}]
 
 - [aps,      '(.+-ap|ap\d)']
@@ -120,7 +120,7 @@ hosts:
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
 - [ hog.runc,             10.247,  000c29ad7767, {admin: uzer}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
-- [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
+# - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
 #   free                  10.250
 #   free                  10.251
 #   free                  10.252
