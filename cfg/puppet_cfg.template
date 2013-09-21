@@ -358,12 +358,22 @@ class distcc {
         ensure => installed,
     }
 
+    file { 'distcc.sh':
+        path => '/usr/local/bin/distcc.sh',
+        mode => 500,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/distcc.sh',
+
+        require => Service['slurm-llnl'],
+    }
+
     cron { 'distcc-hosts':
-        command => "echo > /etc/distcc/hosts",
+        command => '/usr/local/bin/distcc.sh',
         user => root,
         hour => '*',
         minute => '*',
-        require => [Package['distcc'], Service['slurm-llnl']],
+        require => [Package['distcc'], File['distcc.sh']],
     }
 }
 
