@@ -413,7 +413,6 @@ class xen {
 class userqwer {
     user { 'user':
         ensure => present,
-        groups => 'sudo',
         home => '/home/user',
         shell => '/bin/bash',
         password => '$1$DWV8BrMQ$v8TnXmLTDA38CiVBEMndf.',
