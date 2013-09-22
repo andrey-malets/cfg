@@ -119,6 +119,11 @@ define host {
     use        generic-host
     host_name  {{ state.get_canonical_hostname(host) }}
     alias      {{ state.get_canonical_hostname(host) }}
+    {%- if 'nagios' in host.props -%}
+    {%- for name, value in host.props['nagios'].iteritems() %}
+    {{ name }} {{ value }}
+    {%- endfor -%}
+    {%- endif -%}
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
     flap_detection_enabled     0
