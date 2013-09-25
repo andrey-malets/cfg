@@ -92,7 +92,7 @@ hosts:
 #   free                  10.216
 #   free                  10.217
 #   free                  10.218
-- [ pi,                   10.219,  b827ebc2847b, {services: [ssh]}]
+- [ pi,                   10.219,  b827ebc2847b, {services: [ssh], admin: kost}]
 - [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
 - [ irc-back,             10.222,  001851bcb7a7, {backend_for: irc.hackerdom.ru, admin: znick}]
