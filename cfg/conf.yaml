@@ -1,5 +1,6 @@
 people:
 - [andgein,       "Andrey Gein",          andgein@yandex.ru]
+- [and,           "Andrey Khozov",        avkhozov@gmail.com]
 - [ilya,          "Ilya Zelenchuk",       ilya@hackerdom.ru]
 - [kost,          "Konstantin Plotnikov", kost@hackerdom.ru]
 - [last,          "Sergey Azovskov",      last_g@hackerdom.ru]
@@ -96,7 +97,7 @@ hosts:
 - [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
-                                                  backend_for: irc.hackerdom.ru, admin: znick}]
+                                                  backend_for: irc.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
