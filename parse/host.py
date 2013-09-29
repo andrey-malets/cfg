@@ -21,6 +21,9 @@ class Host:
             self.saliases = []
 
         self.sname = get_sname(self.name)
+        self.nick  = reduce(lambda cur, x: cur if len(cur) < len(x) else x,
+                            [self.sname] + self.saliases)
+
         self.addr  = (defaults.expand_ip(data.pop(0))
             if (len(data) and type(data[0]) is not dict) else None)
         

@@ -46,7 +46,7 @@ groups:
 - [switches, '.+-switch']
 - [paper,    '.+-(printer|scanner)']
 - [ups,      '.+-ups']
-- [embedded, [aps, switches, paper, ups], {services: [http], admin: uzer}]
+- [embedded, [aps, switches, mplan, paper, ups], {services: [http], admin: uzer}]
 
 #- [621-pcs,   '621-\d\d',                 {admin: vsamun}]
 - [633-pcs,   '(stream|cuda)-pc',         {services: [rrdp], admin: kost}]

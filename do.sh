@@ -323,6 +323,21 @@ gen_slurm() {
     cp -f $DATA/slurm.conf /etc/puppet/files
 }
 
+gen_nginx() {
+    local CUR=$DATA/ext_http
+    local NEW=$DATA/dhcpd.conf
+
+    ln -sf $CUR /etc/nginx/sites-enabled
+    $MAIN ext_http $CFGDIR/ext_http.template > $NEW
+
+    if ! cmp_files $CUR $NEW; then
+        mv $NEW $CUR
+        /etc/init.d/nginx restart
+    else
+        rm $NEW
+    fi
+}
+
 mkdir -p $DATA
 
 gen_dhcp
@@ -342,3 +357,5 @@ gen_ssh_known_hosts_updater
 
 gen_nagios
 gen_slurm
+
+gen_nginx

@@ -1,1 +1,1 @@
-import dhcp, dns, iptables, nagios, puppet, ssh, slurm, util
+import dhcp, dns, http, iptables, nagios, puppet, ssh, slurm, util
