@@ -447,6 +447,29 @@ class nvidia {
     }
 }
 
+class sp {
+    file { '/usr/local/bin/sp':
+        ensure => present,
+        mode => '755',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/sp',
+    }
+
+    file { '/etc/sudoers.d/sp':
+        ensure => present,
+        mode => '600',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/sp.sudoers',
+    }
+
+    exec { '/usr/local/bin/sp':
+        subscribe => File['/usr/local/bin/sp'],
+        refreshonly => true,
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'managed' in host.props %}
@@ -502,6 +525,7 @@ node '{{ host.name }}' {
         include slurm
         include startcom
         include ldap
+        include sp
 
     {% endif %}
 }
