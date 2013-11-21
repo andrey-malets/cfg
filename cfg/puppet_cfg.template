@@ -475,6 +475,7 @@ node '{{ host.name }}' {
     {% if 'managed' in host.props %}
         include managed-ssh
         include hadoop_slave
+        include smb
     {% endif %}
 
     {% if 'hadoop-master' in host.props['services'] %}
