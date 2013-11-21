@@ -37,7 +37,7 @@ networks:
 - [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.244.126, iface: 'bond0.2', fb: 1}]
 
 groups:
-- [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|tb|ts|it|it2)$', {services: [unix]}]
+- [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|ts|it|it2)$', {services: [unix]}]
 - [windows,  [633-pcs], 'dc3',            {services: [windows, rrdp]}]
 - [xen,      '^(m|t|h)$',                 {services: [xen]}]
 
@@ -117,7 +117,7 @@ hosts:
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091]]
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e]]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru, admin: muzafarov}]
-- [ tb,                   10.241,  001851d78a0a, {admin: andgein}]
+#   free                  10.241
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
