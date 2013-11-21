@@ -7,9 +7,15 @@ def get_pub_port(host):
 @add_cmd('ipt_ports', False, 2)
 def gen_ports(state, dst, chain):
     def tcp_forwardings(host):
+        def matches(host):
+            return state.is_gray(host) and not state.belongs_to(host).private
+
         rv = host.props.get('tcp_fwd', {})
-        if 'ssh' in host.services or 'unix' in host.services: rv[get_pub_port(host)] = 22
-        if 'rrdp' in host.services: rv[get_pub_port(host)] = 3389
+        if matches(host):
+            if 'ssh' in host.services or 'unix' in host.services:
+                rv[get_pub_port(host)] = 22
+            if 'rrdp' in host.services:
+                rv[get_pub_port(host)] = 3389
         return rv
 
     def udp_forwardings(host):
@@ -28,10 +34,7 @@ def gen_ports(state, dst, chain):
                                'ip'      : host.addr,
                                'dstport' : dstport })
 
-    def matches(host):
-        return state.is_gray(host) and not state.belongs_to(host).private
-
-    for host in filter(matches, state.hosts):
+    for host in state.hosts:
         for srcport, dstport in tcp_forwardings(host).iteritems(): add('tcp', srcport, dstport)
         for srcport, dstport in udp_forwardings(host).iteritems(): add('udp', srcport, dstport)
 
