@@ -62,7 +62,7 @@ groups:
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
 # - [ it2,                  9.2,     0017a4abf41f]
-- [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {fb: [10.229, '11.240', '12.250']}]
+- [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], tcp_fwd: {3260: 3260}, {fb: [10.229, '11.240', '12.250', '194.226.244.126']}]
 - [[mmarkov, mm],         9.4,     000c29dfeeff]
 - [[hamming, h],          9.5,    [000423d6896e, 000423d6896f]]
 - [[630-switch, bs],      9.6,     001b11c344e6]
@@ -99,14 +99,14 @@ hosts:
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
                                                   backend_for: irc.hackerdom.ru, admin: and}]
-- [ dc3.runc,             10.223,  00163a34f84d]
+- [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org}]
 - [ canion,               10.226,  001eec2cf0f2, {services: [nvidia]}]
 - [ asus1,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
-- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22}, admin: uzer, services: [hadoop-master]}]
+- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 6817: 6817}, admin: uzer, services: [hadoop-master]}]
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
 - [ hewlett,              10.232 , b499ba5732e9 ]
 - [ packard,              10.233 , b499ba5684d1 ]
