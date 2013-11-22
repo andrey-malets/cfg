@@ -47,7 +47,9 @@ groups:
 - [switches, '.+-switch']
 - [paper,    '.+-(printer|scanner)']
 - [ups,      '.+-ups']
-- [embedded, [aps, switches, mplan, paper, ups], {services: [http], admin: uzer}]
+- [embedded, [aps, switches, paper, ups], {services: [http], admin: uzer}]
+
+- [ructfe2013, 'ructfe\d',     {services: [ssh], admin: dimmo}]
 
 #- [621-pcs,   '621-\d\d',                 {admin: vsamun}]
 - [633-pcs,   '(stream|cuda)-pc',         {services: [rrdp], admin: kost}]
@@ -170,6 +172,16 @@ hosts:
 - [ ns.usu.ru,       194.226.235.22]
 
 - [ splinex.dyndns.org, {admin: ns}]
+
+- [ ructfe0.yandex.net ]
+- [ ructfe1.yandex.net ]
+- [ ructfe2.yandex.net ]
+- [ ructfe3.yandex.net ]
+- [ ructfe4.yandex.net ]
+- [ ructfe5.yandex.net ]
+- [ ructfe6.yandex.net ]
+- [ ructfe8.yandex.net ]
+- [ ructfe9.yandex.net ]
 
 #- [ 621-01,  11.1,   001cc044c5fc]
 #- [ 621-02,  11.2,   001cc044c7fc]
