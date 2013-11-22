@@ -55,7 +55,7 @@ groups:
 - [bhs,       'h(0\d|1[0-7])']
 - [shs,       'h(1(8|9)|2\d)']
 - [hogs,      'hog\d\d',                  {services: [userqwer]}]
-- [managed,   [hogs, notebooks], '(uzer|znick)-pc', {services: [unix], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 1}]
+- [managed,   [volatile], '(clt*|(uzer|znick)-pc)', {services: [unix], admin: uzer, dhcp: {ipxe.scriptlet: cow}, managed: 1}]
 - [notebooks, '(asus(1|2|3)|canion|hewlett|packard)']
 - [volatile,  [hogs, notebooks], {volatile: 1}]
 
@@ -91,8 +91,8 @@ hosts:
 #   dijkstra              9.254
 
 - [ anytask-back,         10.215,  001851ad5d74, {backend_for: anytask.urgu.org, admin: znick}]
-#   free                  10.216
-#   free                  10.217
+- [ clt1,                 10.216, [00142a496556, 0004e21c735b]]
+- [ clt2,                 10.217, [00142a485af5, 0004e21c716a]]
 #   free                  10.218
 - [ pi,                   10.219,  b827ebc2847b, {services: [ssh], admin: kost}]
 - [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
