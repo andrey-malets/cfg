@@ -11,6 +11,7 @@ people:
 - [yariksuperman, "Yaroslav Borcheninov", yariksuperman@gmail.com]
 - [znick,         "Nickolai Zhuravlev",   znick@znick.ru]
 - [ns,            "Nickolai Shturkin",    ns@splinex.com]
+- [ld,            "Bogdan Melnik",        ld@hackerdom.ru]
 
 defaults:
   mon: monitoring@urgu.org
@@ -38,12 +39,12 @@ networks:
 
 groups:
 - [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|ts|it|it2)$', {services: [unix]}]
-- [windows,  [633-pcs], 'dc3',            {services: [windows, rrdp]}]
+- [windows,  [633-pcs], '(dc3|ld-xp)',    {services: [windows, rrdp]}]
 - [xen,      '^(m|t|h)$',                 {services: [xen]}]
 
 - [aps,      '(.+-ap|ap\d)']
 - [ipmi,     '.+-ipmi',                   {services: [ipmi], admin: uzer}]
-- [mplan,    '.+-mplan',                  {services: [mplan], admin: uzer}]
+- [mplan,    '.+-mplan',                  {services: [mplan, https], admin: uzer}]
 - [switches, '.+-switch']
 - [paper,    '.+-(printer|scanner)']
 - [ups,      '.+-ups']
@@ -95,7 +96,7 @@ hosts:
 - [ anytask-back,         10.215,  001851ad5d74, {backend_for: anytask.urgu.org, admin: znick}]
 - [ clt1,                 10.216, [00142a496556, 0004e21c735b]]
 - [ clt2,                 10.217, [00142a485af5, 0004e21c716a]]
-#   free                  10.218
+- [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
 - [ pi,                   10.219,  b827ebc2847b, {services: [ssh], admin: kost}]
 - [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
@@ -115,7 +116,7 @@ hosts:
 - [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
 - [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
-- [ cuda-pc.runc,         10.237]  #?
+- [ cuda-pc.runc,         10.237,  001cc009f4ff]
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091]]
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e]]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru, admin: muzafarov}]
