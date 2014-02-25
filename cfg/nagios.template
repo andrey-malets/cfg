@@ -93,7 +93,7 @@ define contact {
     email                           {{ state.defaults.mon }}
 }
 
-{% for user in state.users %}
+{% for user in state.users.itervalues() %}
 define contact {
     contact_name                    {{ user.nickname }}
     alias                           {{ user.name }}

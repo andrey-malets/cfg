@@ -15,8 +15,8 @@ class State:
                                      config['hosts'])
         self.groups   = map(Group,   config['groups'])
         self.networks = map(Network, config['networks'])
-
-        self.users    = map(User, config['people'])
+        self.users    = dict((user.nickname, user) for user in
+                            map(User, config['people']))
 
         self.errors.extend(check_hosts(self.hosts))
         self.errors.extend(expand_groups(self.groups, self.hosts))

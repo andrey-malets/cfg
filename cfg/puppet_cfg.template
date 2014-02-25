@@ -476,6 +476,13 @@ node '{{ host.name }}' {
         include managed-ssh
         include hadoop_slave
         include smb
+    {% else %}
+        $cron_apt_admin = '{%- if 'admin' in host.props -%}
+                               {{ state.users[host.props['admin']].email }}
+                           {%- else -%}
+                               root
+                           {%- endif -%}'
+        include cron-apt
     {% endif %}
 
     {% if 'hadoop-master' in host.props['services'] %}
