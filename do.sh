@@ -340,22 +340,33 @@ gen_nginx() {
 
 mkdir -p $DATA
 
-gen_dhcp
-gen_dns
-gen_iptables_ports
+almost_all() {
+    gen_dhcp
+    gen_dns
+    gen_iptables_ports
 
-gen_puppet_cfg
-gen_puppet_fileserver
-gen_puppet_ssh
+    gen_puppet_cfg
+    gen_puppet_fileserver
+    gen_puppet_ssh
 
-gather_ssh_known_hosts
+    gather_ssh_known_hosts
 
-gen_ssh_known_hosts
-gen_ssh_known_hosts_updater
+    gen_ssh_known_hosts
+    gen_ssh_known_hosts_updater
 
-#refresh_facts
+    gen_nagios
+    gen_slurm
 
-gen_nagios
-gen_slurm
+    gen_nginx
+}
 
-gen_nginx
+all() {
+    refresh_facts
+    almost_all
+}
+
+if [ $# -eq 0 ]; then
+    almost_all
+else
+    $1
+fi
