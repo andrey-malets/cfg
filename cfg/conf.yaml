@@ -44,7 +44,7 @@ groups:
 
 - [aps,      '(.+-ap|ap\d)']
 - [ipmi,     '.+-ipmi',                   {services: [ipmi], admin: uzer}]
-- [mplan,    '.+-mplan',                  {services: [mplan, https], admin: uzer}]
+- [mplan,    '.+-mplan',                  {services: [mplan], admin: uzer}]
 - [switches, '.+-switch']
 - [paper,    '.+-(printer|scanner)']
 - [ups,      '.+-ups']
