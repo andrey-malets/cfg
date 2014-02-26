@@ -177,11 +177,6 @@ define service {
     check_freshness         1
     freshness_threshold     93600
     check_command           no-puppet
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 {% endif %}
 
