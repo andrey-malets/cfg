@@ -1,0 +1,22 @@
+[global]
+    security     = ads
+    realm        = RUNC.URGU.ORG
+    workgroup    = RUNC
+    netbios name = <%= hostname %>
+;    encrypt passwords = true
+;    log level    = 3
+    log file     = /var/log/samba/thelog
+    max log size = 0
+;
+;    template shell = /bin/bash
+;
+    load printers         = no
+    printing              = bsd
+    printcap name         = /dev/null
+;    show add print wizard = no
+    disable spoolss       = yes
+
+[place]
+    path           = /place
+    nt acl support = yes
+    read only      = no
