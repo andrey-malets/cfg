@@ -72,6 +72,32 @@ class managed-ssh {
         group => root,
         source => "puppet:///$hostname/ssh_host_rsa_key.pub",
     }
+
+    file { '/etc/ssh/keys.tgz':
+        mode => 600,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/keys.tgz',
+    }
+
+    file { '/usr/local/bin/ssh.sh':
+        mode => 700,
+        owner => root,
+        group => root,
+        content => "#!/bin/bash
+            KEYDIR=/etc/ssh/keys
+            mkdir -p \$KEYDIR && cd \$KEYDIR && rm -rf *
+            chown root.root . && chmod 755 .
+            tar xf /etc/ssh/keys.tgz
+            chmod 600 *
+            ",
+    }
+
+    exec { '/usr/local/bin/ssh.sh':
+        subscribe => [File['/etc/ssh/keys.tgz'],
+                      File['/usr/local/bin/ssh.sh']],
+        refreshonly => true,
+    }
 }
 
 class startcom {
