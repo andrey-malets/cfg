@@ -2,8 +2,8 @@
 # Put this file on all nodes of your cluster.
 # See the slurm.conf man page for more information.
 #
-ControlMachine=slurm.fb.urgu.org
-#ControlAddr=
+ControlMachine=ts
+ControlAddr=slurm.fb.urgu.org
 #BackupController=
 #BackupAddr=
 # 
