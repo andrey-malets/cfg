@@ -105,29 +105,34 @@ def expand_groups(groups, hosts):
     group_names = fold_names(groups)
     check_cycles(group_names)
 
-    def empty_parents(group): return not len(group.parents)
+    def no_parents(group): return len(group.parents) == 0
 
-    for group in groups: group.parents = set()
+    for group in groups:
+        group.hosts = []
+        group.parents = set()
+        group.ancestors = set()
     for group in groups:
         for child_name in group.childs:
             group_names[child_name].parents.add(group)
-    for group in groups:
-        group.parents0 = set(group.parents)
-        group.hosts = []
 
-    empty = filter(empty_parents, groups)
-    while len(empty):
-        group = empty.pop()
-        for host in group.get_matching(hosts):
-            errors.extend(merge(group, host))
-            host.groups += group.parents0
-            host.groups += [group]
+    queue = filter(no_parents, groups)
+    while len(queue):
+        group = queue[0]
         for child_name in group.childs:
             child = group_names[child_name]
+            child.ancestors.add(group)
+            child.ancestors.update(group.ancestors)
             child.parents.remove(group)
-            if empty_parents(child):
-                empty.append(child)
-            errors.extend(merge(group, child))
+            if no_parents(child): queue.append(child)
+        queue = queue[1:]
+
+    for group in groups:
+        for ancestor in group.ancestors:
+            errors.extend(merge(ancestor, group))
+        for host in group.get_matching(hosts):
+            errors.extend(merge(group, host))
+            host.groups += group.ancestors
+            host.groups.append(group)
 
     for host in hosts:
         for group in host.groups:
