@@ -93,6 +93,11 @@ define contact {
     email                           {{ state.defaults.mon }}
 }
 
+define command {
+    command_name    no-puppet
+    command_line    $USER1$/check_dummy 2 "CRITICAL: Puppet agent didn't work for a while"
+}
+
 {% for user in state.users.itervalues() %}
 define contact {
     contact_name                    {{ user.nickname }}
@@ -153,6 +158,25 @@ define service {
     check_command       check_ssh
     {%- endif %}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
+}
+{% endif %}
+
+{% if 'unix' in host.props['services'] %}
+define service {
+    use                 generic-service
+    host_name           {{ state.get_canonical_hostname(host) }}
+    service_description Puppet client
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    active_checks_enabled   0
+    passive_checks_enabled  1
+    check_freshness         1
+    freshness_threshold     93600
+    check_command           no-puppet
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
     flap_detection_enabled     0
