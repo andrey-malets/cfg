@@ -6,5 +6,6 @@ class cron-apt {
         owner => root,
         group => root,
         content => template('cron-apt/config.erb'),
+        require => Package['cron-apt'],
     }
 }
