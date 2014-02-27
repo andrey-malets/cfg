@@ -2,7 +2,7 @@
 
 [ -f /usr/local/puppet.random ] && \
     wget -O- <%= puppet_random_host %>/random 2>/dev/null | \
-        cmp /usr/local/puppet.random && \
+        cmp /usr/local/puppet.random &>/dev/null && \
     /usr/sbin/send_nsca -H <%= nsca_host %> -d , <<EOF >/dev/null
 <%= host %>,Puppet client,0,OK
 EOF
