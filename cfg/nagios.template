@@ -95,7 +95,7 @@ define contact {
 
 define command {
     command_name    no-puppet
-    command_line    $USER1$/check_dummy 2 "CRITICAL: Puppet agent didn't work for a while"
+    command_line    $USER1$/check_dummy 2 "Puppet agent didn't work for a while"
 }
 
 {% for user in state.users.itervalues() %}
