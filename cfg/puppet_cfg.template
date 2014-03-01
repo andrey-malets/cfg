@@ -552,6 +552,14 @@ node '{{ host.name }}' {
             include nvidia
         {% endif %}
 
+        {% if 'admin' in host.props %}
+            mailalias { 'root':
+                name => root,
+                ensure => present,
+                recipient => '{{ state.users[host.props['admin']].email }}'
+            }
+        {% endif %}
+
         $host = '{{ state.get_canonical_hostname(host) }}'
         $nsca_host = '{{ state.defaults.nagios }}'
         $puppet_random_host = 'urgu.org'
