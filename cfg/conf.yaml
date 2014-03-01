@@ -40,7 +40,8 @@ networks:
 
 groups:
 - [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|ts|it|it2)$', {services: [unix]}]
-- [windows,  [633-pcs], '(dc3|ld-xp)',    {services: [windows, rrdp]}]
+- [windows,  [633-pcs], '(lick|dc3|ld-xp)',
+                                          {services: [windows, rrdp]}]
 - [xen,      '^(m|t|h)$',                 {services: [xen]}]
 - [http,     '(anytask|irc|r4u|school|status|hackerdom)-back',
                                           {services: [http]}]
@@ -107,7 +108,7 @@ hosts:
 - [ hp-low-ups,           9.28,    00c0b72f2677]
 #   dijkstra              9.254
 
-- [ anytask-back,         10.215,  001851ad5d74, {backend_for: anytask.urgu.org, admin: znick}]
+- [ anytask-back-old,     10.215,  001851ad5d74, {backend_for: anytask.urgu.org, admin: znick}]
 - [ clt1,                 10.216, [00142a496556, 0004e21c735b]]
 - [ clt2,                 10.217, [00142a485af5, 0004e21c716a]]
 - [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
@@ -137,7 +138,7 @@ hosts:
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091], {admin: uzer}]
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru], admin: muzafarov}]
-#   free                  10.241
+- [ anytask-back,         10.241,  000c29cf8130]
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
