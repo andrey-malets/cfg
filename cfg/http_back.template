@@ -1,0 +1,37 @@
+{%- for host in state.hosts %}
+{%- if 'http' in host.services and 'backend_for' in host.props -%}
+{%- if host.props['backend_for'] is string %}
+server {
+    server_name {{ host.props['backend_for'] }};
+    listen 80;
+
+    access_log  /var/log/nginx/{{ host.props['backend_for'] }}.access.log;
+    error_log   /var/log/nginx/{{ host.props['backend_for'] }}.error.log;
+
+    proxy_set_header    X-Forwarded-For $remote_addr;
+    proxy_set_header    Host            $host;
+
+    location / {
+        proxy_pass      http://{{ host.addr }};
+    }
+}
+{% else %}
+{% for hostname in host.props['backend_for'] %}
+server {
+    server_name {{ hostname }};
+    listen 80;
+
+    access_log  /var/log/nginx/{{ hostname }}.access.log;
+    error_log   /var/log/nginx/{{ hostname }}.error.log;
+
+    proxy_set_header    X-Forwarded-For $remote_addr;
+    proxy_set_header    Host            $host;
+
+    location / {
+        proxy_pass      http://{{ host.addr }};
+    }
+}
+{% endfor %}
+{% endif -%}
+{% endif -%}
+{% endfor -%}

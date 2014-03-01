@@ -42,7 +42,9 @@ groups:
 - [unix,     '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|ts|it|it2)$', {services: [unix]}]
 - [windows,  [633-pcs], '(dc3|ld-xp)',    {services: [windows, rrdp]}]
 - [xen,      '^(m|t|h)$',                 {services: [xen]}]
-
+- [http,     '(anytask|irc|r4u|school|status|hackerdom)-back',
+                                          {services: [http]}]
+- [https,    'redmine-back',              {services: [https]}]
 - [aps,      '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,     '.+-ipmi',                   {services: [ipmi], admin: uzer}]
 - [mplan,    '.+-mplan',                  {services: [mplan], admin: uzer}]
@@ -113,7 +115,7 @@ hosts:
 - [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
-                                                  backend_for: irc.hackerdom.ru, admin: and}]
+                                                  backend_for: [irc.hackerdom.ru, irclog.hackerdom.ru], admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org, admin: alexog}]
@@ -121,22 +123,25 @@ hosts:
 - [ asus1,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
-- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 6817: 6817}, admin: uzer, services: [hadoop-master]}]
+- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 6817: 6817}, admin: uzer,
+                                                  services: [hadoop-master]}]
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
 - [ hewlett,              10.232 , b499ba5732e9 ]
 - [ packard,              10.233 , b499ba5684d1 ]
 - [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
-- [ redmine-back,         10.235,  001851224547, {backend_for: redmine.hackerdom.ru, admin: znick}]
+- [ redmine-back,         10.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
+                                                                git.redmine.hackerdom.ru],
+                                                  admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237,  001cc009f4ff]
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091], {admin: uzer}]
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
-- [ school-back,         '10.240', 001851d78a56, {backend_for: school.uralctf.ru, admin: muzafarov}]
+- [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru], admin: muzafarov}]
 #   free                  10.241
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
-- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: hackerdom.ru}] # admin: domi?
+- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru, www.hackerdom.ru]}] # admin: domi?
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
 - [ hog.runc,             10.247,  000c29ad7767, {admin: uzer}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
