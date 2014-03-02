@@ -101,12 +101,17 @@ class managed-ssh {
 }
 
 class startcom {
+    package { 'ca-certificates':
+        ensure => installed
+    }
+
     file { 'startcom.crt':
         path => '/usr/local/share/ca-certificates/startcom.crt',
         mode => 644,
         owner => root,
         group => root,
         source => 'puppet:///files/startcom.crt',
+        require => Package['ca-certificates'],
     }
 
     exec { '/usr/sbin/update-ca-certificates -f':
@@ -482,12 +487,20 @@ class sp {
         source => 'puppet:///files/sp',
     }
 
+    file { '/etc/sudoers.d':
+        ensure => directory,
+        mode => '644',
+        owner => root,
+        group => root,
+    }
+
     file { '/etc/sudoers.d/sp':
         ensure => present,
         mode => '600',
         owner => root,
         group => root,
         source => 'puppet:///files/sp.sudoers',
+        require => File['/etc/sudoers.d'],
     }
 
     exec { '/usr/local/bin/sp':
