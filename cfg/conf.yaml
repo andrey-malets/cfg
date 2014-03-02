@@ -126,7 +126,7 @@ hosts:
 #   markov-fastbone       10.229
 - [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 6817: 6817}, admin: uzer,
                                                   services: [hadoop-master]}]
-- [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer}]
+- [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
 - [ hewlett,              10.232 , b499ba5732e9 ]
 - [ packard,              10.233 , b499ba5684d1 ]
 - [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
