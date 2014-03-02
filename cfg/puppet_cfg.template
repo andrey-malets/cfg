@@ -584,6 +584,21 @@ class sp {
     }
 }
 
+class pam_mount {
+    package { 'libpam-mount':
+        ensure => installed,
+    }
+
+    file { '/etc/security/pam_mount.conf.xml':
+        require => Package['libpam-mount'],
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/pam_mount.conf.xml',
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -614,6 +629,7 @@ node '{{ host.name }}' {
             include managed-apt
             include managed-ssh
             include managed-update
+            include pam_mount
             include smb
         {% else %}
             $cron_apt_admin = '{%- if 'admin' in host.props -%}
