@@ -33,15 +33,42 @@ class slurm {
     }
 }
 
-class managed-ssh {
+class ssh {
     package { 'openssh-server': ensure => installed }
+    package { 'openssh-client': }
 
     service { 'ssh':
         ensure  => 'running',
         enable  => 'true',
     }
 
+    augeas { 'ssh_config':
+        require => Package['openssh-client'],
+        context => '/files/etc/ssh/ssh_config',
+        changes => ['set Host/ForwardAgent yes'],
+    }
+
+    augeas { 'sshd_config':
+        require => Package['openssh-server'],
+        notify => Service['ssh'],
+        context => '/files/etc/ssh/sshd_config',
+        changes => ['set UseDNS no',
+                    'set AllowAgentForwarding yes'],
+    }
+
+    if $userqwer {
+        augeas { 'sshd_config_userqwer':
+            require => Package['openssh-server'],
+            notify => Service['ssh'],
+            context => '/files/etc/ssh/sshd_config',
+            changes => 'set DenyUsers/1 user',
+        }
+    }
+}
+
+class managed-ssh inherits ssh {
     file { '/etc/ssh/ssh_host_dsa_key':
+        require => Package['openssh-server'],
         notify => Service['ssh'],
         mode => 600,
         owner => root,
@@ -50,6 +77,7 @@ class managed-ssh {
     }
 
     file { '/etc/ssh/ssh_host_dsa_key.pub':
+        require => Package['openssh-server'],
         notify => Service['ssh'],
         mode => 644,
         owner => root,
@@ -58,6 +86,7 @@ class managed-ssh {
     }
 
     file { '/etc/ssh/ssh_host_rsa_key':
+        require => Package['openssh-server'],
         notify => Service['ssh'],
         mode => 600,
         owner => root,
@@ -66,6 +95,7 @@ class managed-ssh {
     }
 
     file { '/etc/ssh/ssh_host_rsa_key.pub':
+        require => Package['openssh-server'],
         notify => Service['ssh'],
         mode => 644,
         owner => root,
@@ -73,7 +103,15 @@ class managed-ssh {
         source => "puppet:///$hostname/ssh_host_rsa_key.pub",
     }
 
+    augeas { 'managed_sshd_config':
+        require => Package['openssh-server'],
+        notify => Service['ssh'],
+        context => '/files/etc/ssh/sshd_config',
+        changes => ['set AuthorizedKeysFile "/etc/ssh/keys/%u %h/.ssh/authorized_keys"'],
+    }
+
     file { '/etc/ssh/keys.tgz':
+        require => Package['openssh-server'],
         mode => 600,
         owner => root,
         group => root,
@@ -97,6 +135,43 @@ class managed-ssh {
         subscribe => [File['/etc/ssh/keys.tgz'],
                       File['/usr/local/bin/ssh.sh']],
         refreshonly => true,
+    }
+}
+
+class managed-update {
+    file { '/root/empty.sh':
+        mode => 700,
+        owner => root,
+        group => root,
+        content => "#!/bin/bash
+            [ `w -h | grep -v '^user' | wc -l` -eq 0 ] && [ `pgrep tmux | wc -l` -eq 0 ] && \
+              [ `for i in /var/run/screen/*; do ls -1 $i; done | wc -l` -eq 0 ]
+            ",
+    }
+
+    cron { 'managed-update':
+        command => '/root/empty.sh && init 6',
+        user => root,
+        hour => 7,
+        minute => 10,
+        require => File['/root/empty.sh'],
+    }
+}
+
+class managed-apt {
+    package { 'sudo':
+        ensure => installed,
+    }
+
+    file { '/etc/sudoers.d/managed-apt':
+        require => Package['sudo'],
+        ensure => present,
+        mode => '440',
+        owner => root,
+        group => root,
+        content => 'ALL ALL=(ALL:ALL) /usr/bin/apt-get update
+                    ALL ALL=(ALL:ALL) /usr/bin/apt-get install *
+                   ',
     }
 }
 
@@ -496,7 +571,7 @@ class sp {
 
     file { '/etc/sudoers.d/sp':
         ensure => present,
-        mode => '600',
+        mode => '440',
         owner => root,
         group => root,
         source => 'puppet:///files/sp.sudoers',
@@ -511,28 +586,15 @@ class sp {
 
 {% for host in state.hosts %}
 node '{{ host.name }}' {
-    {% if 'managed' in host.props %}
-        include managed-ssh
-        include hadoop_slave
-        include smb
-    {% else %}
-        $cron_apt_admin = '{%- if 'admin' in host.props -%}
-                               {{ state.users[host.props['admin']].email }}
-                           {%- else -%}
-                               root
-                           {%- endif -%}'
-        include cron-apt
-    {% endif %}
-
     {% if 'hadoop-master' in host.props['services'] %}
         include hadoop_master
     {% endif %}
 
-    package { 'ntp':
-        ensure => installed,
-    }
-
     {% if 'unix' in host.services %}
+        package { 'ntp':
+            ensure => installed,
+        }
+
         $nrpe_allowed = '{{ ([state.get_nagios(host.addr)]
             + host.props.get('nrpe_allowed', []))|join(',') }}'
         {% if host.addr %}
@@ -542,9 +604,30 @@ node '{{ host.name }}' {
         {% endif %}
 
         {% if 'managed' in host.props %}
+            {% if 'userqwer' in host.services %}
+                include userqwer
+                $userqwer = 'true'
+            {% endif %}
             $check_apt = 'false'
+
+            include hadoop_slave
+            include managed-apt
+            include managed-ssh
+            include managed-update
+            include smb
         {% else %}
+            $cron_apt_admin = '{%- if 'admin' in host.props -%}
+                                   {{ state.users[host.props['admin']].email }}
+                               {%- else -%}
+                                   root
+                               {%- endif -%}'
             $check_apt = 'true'
+            include cron-apt
+            include ssh
+        {% endif %}
+
+        {% if 'managed-apt' in host.services %}
+            include managed-apt
         {% endif %}
 
         {% if 'nagios' in host.services %}
@@ -555,10 +638,6 @@ node '{{ host.name }}' {
 
         {% if 'xen' in host.services %}
             include xen
-        {% endif %}
-
-        {% if 'userqwer' in host.services %}
-            include userqwer
         {% endif %}
 
         {% if 'nvidia' in host.services %}
@@ -581,12 +660,11 @@ node '{{ host.name }}' {
         include btsync
         include distcc
         include known_hosts
+        include ldap
         include nrpe
         include slurm
-        include startcom
-        include ldap
         include sp
-
+        include startcom
     {% endif %}
 }
 {% endfor %}

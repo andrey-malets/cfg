@@ -144,7 +144,7 @@ hosts:
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru, www.hackerdom.ru]}] # admin: domi?
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
-- [ hog.runc,             10.247,  000c29ad7767, {admin: uzer}]
+- [ hog.runc,             10.247,  000c29ad7767, {admin: uzer, services: [managed-apt]}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
 #   free                  10.250
