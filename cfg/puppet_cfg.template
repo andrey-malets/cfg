@@ -107,7 +107,7 @@ class managed-ssh inherits ssh {
         require => Package['openssh-server'],
         notify => Service['ssh'],
         context => '/files/etc/ssh/sshd_config',
-        changes => ['set AuthorizedKeysFile "/etc/ssh/keys/%u %h/.ssh/authorized_keys"'],
+        changes => ['set AuthorizedKeysFile "/etc/ssh/keys/%u /root/.ssh/authorized_keys"'],
     }
 
     file { '/etc/ssh/keys.tgz':
