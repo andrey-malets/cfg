@@ -163,7 +163,7 @@ NodeName={{ host.sname }}
 
 {%- for group, hosts in groups.iteritems() %}
 PartitionName={{ group }} Nodes={{ hosts|join(',') }} State=UP {%- 
-    if group == default %} Default=YES{% endif %} AllowGroups=slurm-{{ group }}
+    if group == default %} Default=YES{% endif %} AllowGroups=slurm,slurm-{{ group }}
 {%- endfor %}
 
 #NodeName=hog01 CPUs=2 Sockets=2 State=UNKNOWN 
