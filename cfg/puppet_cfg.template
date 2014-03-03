@@ -144,13 +144,14 @@ class managed-update {
         owner => root,
         group => root,
         content => "#!/bin/bash
-            [ `w -h | grep -v '^user' | wc -l` -eq 0 ] && [ `pgrep tmux | wc -l` -eq 0 ] && \
-              [ `for i in /var/run/screen/*; do ls -1 $i; done | wc -l` -eq 0 ]
-            ",
+            [ `w -h | grep -v '^user' | wc -l` -eq 0 ] && \
+            [ `pgrep tmux | wc -l` -eq 0 ] && \
+            [ `ls -A /var/run/screen | wc -l` -eq 0 ]
+        ",
     }
 
     cron { 'managed-update':
-        command => '/root/empty.sh && init 6',
+        command => '/root/empty.sh && /sbin/init 6',
         user => root,
         hour => 7,
         minute => 10,
