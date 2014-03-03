@@ -599,6 +599,29 @@ class pam_mount {
     }
 }
 
+class exim_default {
+    package { 'exim4-daemon-light':
+        ensure => installed,
+    }
+
+    service { 'exim4': }
+
+    file { '/etc/exim4/update-exim4.conf.conf':
+        require => Package['exim4-daemon-light'],
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/update-exim4.conf.conf',
+    }
+
+    exec { '/usr/sbin/update-exim4.conf':
+        subscribe => File['/etc/exim4/update-exim4.conf.conf'],
+        refreshonly => true,
+        notify => Service['exim4'],
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -654,6 +677,10 @@ node '{{ host.name }}' {
 
         {% if 'xen' in host.services %}
             include xen
+        {% endif %}
+
+        {% if 'exim_default' in host.services %}
+            include exim_default
         {% endif %}
 
         {% if 'nvidia' in host.services %}

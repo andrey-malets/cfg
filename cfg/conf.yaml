@@ -45,6 +45,7 @@ groups:
 - [xen,      '^(m|t|h)$',                 {services: [xen]}]
 - [http,     '^(anytask|irc|r4u|school|status|hackerdom)-back$',
                                           {services: [http]}]
+- [exim,     '^(h|hog|m|mm|t|ts|it|i2)$', {services: [exim_default]}]
 - [https,    'redmine-back',              {services: [https]}]
 - [aps,      '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,     '.+-ipmi',                   {services: [ipmi], admin: uzer}]
