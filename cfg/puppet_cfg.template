@@ -588,7 +588,10 @@ class sp {
 class pam_mount {
     package { 'libpam-mount':
         ensure => installed,
+        notify => Service['gdm'],
     }
+
+    service { 'gdm': }
 
     file { '/etc/security/pam_mount.conf.xml':
         require => Package['libpam-mount'],
