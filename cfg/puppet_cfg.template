@@ -661,6 +661,9 @@ node '{{ host.name }}' {
                                    root
                                {%- endif -%}'
             $check_apt = 'true'
+            {% if 'autoupdate' in host.services %}
+                $autoupdate = 'true'
+            {% endif %}
             include cron-apt
             include ssh
         {% endif %}
