@@ -537,6 +537,13 @@ class ldap {
     }
 }
 
+class gdm {
+    service { 'gdm':
+        ensure => running,
+        enable => true,
+    }
+}
+
 class nvidia {
     file { '/etc/X11/xorg.conf':
         ensure => present,
@@ -544,13 +551,23 @@ class nvidia {
         owner => root,
         group => root,
         source => 'puppet:///files/nvidia.xorg.conf',
+        notify => Service['gdm'],
+    }
+}
+
+class pam_mount {
+    package { 'libpam-mount':
+        ensure => installed,
+        notify => Service['gdm'],
     }
 
-    service { 'gdm':
-        ensure => running,
-        enable => true,
-        require => File['/etc/X11/xorg.conf'],
-        subscribe => File['/etc/X11/xorg.conf'],
+    file { '/etc/security/pam_mount.conf.xml':
+        require => Package['libpam-mount'],
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/pam_mount.conf.xml',
     }
 }
 
@@ -582,24 +599,6 @@ class sp {
     exec { '/usr/local/bin/sp':
         subscribe => File['/usr/local/bin/sp'],
         refreshonly => true,
-    }
-}
-
-class pam_mount {
-    package { 'libpam-mount':
-        ensure => installed,
-        notify => Service['gdm'],
-    }
-
-    service { 'gdm': }
-
-    file { '/etc/security/pam_mount.conf.xml':
-        require => Package['libpam-mount'],
-        ensure => present,
-        mode => '644',
-        owner => root,
-        group => root,
-        source => 'puppet:///files/pam_mount.conf.xml',
     }
 }
 
@@ -709,6 +708,7 @@ node '{{ host.name }}' {
 
         include btsync
         include distcc
+        include gdm
         include known_hosts
         include ldap
         include nrpe
