@@ -25,4 +25,10 @@ class random {
         minute => '0',
         require => [File['puppet.random'], File['puppet.random.sh']],
     }
+
+    exec { '/usr/local/bin/puppet.random.sh':
+        subscribe => [File['puppet.random'],
+                      File['puppet.random.sh']],
+        refreshonly => true,
+    }
 }
