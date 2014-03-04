@@ -171,7 +171,7 @@ class managed-apt {
         owner => root,
         group => root,
         content => 'ALL ALL=(ALL:ALL) /usr/bin/apt-get update
-                    ALL ALL=(ALL:ALL) /usr/bin/apt-get install *
+                    ALL ALL=(ALL:ALL) /usr/bin/apt-get install -- *
                    ',
     }
 }
@@ -520,7 +520,6 @@ class xen {
 class userqwer {
     user { 'user':
         ensure => present,
-        groups => ['sudo'],
         home => '/home/user',
         shell => '/bin/bash',
         password => '$1$DWV8BrMQ$v8TnXmLTDA38CiVBEMndf.',
