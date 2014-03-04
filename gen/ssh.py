@@ -7,10 +7,7 @@ from iptables import get_pub_port
 def gen(state, ext_host, ext_addr):
     lines = []
     def get_names(patt, host):
-        rv = []
-        rv.append(patt % host.name)
-        rv.append(patt % host.sname)
-        rv.append(patt % host.addr)
+        rv = [patt % host.name, patt % host.sname, patt % host.addr]
         rv.extend(map(lambda alias: patt % alias, host.aliases))
         rv.extend(map(lambda alias: patt % alias, host.saliases))
         return rv
