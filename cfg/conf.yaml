@@ -141,7 +141,7 @@ hosts:
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091], {admin: uzer}]
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru], admin: muzafarov}]
-- [ anytask-back,         10.241,  000c29cf8130]
+- [ anytask-back,         10.241,  000c29cf8130, {admin: znick}]
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
