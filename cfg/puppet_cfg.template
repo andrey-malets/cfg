@@ -656,6 +656,13 @@ node '{{ host.name }}' {
             include managed-update
             include pam_mount
             include smb
+
+            package { 'cron-apt': ensure => absent }
+            file { '/etc/hostname': content => '{{ host.name }}' }
+            file { '/etc/mailname':
+                content => '{{ host.name }}',
+                notify => Service['exim4'],
+            }
         {% else %}
             $cron_apt_admin = '{%- if 'admin' in host.props -%}
                                    {{ state.users[host.props['admin']].email }}
@@ -670,6 +677,10 @@ node '{{ host.name }}' {
             include ssh
         {% endif %}
 
+        {% if 'exim_default' in host.services or 'managed' in host.props %}
+            include exim_default
+        {% endif %}
+
         {% if 'managed-apt' in host.services %}
             include managed-apt
         {% endif %}
@@ -682,10 +693,6 @@ node '{{ host.name }}' {
 
         {% if 'xen' in host.services %}
             include xen
-        {% endif %}
-
-        {% if 'exim_default' in host.services %}
-            include exim_default
         {% endif %}
 
         {% if 'nvidia' in host.services %}
