@@ -175,6 +175,7 @@ define service {
     active_checks_enabled   0
     passive_checks_enabled  1
     check_freshness         1
+    max_check_attempts      1
     freshness_threshold     93600
     check_command           no-puppet
 }
