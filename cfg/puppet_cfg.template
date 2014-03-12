@@ -536,13 +536,6 @@ class ldap {
     }
 }
 
-class gdm {
-    service { 'gdm':
-        ensure => running,
-        enable => true,
-    }
-}
-
 class nvidia {
     file { '/etc/X11/xorg.conf':
         ensure => present,
