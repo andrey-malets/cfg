@@ -372,7 +372,8 @@ almost_all() {
     gen_nagios
     gen_slurm
 
-    gen_nginx
+    gen_ext_http
+    gen_http_back
 }
 
 all() {
