@@ -83,6 +83,8 @@ hosts:
 - [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
+                                        backend_for: m.fb.urgu.org,
+                                        services: [http],
                                         admin: uzer}]
 - [[mmarkov, mm],         9.4,     000c29dfeeff, {admin: uzer}]
 - [[hamming, h],          9.5,    [000423d6896e, 000423d6896f], {admin: uzer}]
@@ -119,7 +121,7 @@ hosts:
 - [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
-                                                  backend_for: [irc.hackerdom.ru, irclog.hackerdom.ru], admin: and}]
+                                                  backend_for: irclog.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
 - [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org, admin: alexog}]
@@ -140,12 +142,14 @@ hosts:
 - [ cuda-pc.runc,         10.237,  001cc009f4ff]
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091], {admin: uzer}]
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
-- [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru], admin: muzafarov}]
+- [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'], admin: muzafarov}]
 - [ anytask-back,         10.241,  000c29cf8130, {admin: znick}]
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
-- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru, www.hackerdom.ru]}] # admin: domi?
+- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru,
+                                                                seminar.hackerdom.ru,
+                                                                www.hackerdom.ru]}] # admin: domi?
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
 - [ hog.runc,             10.247,  000c29ad7767, {admin: uzer, services: [managed-apt]}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
