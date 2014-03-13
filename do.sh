@@ -323,12 +323,27 @@ gen_slurm() {
     cp -f $DATA/slurm.conf /etc/puppet/files
 }
 
-gen_nginx() {
+gen_ext_http() {
     local CUR=$DATA/ext_http
-    local NEW=$DATA/dhcpd.conf
+    local NEW=$DATA/ext_http.new
 
     ln -sf $CUR /etc/nginx/sites-enabled
     $MAIN ext_http $CFGDIR/ext_http.template > $NEW
+
+    if ! cmp_files $CUR $NEW; then
+        mv $NEW $CUR
+        /etc/init.d/nginx restart
+    else
+        rm $NEW
+    fi
+}
+
+gen_http_back() {
+    local CUR=$DATA/http_back
+    local NEW=$DATA/http_back.new
+
+    ln -sf $CUR /etc/nginx/sites-enabled
+    $MAIN http_back $CFGDIR/http_back.template > $NEW
 
     if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR

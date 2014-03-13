@@ -5,8 +5,8 @@ server {
     server_name {{ host.props['backend_for'] }};
     listen 80;
 
-    access_log  /var/log/nginx/{{ host.props['backend_for'] }}.access.log;
-    error_log   /var/log/nginx/{{ host.props['backend_for'] }}.error.log;
+    access_log  /var/log/nginx/{{ host.props['backend_for'].replace('*','_') }}.access.log;
+    error_log   /var/log/nginx/{{ host.props['backend_for'].replace('*','_') }}.error.log;
 
     proxy_set_header    X-Forwarded-For $remote_addr;
     proxy_set_header    Host            $host;
@@ -21,8 +21,8 @@ server {
     server_name {{ hostname }};
     listen 80;
 
-    access_log  /var/log/nginx/{{ hostname }}.access.log;
-    error_log   /var/log/nginx/{{ hostname }}.error.log;
+    access_log  /var/log/nginx/{{ hostname.replace('*','_') }}.access.log;
+    error_log   /var/log/nginx/{{ hostname.replace('*','_') }}.error.log;
 
     proxy_set_header    X-Forwarded-For $remote_addr;
     proxy_set_header    Host            $host;
