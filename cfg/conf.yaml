@@ -12,6 +12,7 @@ people:
 - [uzer,          "Andrey Malets",        andrey.malets@gmail.com]
 - [vsamun,        "Victor Samun",         victor.samun@gmail.com]
 - [yariksuperman, "Yaroslav Borcheninov", yariksuperman@gmail.com]
+- [yury.pliner,   "Yury Pliner",          yury.pliner@gmail.com]
 - [znick,         "Nickolai Zhuravlev",   znick@znick.ru]
 
 defaults:
@@ -149,7 +150,8 @@ hosts:
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru,
                                                                 seminar.hackerdom.ru,
-                                                                www.hackerdom.ru]}] # admin: domi?
+                                                                www.hackerdom.ru],
+                                                  admin: znick}]
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
 - [ hog.runc,             10.247,  000c29ad7767, {admin: uzer, services: [managed-apt]}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
@@ -184,7 +186,7 @@ hosts:
     {admin: uzer, ssh_port: 1022, services: [nagios], nrpe_allowed: [195.19.132.20]}]
 
 - [ babbage.usu,      194.226.235.251, {admin: znick}]
-- [ overclocking.usu, 194.226.235.187]
+- [ overclocking.usu, 194.226.235.187, {admin: yury.pliner}]
 - [ shannon.usu,      194.226.235.185, {admin: znick}]
 
 - [ ructf.org,  194.226.235.189, {admin: znick}]
