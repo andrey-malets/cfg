@@ -383,5 +383,6 @@ all() {
 if [ $# -eq 0 ]; then
     almost_all
 else
-    $1
+    cmd=$1; shift
+    $cmd "$@"
 fi

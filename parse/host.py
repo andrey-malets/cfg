@@ -1,5 +1,3 @@
-import re
-
 from util import fromgroup, primitive
 
 def get_sname(name): return name.split('.')[0]
