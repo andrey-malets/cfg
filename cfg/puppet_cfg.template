@@ -617,6 +617,28 @@ class exim_default {
     }
 }
 
+class exchange {
+    file { '/exchange':
+        owner => root,
+        group => root,
+        mode => '777',
+        ensure => directory,
+    }
+
+    package { 'cifs-utils':
+        ensure => installed,
+    }
+
+    mount { '/exchange':
+        require => [File['/exchange'], Package['cifs-utils']],
+        ensure => mounted,
+        atboot => true,
+        device => '//lick/exchange',
+        fstype => 'cifs',
+        options => 'user=guest,file_mode=0666,dir_mode=0777',
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -643,6 +665,7 @@ node '{{ host.name }}' {
             {% endif %}
             $check_apt = 'false'
 
+            include exchange
             include hadoop_slave
             include managed-apt
             include managed-ssh
