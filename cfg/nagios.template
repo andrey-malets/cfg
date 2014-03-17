@@ -182,10 +182,16 @@ define service {
 {% endif %}
 
 {% if 'http' in host.props['services'] %}
+{% if not 'backend_for' in host.props or host.props['backend_for'] is string %}
 define service {
     use                 generic-service
+    {% if 'backend_for' in host.props %}
+    service_description http://{{ host.props['backend_for'] }}
+    check_command       check_http2!{{ host.props['backend_for'] }}
+    {% else %}
     service_description HTTP server
     check_command       check_http
+    {% endif %}
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     {%- if 'volatile' in host.props %}
@@ -194,7 +200,25 @@ define service {
     failure_prediction_enabled 0
     {% endif %}
 }
-{% endif %}
+{% else %}
+{% for vhost in host.props['backend_for'] %}
+{% if vhost.find('*') == -1 %}
+define service {
+    use                 generic-service
+    service_description http://{{ vhost }}
+    check_command       check_http2!{{ vhost }}
+    host_name           {{ state.get_canonical_hostname(host) }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
+}
+{% endif %}   # find
+{% endfor %}  # for vhost in host.props['backend_for']
+{% endif %}   # not 'backend_for' in host.props or ...
+{% endif %}   # if 'http' in host.props['services']
 
 {% if 'unix' in host.props['services'] %}
 define service {
