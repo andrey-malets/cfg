@@ -86,7 +86,7 @@ hosts:
                                         backend_for: m.fb.urgu.org,
                                         services: [http],
                                         admin: uzer}]
-- [[mmarkov, mm],         9.4,     000c29dfeeff, {admin: uzer}]
+- [[mmarkov, mm],         9.4,     000c29dfeeff, {admin: uzer, services: [openvz]}]
 - [[hamming, h],          9.5,    [000423d6896e, 000423d6896f], {admin: uzer}]
 - [[630-switch, bs],      9.6,     001b11c344e6]
 - [[hp-switch, hps],      9.7,     001ec1831c01]
