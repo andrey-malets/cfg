@@ -44,7 +44,7 @@ groups:
 - [windows,    [633-pcs], '(lick|dc3|ld-xp)',
                                             {services: [windows, rrdp]}]
 - [xen,        '^(m|t|h)$',                 {services: [xen]}]
-- [http,       '^(anytask|irc|r4u|school|status|hackerdom)-back$',
+- [http,       '^(anytask|r4u|school|status|hackerdom)-back$',
                                             {services: [http]}]
 - [https,      'redmine-back',              {services: [https]}]
 - [exim,       '^(h|hog|m|mm|t|ts|it|it2)$',{services: [exim_default]}]
