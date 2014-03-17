@@ -47,8 +47,7 @@ groups:
 - [http,       '^(anytask|r4u|school|status|hackerdom)-back$',
                                             {services: [http]}]
 - [https,      'redmine-back',              {services: [https]}]
-- [exim,       '^(h|hog|m|mm|t|ts|it|it2)$',{services: [exim_default]}]
-- [autoupdate, '^(hog|ts)$',                {services: [autoupdate]}]
+- [uzers_unix, '^(h|hog|m|mm|t|ts|it|it2)$',{services: [exim_default, autoupdate]}]
 
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
