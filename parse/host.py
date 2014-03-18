@@ -12,7 +12,7 @@ class Host:
         if type(names) == list:
             self.name     = defaults.expand_host(names.pop(0))
             self.aliases  = map(defaults.expand_host, names)
-            self.saliases = map(get_sname, names)
+            self.saliases = map(get_sname, filter(lambda name: '.' not in name, names))
         else:
             self.name    = defaults.expand_host(names)
             self.aliases = []
