@@ -36,10 +36,7 @@ mirror		3600	IN	CNAME	mirror.yandex.ru.
 115		3600	IN	PTR	airlab.math.usu.ru.
 126		3600	IN	PTR	dijkstra.urgu.org.
 
-{% for host in hosts %}
-{{ "%-16s"|format(host.name) }} IN A     {{ host.addr }}
-{%- for alias in host.aliases %}
-{{ "%-16s"|format(alias) }} IN CNAME {{ host.name }}
-{%- endfor -%}
+{% for name, type, value in records %}
+{{ "%-16s"|format(name) }} IN {{ "%-6s"|format(type) }}{{ value }}
 {%- endfor %}
 ; vim: sw=8 ts=8 ft=none noexpandtab

@@ -8,6 +8,6 @@ $TTL    86400
 ;
 
 @	IN	NS	dijkstra.urgu.org.
-{% for host in hosts %}
-{{ host.addr }} IN PTR {{ host.name }}.
+{% for name, type, value in records %}
+{{ "%-3s"|format(name) }} IN {{ "%-4s"|format(type) }}{{ value }}
 {%- endfor %}
