@@ -19,6 +19,7 @@ defaults:
   mon: monitoring@urgu.org
   slurm: managed
   nagios: 194.226.244.126
+  frontend: 194.226.244.126
   network_prefix: '172.16'
   domains:
     default: 'urgu.org'
@@ -180,7 +181,7 @@ hosts:
 - [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
-- [[dijkstra, urgu.org, d, v, anytask, puppet, r4u, ssl, status, wiki],
+- [[dijkstra, urgu.org, d, v, puppet, ssl, status, wiki],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
                                     services: [nagios, autoupdate],
