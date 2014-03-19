@@ -49,6 +49,7 @@ groups:
                                             {services: [http]}]
 - [https,      'redmine-back',              {services: [https]}]
 - [uzers_unix, '^(h|hog|m|mm|t|ts|it|it2)$',{services: [exim_default, autoupdate]}]
+- [auto_vms,   '^(irc|r4u)-back$',          {services: [exim_default, autoupdate]}]
 
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
@@ -114,7 +115,7 @@ hosts:
 - [ hp-low-ups,           9.28,    00c0b72f2677]
 #   dijkstra              9.254
 
-- [ anytask-back-old,     10.215,  001851ad5d74, {backend_for: anytask.urgu.org, admin: znick}]
+- [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
 - [ clt1,                 10.216, [00142a496556, 0004e21c735b]]
 - [ clt2,                 10.217, [00142a485af5, 0004e21c716a]]
 - [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
@@ -138,13 +139,14 @@ hosts:
 - [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
 - [ redmine-back,         10.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
                                                                 git.redmine.hackerdom.ru],
+                                                  services: [autoupdate],
                                                   admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237,  001cc009f4ff]
 - [[itanium,it],          10.238,  [001b789f0090, 001b789f0091], {admin: uzer}]
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'], admin: muzafarov}]
-- [ anytask-back,         10.241,  000c29cf8130, {admin: znick}]
+#   free                  10.241
 - [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
@@ -182,6 +184,7 @@ hosts:
 #   free                  194.226.244.124
 #   free                  194.226.244.125
 - [[dijkstra, urgu.org, d, v, puppet, ssl, status, wiki],
+- [[dijkstra, anytask, urgu.org, d, v, puppet, ssl, status, wiki],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
                                     services: [nagios, autoupdate],
