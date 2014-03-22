@@ -293,7 +293,9 @@ END
 
 cat <<END
 
-bash -ec "\${script[*]}"
+for i in \$(seq 1 \${#script[@]}); do
+    bash -ec "\${script[i-1]}"
+done
 
 if [ \$auto -ne 0 ]; then
     mv \$temp_file \$known_hosts_file
