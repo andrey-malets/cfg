@@ -41,15 +41,15 @@ networks:
 - [194.226.244.112/28, 194.226.244.114, {nagios: 194.226.244.126, iface: 'bond0.2', fb: 1}]
 
 groups:
-- [unix,       '^(.*-back|d|h|hog|mysql|m|mm|n|r|t|ts|it|it2)$', {services: [unix]}]
+- [unix,       '^(.*-back|d|h|hog|mysql|m|mm|n|p|r|t|ts|it|it2)$', {services: [unix]}]
 - [windows,    [633-pcs], '(lick|dc3|ld-xp)',
                                             {services: [windows, rrdp]}]
 - [xen,        '^(m|t|h)$',                 {services: [xen]}]
 - [http,       '^(anytask|r4u|school|status|hackerdom)-back$',
-                                            {services: [http]}]
-- [https,      'redmine-back',              {services: [https]}]
-- [uzers_unix, '^(h|hog|m|mm|t|ts|it|it2)$',{services: [exim_default, autoupdate]}]
-- [auto_vms,   '^(irc|r4u)-back$',          {services: [exim_default, autoupdate]}]
+                                              {services: [http]}]
+- [https,      'redmine-back',                {services: [https]}]
+- [uzers_unix, '^(h|hog|m|mm|p|t|ts|it|it2)$',{services: [exim_default, autoupdate]}]
+- [auto_vms,   '^(irc|r4u)-back$',            {services: [exim_default, autoupdate]}]
 
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
@@ -81,7 +81,7 @@ groups:
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
-# - [ it2,                  9.2,     0017a4abf41f]
+- [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer}]
 - [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
@@ -100,7 +100,7 @@ hosts:
 - [[storage-mplan, s-m],  9.13,    001a4bec0cee]
 - [[it2-mplan,it2-m],     9.14,    001b789f92a6]
 - [[it-mplan,it-m],       9.15,    002b789fa22f]
-- [[dell-mplan,dell-m],   9.16]    #?
+- [[postel-mplan,p-m],    9.16,    00065bff8f1b]
 - [ ap0,                  9.17,    001225556be2]
 - [[markov-ipmi, m-i],    9.18,    0015176b9b3e]
 - [[hamming-ipmi, h-i],   9.19,    000423d68970]
@@ -164,7 +164,7 @@ hosts:
 #   main-switch           10.253
 #   dijkstra              10.254
 
-- [[pioneer, p],          18.1, {admin: uzer}]
+#- [[pioneer, p],          18.1, {admin: uzer}]
 
 - [ dcimap-vm,           '50.100', 000c29ad8762, {admin: andgein}]
 - [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
@@ -183,7 +183,6 @@ hosts:
 - [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
-- [[dijkstra, urgu.org, d, v, puppet, ssl, status, wiki],
 - [[dijkstra, anytask, urgu.org, d, v, puppet, ssl, status, wiki],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
