@@ -98,6 +98,11 @@ define command {
     command_line    $USER1$/check_dummy 2 "Puppet agent didn't work for a while"
 }
 
+define command {
+    command_name    check_arp_table
+    command_line    /usr/lib/nagios/plugins/check_arp $ARG1$ $ARG2$
+}
+
 {% for user in state.users.itervalues() %}
 define contact {
     contact_name                    {{ user.nickname }}
@@ -143,6 +148,10 @@ define host {
     address    {{ host.name }}
     {%- endif %}
     contacts   {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+
+    {% if 'ipmi' in host.services and host.macs|count == 1 %}
+    check_command   check_arp_table!{{ host.addr }}!{{ host.macs[0] }}
+    {% endif %}
 }
 
 {% if 'services' in host.props %}
