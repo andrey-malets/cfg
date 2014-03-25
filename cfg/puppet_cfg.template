@@ -675,8 +675,10 @@ node '{{ host.name }}' {
             {% endif %}
             $check_apt = 'false'
 
-            include exchange
             include hadoop_slave
+            $check_hadoop_slave = 'true'
+
+            include exchange
             include managed-apt
             include managed-ssh
             include managed-update

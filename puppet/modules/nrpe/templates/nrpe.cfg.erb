@@ -204,6 +204,10 @@ command[check_apt]=/usr/lib/nagios/plugins/check_apt
 <% if @check_nagios == 'true' -%>
 command[check_nagios]=/usr/lib/nagios/plugins/check_nagios -F /var/cache/nagios3/status.dat -e 5 -C /usr/sbin/nagios3
 <% end -%>
+<% if @check_hadoop_slave == 'true' -%>
+command[check_datanode]=sudo /usr/lib/nagios/plugins/check_hadoop DataNode
+command[check_tasktracker]=sudo /usr/lib/nagios/plugins/check_hadoop TaskTracker
+<% end -%>
 
 # The following examples allow user-supplied arguments and can
 # only be used if the NRPE daemon was compiled with support for

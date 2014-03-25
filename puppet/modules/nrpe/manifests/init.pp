@@ -30,4 +30,21 @@ class nrpe {
         require => [Package['nagios-nrpe-server'],
                     Package['nagios-plugins-basic']],
     }
+
+    if $check_hadoop_slave {
+        file { '/usr/lib/nagios/plugins/check_hadoop':
+            mode => 755,
+            owner => root,
+            group => root,
+            source => "puppet:///files/check_hadoop",
+        }
+
+        file { '/etc/sudoers.d/nagios-jps':
+            content => 'nagios ALL=(ALL) NOPASSWD: /usr/lib/nagios/plugins/check_hadoop *
+',
+            mode => 440,
+            owner => root,
+            group => root,
+        }
+    }
 }
