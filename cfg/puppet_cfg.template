@@ -643,6 +643,7 @@ class exchange {
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
         include hadoop_master
+        $check_hadoop_master = 'true'
     {% endif %}
 
     {% if 'unix' in host.services %}

@@ -31,7 +31,7 @@ class nrpe {
                     Package['nagios-plugins-basic']],
     }
 
-    if $check_hadoop_slave {
+    if $check_hadoop_slave or $check_hadoop_master {
         file { '/usr/lib/nagios/plugins/check_hadoop':
             mode => 755,
             owner => root,

@@ -287,6 +287,35 @@ define service {
     {% endif %}
 }
 
+{% if 'hadoop-master' in host.props['services'] %}
+define service {
+    use                 generic-service
+    service_description Hadoop NameNode
+    check_command       check_nrpe_1arg!check_namenode
+    host_name           {{ state.get_canonical_hostname(host) }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    servicegroups       hadoop
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
+}
+define service {
+    use                 generic-service
+    service_description Hadoop JobTracker
+    check_command       check_nrpe_1arg!check_jobtracker
+    host_name           {{ state.get_canonical_hostname(host) }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    servicegroups       hadoop
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
+}
+{% endif %}
+
 {% if 'managed' in host.props %}
 define service {
     use                 generic-service
