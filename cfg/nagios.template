@@ -124,6 +124,11 @@ define hostgroup {
 }
 {% endfor %}
 
+define servicegroup {
+    servicegroup_name hadoop
+    alias             Hadoop
+}
+
 {% for host in state.hosts %}
 define host {
     use        generic-host
@@ -289,6 +294,7 @@ define service {
     check_command       check_nrpe_1arg!check_datanode
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    servicegroups       hadoop
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
     flap_detection_enabled     0
@@ -301,6 +307,7 @@ define service {
     check_command       check_nrpe_1arg!check_tasktracker
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    servicegroups       hadoop
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
     flap_detection_enabled     0
