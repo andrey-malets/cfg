@@ -11,7 +11,7 @@ server {
     error_log   /var/log/nginx/e.urgu.org.error.log;
 
     location / {
-        proxy_pass      http://{{ host.nick }}.urgu.org/;
+        proxy_pass      http://{{ host.name }}/;
         proxy_redirect  ~http://{{ host.nick }}.e.urgu.org/(.+)$ https://{{ host.nick }}.e.urgu.org/$1;
         proxy_http_version 1.1;
     }
