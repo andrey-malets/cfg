@@ -49,7 +49,7 @@ groups:
                                               {services: [http]}]
 - [https,      'redmine-back',                {services: [https]}]
 - [uzers_unix, '^(h|hog|m|mm|p|t|ts|it|it2)$',{services: [exim_default, autoupdate]}]
-- [auto_vms,   '^(irc|r4u)-back$',            {services: [exim_default, autoupdate]}]
+- [auto_vms,   '^(irc|r4u|school)-back$',     {services: [exim_default, autoupdate]}]
 
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
