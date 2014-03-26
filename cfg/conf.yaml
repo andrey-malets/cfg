@@ -45,7 +45,7 @@ groups:
 - [windows,    [633-pcs], '(lick|dc3|ld-xp)',
                                             {services: [windows, rrdp]}]
 - [xen,        '^(m|t|h)$',                 {services: [xen]}]
-- [http,       '^(anytask|r4u|school|status|hackerdom)-back$',
+- [http,       '^(anytask|r4u|school|hackerdom)-back$',
                                               {services: [http]}]
 - [https,      'redmine-back',                {services: [https]}]
 - [uzers_unix, '^(h|hog|m|mm|p|t|ts|it|it2)$',{services: [exim_default, autoupdate]}]
@@ -147,7 +147,7 @@ hosts:
 - [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'], admin: muzafarov}]
 #   free                  10.241
-- [ status-back,          10.242,  0018512a9b87, {backend_for: status.hackerdom.ru, admin: znick}]
+#   free                  10.242
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru,
