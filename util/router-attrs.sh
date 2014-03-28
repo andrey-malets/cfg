@@ -12,4 +12,4 @@ res=($(ip route | grep "$attr" | while read route ; do
     done
 done))
 
-IFS=,; echo "${res[*]}"
+echo "${res[*]}"

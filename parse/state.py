@@ -7,14 +7,15 @@ from user     import User
 import network
 
 class State:
-    def __init__(self, config):
+    def __init__(self, config, router_attrs):
         self.errors = []
         self.defaults = Defaults(config['defaults'], self.errors)
 
         self.hosts    = map(lambda item: Host(item, self.defaults),
                                      config['hosts'])
         self.groups   = map(Group,   config['groups'])
-        self.networks = map(Network, config['networks'])
+        self.networks = map(lambda item: Network(item, router_attrs),
+                                         config['networks'])
         self.users    = dict((user.nickname, user) for user in
                             map(User, config['people']))
 

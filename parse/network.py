@@ -14,16 +14,16 @@ class Network:
             addr = addr >> 8
         return '.'.join(reversed(octets))
         
-    def __init__(self, data):
+    def __init__(self, data, router_attrs):
         addr, mask   = data.pop(0).split('/')
         self.addr    = Network.stoi(addr)
         self.count   = int(mask)
         self.mask    = -1 << (32-int(mask))
         self.router  = Network.stoi(data.pop(0))
         self.props   = {} if not len(data) else data.pop(0)
-        self.iface   = self.props.get('iface', None)
+        self.iface   = router_attrs['dev'].get(str(self), None)
+        self.nagios  = router_attrs['src'].get(str(self), None)
         self.dhcp    = None if 'dhcp' not in self.props else self.props['dhcp'].split('-')
-        self.nagios  = self.props.get('nagios', None)
         self.private = self.props.get('private', 0)
         assert (self.addr & ~self.mask) == 0, 'invalid network %s' % self
         assert self.router & self.mask == self.addr, 'invalid router for %s' % self
@@ -31,7 +31,7 @@ class Network:
             self.get_addr())
 
     def __str__(self):
-        return '%s/%s' % (self.get_addr(), self.get_mask())
+        return '%s/%s' % (self.get_addr(), self.count)
 
     def has(self, addr):
         return Network.stoi(addr) & self.mask == self.addr if addr else False

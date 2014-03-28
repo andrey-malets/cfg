@@ -3,6 +3,7 @@
 BASE=`dirname $0`
 MAIN="python $BASE/main.py"
 SERIAL="python $BASE/util/serial.py"
+ROUTER_ATTRS="$BASE/util/router-attrs.sh"
 DATA=/var/lib/cfg
 
 FACTS=$DATA/facts
@@ -356,6 +357,9 @@ gen_http_back() {
 }
 
 mkdir -p $DATA
+
+export ROUTER_DEV=$($ROUTER_ATTRS dev)
+export ROUTER_SRC=$($ROUTER_ATTRS src)
 
 almost_all() {
     gen_dhcp
