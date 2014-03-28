@@ -659,6 +659,7 @@ node '{{ host.name }}' {
             $nrpe_listen = '0.0.0.0'
         {% endif %}
         {% if 'openvz' in host.services %}
+            $nrpe_check_disk_root = 'true'
             $nrpe_procs_warn = '700'
             $nrpe_procs_crit = '1000'
         {% elif 'xen' in host.services %}
