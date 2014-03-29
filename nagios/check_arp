@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo 1>&2 "usage: $0 <switch> <mac>"
+    exit 3
+fi
+
+switch=$1
+mac=$2
+
+base=$(dirname $0)
+
+count=$(../util/3com.py $switch | grep $mac | wc -l)
+
+if [ "$count" -eq 0 ]; then
+    echo 'No mac found in ARP table'
+    exit 2
+elif [ "$count" -eq 1 ]; then
+    echo 'ARP record OK'
+    exit 0
+else
+    echo "ARP table status unknown ($count records)"
+    exit 1
+fi
