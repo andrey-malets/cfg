@@ -44,11 +44,11 @@ groups:
 - [unix,       '^(.*-back|d|h|hog|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$', {services: [unix]}]
 - [windows,    [633-pcs], '(lick|dc3|ld-xp)',
                                             {services: [windows, rrdp]}]
-- [xen,        '^(m|t|h)$',                 {services: [xen]}]
+- [xen,        '^(h|m|r|t)$',               {services: [xen]}]
 - [http,       '^(anytask|r4u|school|hackerdom)-back$',
                                                     {services: [http]}]
 - [https,      'redmine-back',                      {services: [https]}]
-- [uzers_unix, '^(h|hog|m|mm|p|t|ts|it|it2)$',      {services: [exim_default, autoupdate]}]
+- [uzers_unix, '^(h|hog|m|mm|p|r|t|ts|it|it2)$',    {services: [exim_default, autoupdate]}]
 - [auto_vms,   '^((irc|r4u|school)-back|shannon)$', {services: [exim_default, autoupdate]}]
 
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
@@ -110,7 +110,7 @@ hosts:
 - [[633-ups, bfu],        9.23,    00c0b731da0e]
 - [[airlab-switch, as],   9.24,    001b11c34547]
 - [[ritchie-ipmi, r-i],   9.25,    001e670fac42]
-- [[ritchie, r],          9.26]    #?
+- [[ritchie, r],          9.26,   [001e670fac40, 001e670fac41], {admin: uzer}]
 - [ hp-high-ups,          9.27,    00c0b798608d]
 - [ hp-low-ups,           9.28,    00c0b72f2677]
 #   dijkstra              9.254
