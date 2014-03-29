@@ -154,8 +154,8 @@ define host {
     {%- endif %}
     contacts   {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 
-    {% if 'ipmi' in host.services and host.macs|count == 1 %}
-    check_command   check_arp_table!{{ host.addr }}!{{ host.macs[0] }}
+    {% if 'ipmi' in host.services and host.macs|count == 1 and 'switch' in host.props %}
+    check_command   check_arp_table!{{ host.props['switch'] }}!{{ host.macs[0] }}
     {% endif %}
 }
 
