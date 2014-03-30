@@ -45,6 +45,7 @@ groups:
 - [windows,    [633-pcs], '(lick|dc3|ld-xp)',
                                             {services: [windows, rrdp]}]
 - [xen,        '^(h|m|r|t)$',               {services: [xen]}]
+- [megaraid,   '^(m|r)$',                   {services: [megaraid]}]
 - [http,       '^(anytask|r4u|school|hackerdom)-back$',
                                                     {services: [http]}]
 - [https,      'redmine-back',                      {services: [https]}]
@@ -81,7 +82,8 @@ groups:
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
-- [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer}]
+- [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer,
+                                                                 services: [adaptecraid]}]
 - [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],

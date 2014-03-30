@@ -216,6 +216,9 @@ command[check_tasktracker]=sudo /usr/lib/nagios/plugins/check_hadoop TaskTracker
 command[check_namenode]=sudo /usr/lib/nagios/plugins/check_hadoop NameNode
 command[check_jobtracker]=sudo /usr/lib/nagios/plugins/check_hadoop JobTracker
 <% end -%>
+<% if @check_megaraid == 'true' -%>
+command[check_megaraid]=/usr/lib/nagios/plugins/check_megaraid_sas
+<% end -%>
 
 # The following examples allow user-supplied arguments and can
 # only be used if the NRPE daemon was compiled with support for

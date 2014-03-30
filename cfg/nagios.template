@@ -316,6 +316,16 @@ define service {
 }
 {% endif %}
 
+{% if 'megaraid' in host.props['services'] %}
+define service {
+    use                 generic-service
+    service_description RAID status
+    check_command       check_nrpe_1arg!check_megaraid
+    host_name           {{ state.get_canonical_hostname(host) }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+}
+{% endif %}
+
 {% if 'managed' in host.props %}
 define service {
     use                 generic-service

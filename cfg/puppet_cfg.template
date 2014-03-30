@@ -1,3 +1,12 @@
+class { 'apt':
+    always_apt_update    => false,
+    disable_keys         => undef,
+    purge_sources_list   => false,
+    purge_sources_list_d => false,
+    purge_preferences_d  => false,
+    update_timeout       => undef
+}
+
 class slurm {
     package { 'munge':      ensure => installed }
     package { 'slurm-llnl': ensure => installed }
@@ -639,6 +648,40 @@ class exchange {
     }
 }
 
+class hwraid {
+    apt::key { 'hwraid':
+        key_source => 'http://hwraid.le-vert.net/debian/hwraid.le-vert.net.gpg.key',
+    }
+
+    apt::source { 'hwraid':
+        location => 'http://hwraid.le-vert.net/debian',
+        repos => 'main',
+        require => Apt::Key['hwraid'],
+    }
+}
+
+class megaraid inherits hwraid {
+    package { 'megacli':
+        ensure => installed,
+        require => Apt::Source['hwraid'],
+    }
+
+    file { '/usr/lib/nagios/plugins/check_megaraid_sas':
+        ensure => present,
+        mode => 755,
+        owner => root,
+        group => root,
+        source => "puppet:///files/check_megaraid_sas",
+    }
+}
+
+class adaptecraid inherits hwraid {
+    package { 'arcconf':
+        ensure => installed,
+        require => Apt::Source['hwraid'],
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -668,6 +711,9 @@ node '{{ host.name }}' {
         {% else %}
             $nrpe_procs_warn = '250'
             $nrpe_procs_crit = '400'
+        {% endif %}
+        {% if 'megaraid' in host.props['services'] %}
+            $check_megaraid = 'true'
         {% endif %}
 
         {% if 'managed' in host.props %}
@@ -735,6 +781,12 @@ node '{{ host.name }}' {
                 ensure => present,
                 recipient => '{{ state.users[host.props['admin']].email }}'
             }
+        {% endif %}
+
+        {% if 'megaraid' in host.services %}
+            include megaraid
+        {% elif 'adaptecraid' in host.services %}
+            include adaptecraid
         {% endif %}
 
         $host = '{{ state.get_canonical_hostname(host) }}'

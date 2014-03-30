@@ -31,6 +31,16 @@ class nrpe {
                     Package['nagios-plugins-basic']],
     }
 
+    if $check_megaraid {
+        file { '/etc/sudoers.d/nagios-megaraid':
+            content => 'nagios ALL=(ALL) NOPASSWD: /usr/sbin/megacli *
+',
+            mode => 440,
+            owner => root,
+            group => root,
+        }
+    }
+
     if $check_hadoop_slave or $check_hadoop_master {
         file { '/usr/lib/nagios/plugins/check_hadoop':
             mode => 755,
