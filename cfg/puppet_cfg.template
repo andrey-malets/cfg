@@ -689,6 +689,19 @@ class adaptecraid inherits hwraid {
     }
 }
 
+class smartmon {
+    package { 'smartmontools':
+        ensure => installed,
+    }
+
+    file { '/usr/lib/nagios/plugins/check_smartmon':
+        mode => 755,
+        owner => root,
+        group => root,
+        source => "puppet:///files/check_smartmon",
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -732,6 +745,9 @@ node '{{ host.name }}' {
 
             include hadoop_slave
             $check_hadoop_slave = 'true'
+
+            include smartmon
+            $check_smartmon = 'true'
 
             include exchange
             include managed-apt
