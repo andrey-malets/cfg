@@ -18,7 +18,7 @@ def gen_fwd(state, zone):
     def matches(name):
         return name.find('.') == name.find(zone) - 1
     for host in state.hosts:
-        if matches(host.name):
+        if matches(host.name) and host.addr != None:
             yield (host.sname, 'A', host.addr)
             for alias in host.saliases:
                 yield (alias, 'CNAME', host.sname)
