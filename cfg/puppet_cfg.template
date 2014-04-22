@@ -392,6 +392,13 @@ class hadoop_slave inherits hadoop_base {
 }
 
 class hadoop_master inherits hadoop_base {
+    file { '/etc/hadoop/hosts.exclude':
+        ensure => present,
+        owner => root,
+        group => root,
+        mode => 644,
+    }
+
     service { 'hadoop-namenode':
         ensure => running,
         enable => true,
