@@ -145,8 +145,8 @@ hosts:
                                                   admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237,  001cc009f4ff]
-- [[itanium,it],          10.238,  [001b789f0090, 001b789f0091], {admin: uzer}]
-- [[itanium2,it2],        10.239,  [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
+- [[itanium,it],          10.238, [001b789f0090, 001b789f0091], {admin: uzer}]
+- [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'], admin: muzafarov}]
 #   free                  10.241
 #   free                  10.242
