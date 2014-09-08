@@ -118,8 +118,8 @@ hosts:
 #   dijkstra              9.254
 
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
-- [ clt1,                 10.216, [00142a496556, 0004e21c735b]]
-- [ clt2,                 10.217, [00142a485af5, 0004e21c716a]]
+#- [ clt1,                 10.216, [00142a496556, 0004e21c735b]]
+#- [ clt2,                 10.217, [00142a485af5, 0004e21c716a]]
 - [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
 - [ pi,                   10.219,  b827ebc2847b, {services: [ssh], admin: kost}]
 - [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
