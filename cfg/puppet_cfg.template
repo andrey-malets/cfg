@@ -610,6 +610,17 @@ class sp {
     }
 }
 
+class teachers {
+    file { '/etc/sudoers.d/teachers':
+        ensure => present,
+        mode => '440',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/teachers.sudoers',
+        require => File['/etc/sudoers.d'],
+    }
+}
+
 class exim_default {
     package { 'exim4-daemon-light':
         ensure => installed,
@@ -755,6 +766,7 @@ node '{{ host.name }}' {
             include managed-update
             include pam_mount
             include smb
+            include teachers
 
             package { 'cron-apt': ensure => absent }
             file { '/etc/hostname': content => '{{ host.name }}' }
