@@ -122,7 +122,7 @@ hosts:
 #- [ clt2,                 10.217, [00142a485af5, 0004e21c716a]]
 - [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
 - [ pi,                   10.219,  b827ebc2847b, {services: [ssh], admin: kost}]
-- [ asus3,               '10.220', 14dae9c9a638, {services: [nvidia]}]
+- [ asus1,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
                                                   backend_for: irclog.hackerdom.ru, admin: and}]
@@ -130,7 +130,7 @@ hosts:
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
 #   free                  10.225
 - [ canion,               10.226,  001eec2cf0f2, {services: [nvidia]}]
-- [ asus1,                10.227,  14dae9c9a63b, {services: [nvidia]}]
+- [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
 #   markov-fastbone       10.229
 - [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 6817: 6817}, admin: uzer,
