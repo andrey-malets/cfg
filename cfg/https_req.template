@@ -1,0 +1,26 @@
+[ req ]
+distinguished_name      = req_distinguished_name
+
+[ req_distinguished_name ]
+countryName                     = Country Name (2 letter code)
+countryName_default             = RU
+
+stateOrProvinceName             = State or Province Name (full name)
+stateOrProvinceName_default     = Sverdlovskaya
+
+localityName                    = Locality Name (eg, city)
+localityName_default            = Yekaterinburg
+
+organizationName                = Organization Name (eg, company)
+organizationName_default        = Ural State University
+
+organizationalUnitName          = Organizational Unit Name (eg, section)
+organizationalUnitName_default  = RUNC
+
+commonName                      = Common Name (eg, YOUR name)
+commonName_default              = {{ cn }}
+
+emailAddress                    = Email Address
+{% if host.admin %}
+emailAddress_default            = {{ state.users[host.admin].email }}
+{%- endif %}

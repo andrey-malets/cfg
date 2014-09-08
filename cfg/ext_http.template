@@ -4,8 +4,8 @@
 server {
     server_name         {{ host.nick }}.e.urgu.org;
     listen              443 ssl;
-    ssl_certificate     /root/keys/cert.pem;
-    ssl_certificate_key /root/keys/priv.key;
+    ssl_certificate     {{ keypath }}/{{ host.nick }}.e.urgu.org.crt;
+    ssl_certificate_key {{ keypath }}/{{ host.nick }}.e.urgu.org.key;
 
     access_log  /var/log/nginx/e.urgu.org.access.log;
     error_log   /var/log/nginx/e.urgu.org.error.log;

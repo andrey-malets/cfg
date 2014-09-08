@@ -1,9 +1,15 @@
 {%- for host in state.hosts %}
-{%- if 'http' in host.services and 'backend_for' in host.props -%}
+{%- if ('http' in host.services or 'https' in host.services) and 'backend_for' in host.props -%}
 {%- if host.props['backend_for'] is string %}
 server {
     server_name {{ host.props['backend_for'] }};
+    {% if 'http' in host.services %}
     listen 80;
+    {% else %}
+    listen              443 ssl;
+    ssl_certificate     {{ keypath }}/{{ host.props['backend_for'] }}.crt;
+    ssl_certificate_key {{ keypath }}/{{ host.props['backend_for'] }}.key;
+    {% endif %}
 
     access_log  /var/log/nginx/{{ host.props['backend_for'].replace('*','_') }}.access.log;
     error_log   /var/log/nginx/{{ host.props['backend_for'].replace('*','_') }}.error.log;
@@ -12,14 +18,24 @@ server {
     proxy_set_header    Host            $host;
 
     location / {
+        {% if 'http' in host.services %}
         proxy_pass      http://{{ host.addr }};
+        {% else %}
+        proxy_pass      https://{{ host.addr }};
+        {% endif %}
     }
 }
 {% else %}
 {% for hostname in host.props['backend_for'] %}
 server {
     server_name {{ hostname }};
+    {% if 'http' in host.services %}
     listen 80;
+    {% else %}
+    listen              443 ssl;
+    ssl_certificate     {{ keypath }}/{{ hostname }}.crt;
+    ssl_certificate_key {{ keypath }}/{{ hostname }}.key;
+    {% endif %}
 
     access_log  /var/log/nginx/{{ hostname.replace('*','_') }}.access.log;
     error_log   /var/log/nginx/{{ hostname.replace('*','_') }}.error.log;
@@ -28,7 +44,11 @@ server {
     proxy_set_header    Host            $host;
 
     location / {
+        {% if 'http' in host.services %}
         proxy_pass      http://{{ host.addr }};
+        {% else %}
+        proxy_pass      https://{{ host.addr }};
+        {% endif %}
     }
 }
 {% endfor %}

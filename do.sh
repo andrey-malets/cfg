@@ -329,9 +329,10 @@ gen_slurm() {
 gen_ext_http() {
     local CUR=$DATA/ext_http
     local NEW=$DATA/ext_http.new
+    local KEYPATH=$DATA/https
 
     ln -sf $CUR /etc/nginx/sites-enabled
-    $MAIN ext_http $CFGDIR/ext_http.template > $NEW
+    $MAIN ext_http $CFGDIR/ext_http.template $KEYPATH > $NEW
 
     if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR
@@ -344,9 +345,10 @@ gen_ext_http() {
 gen_http_back() {
     local CUR=$DATA/http_back
     local NEW=$DATA/http_back.new
+    local KEYPATH=$DATA/https
 
     ln -sf $CUR /etc/nginx/sites-enabled
-    $MAIN http_back $CFGDIR/http_back.template > $NEW
+    $MAIN http_back $CFGDIR/http_back.template $KEYPATH > $NEW
 
     if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR
@@ -354,6 +356,47 @@ gen_http_back() {
     else
         rm $NEW
     fi
+}
+
+reset_https_ca() {
+    local DIR="$DATA/https"
+    local KEY="$DIR/ca.key" CRT="$DIR/ca.crt"
+
+    local PWD
+    read -s -p 'Password:' PWD
+
+    local CN="$ROUTER_HOST"
+
+    rm -rf "$DIR"
+    mkdir -p "$DIR/"{,certs,crl,newcerts,private}
+    echo '01' > "$DIR/serial"
+    touch "$DIR/index.txt"
+
+    chown www-data: "$DIR"
+    chmod 500 "$DIR"
+
+    openssl genrsa -des3 -out "$KEY" -passout env:PWD 2048
+    chmod 600 "$KEY"
+    openssl req -new -x509 -days $((365*3)) -key "$KEY" -passin env:PWD -config \
+        <($MAIN https_req $CFGDIR/https_req.template "$ROUTER_HOST" "$CN") \
+        -out "$CRT" -batch
+}
+
+gen_https_certs() {
+    local DIR="$DATA/https"
+    local CA_KEY="$DIR/ca.key" CA_CRT="$DIR/ca.crt"
+
+    local PWD
+    read -s -p 'Password:' PWD
+
+    $MAIN https | while read hostspec; do
+        local hostname=${hostspec%%,*} cn=${hostspec##*,}
+        local KEY="$DIR/$cn.key" CRT="$DIR/$cn.crt" REQ="$DIR/$cn.req"
+        openssl req -nodes -newkey rsa:1024 -keyout "$KEY" -out "$REQ" -batch \
+            -config <($MAIN https_req $CFGDIR/https_req.template "$hostname" "$cn")
+        openssl ca -out "$CRT" -passin env:PWD -in "$REQ" -keyfile "$CA_KEY" \
+            -config <($MAIN https_ca $CFGDIR/https_ca.template "$DIR") -batch
+    done
 }
 
 mkdir -p $DATA
