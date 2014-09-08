@@ -197,7 +197,9 @@ hosts:
 - [ babbage.usu,      194.226.235.251, {admin: znick}]
 - [ shannon.usu,      194.226.235.185, {admin: znick}]
 
-- [ ructf.org,  194.226.235.189, {admin: znick}]
+- [ ructf.org,  194.226.235.189, {admin: znick,
+                                  backend_for: [ructf.org, www.ructf.org],
+                                  services: [http]}]
 - [ ructfe.org, 194.226.235.189, {admin: znick}]
 
 - [ loa.imm.uran.ru ]
