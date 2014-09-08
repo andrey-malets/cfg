@@ -97,8 +97,8 @@ hosts:
 - [[hog-switch, hs],      9.8,     001ac1d1a981]
 - [[hog-ap, hap],         9.9,     00259c3171aa]
 - [ l,                   '9.10',   001a4bec0cec, {admin: znick}]
-- [[hog-ups, hu],         9.11,    00c0b7598b9d] 
-- [[neumann, n],          9.12,    001b211597b5, {admin: uzer}]  #?
+- [[hog-low-ups, hlu],    9.11,    00c0b7598b9d]
+- [[neumann, n],          9.12,   [90e2ba3f0fc2, 90e2ba3f0fc3], {admin: uzer}]
 - [[storage-mplan, s-m],  9.13,    001a4bec0cee]
 - [[it2-mplan,it2-m],     9.14,    001b789f92a6]
 - [[it-mplan,it-m],       9.15,    002b789fa22f]
@@ -115,6 +115,7 @@ hosts:
 - [[ritchie, r],          9.26,   [001e670fac40, 001e670fac41], {admin: uzer}]
 - [ hp-high-ups,          9.27,    00c0b798608d]
 - [ hp-low-ups,           9.28,    00c0b72f2677]
+- [[hog-high-ups, hhu],   9.29,    00c0b79860d9]
 #   dijkstra              9.254
 
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
