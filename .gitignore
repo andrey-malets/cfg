@@ -1,2 +1,4 @@
 *.pyc
 pwds
+/puppet/modules/apt
+/puppet/modules/stdlib
