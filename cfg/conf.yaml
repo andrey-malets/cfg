@@ -192,7 +192,6 @@ hosts:
                                     nrpe_allowed: [195.19.132.20]}]
 
 - [ babbage.usu,      194.226.235.251, {admin: znick}]
-- [ overclocking.usu, 194.226.235.187, {admin: yury.pliner, services: [http]}]
 - [ shannon.usu,      194.226.235.185, {admin: znick}]
 
 - [ ructf.org,  194.226.235.189, {admin: znick}]
