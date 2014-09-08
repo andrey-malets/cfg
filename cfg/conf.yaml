@@ -128,7 +128,7 @@ hosts:
                                                   backend_for: irclog.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
-- [ r4u-back,             10.225,  0018510ee115, {backend_for: r4u.urgu.org, admin: alexog}]
+#   free                  10.225
 - [ canion,               10.226,  001eec2cf0f2, {services: [nvidia]}]
 - [ asus1,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
