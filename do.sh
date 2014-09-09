@@ -380,6 +380,7 @@ reset_https_ca() {
     openssl req -new -x509 -days $((365*3)) -key "$KEY" -passin env:PWD -config \
         <($MAIN https_req $CFGDIR/https_req.template "$ROUTER_HOST" "$CN") \
         -out "$CRT" -batch
+    cp "$CRT" /etc/puppet/files
 }
 
 gen_https_certs() {

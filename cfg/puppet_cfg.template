@@ -185,22 +185,22 @@ class managed-apt {
     }
 }
 
-class startcom {
+class runc_ca {
     package { 'ca-certificates':
         ensure => installed
     }
 
-    file { 'startcom.crt':
-        path => '/usr/local/share/ca-certificates/startcom.crt',
+    file { 'dijkstra.urgu.org.crt':
+        path => '/usr/local/share/ca-certificates/dijkstra.urgu.org.crt',
         mode => 644,
         owner => root,
         group => root,
-        source => 'puppet:///files/startcom.crt',
+        source => 'puppet:///files/ca.crt',
         require => Package['ca-certificates'],
     }
 
     exec { '/usr/sbin/update-ca-certificates -f':
-        subscribe => File['startcom.crt'],
+        subscribe => File['dijkstra.urgu.org.crt'],
         refreshonly => true,
     }
 }
@@ -835,9 +835,9 @@ node '{{ host.name }}' {
         include known_hosts
         include ldap
         include nrpe
+        include runc_ca
         include slurm
         include sp
-        include startcom
     {% endif %}
 }
 {% endfor %}
