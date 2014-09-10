@@ -176,7 +176,7 @@ hosts:
 - [ dcimap-printer,       50.246,  00c0ee1c78a8, {admin: yariksuperman}]
 
 #   free                  194.226.244.113
-- [[main-switch, ms],     194.226.244.114, 001cc534d301]
+- [[main-switch, ms],     194.226.244.114, 001cc534d301, {services: [ext_http]}]
 - [ airlab.math.usu.ru,   194.226.244.115, 000c29ad7662, {admin: yariksuperman}]
 #   free                  194.226.244.116
 #   free                  194.226.244.117

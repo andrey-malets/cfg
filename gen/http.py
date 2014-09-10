@@ -13,7 +13,9 @@ def gen_http_back(state, template, keypath):
 def list_https_hosts(state):
     rv = []
     for host in state.hosts:
-        if 'http' in host.services and state.belongs_to(host).private:
+        network = state.belongs_to(host)
+        if (('http' in host.services and network and network.private) or
+            'ext_http' in host.services):
             rv.append('%s,%s.e.urgu.org' % (host.name, host.nick))
         if 'https' in host.services and 'backend_for' in host.props:
             backends = host.props['backend_for']

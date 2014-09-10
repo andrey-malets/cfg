@@ -1,5 +1,5 @@
 {%- for host in state.hosts %}
-{%- if 'http' in host.services and state.belongs_to(host).private %}
+{%- if ('http' in host.services and state.belongs_to(host).private) or 'ext_http' in host.services %}
 
 server {
     server_name         {{ host.nick }}.e.urgu.org;
