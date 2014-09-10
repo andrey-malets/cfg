@@ -1,5 +1,6 @@
 people:
 - [alexog,        "Alexander Bocharov",   alexog@hackerdom.ru]
+- [alklepin,      "Alexander Klepinin",   alklepin@mail.utnet.ru]
 - [and,           "Andrey Khozov",        avkhozov@gmail.com]
 - [andgein,       "Andrey Gein",          andgein@yandex.ru]
 - [dimmo,         "Dmitry Simonov",       dimmoborgir@gmail.com]
@@ -197,10 +198,11 @@ hosts:
 - [ babbage.usu,      194.226.235.251, {admin: znick}]
 - [ shannon.usu,      194.226.235.185, {admin: znick}]
 
-- [ ructf.org,  194.226.235.189, {admin: znick,
-                                  backend_for: [ructf.org, www.ructf.org],
-                                  services: [http]}]
-- [ ructfe.org, 194.226.235.189, {admin: znick}]
+- [ ructf.org,    194.226.235.189, {admin: znick,
+                                    backend_for: [ructf.org, www.ructf.org],
+                                    services: [http]}]
+- [ ructfe.org,   194.226.235.189, {admin: znick, services: [http]}]
+- [ acm.timus.ru,                  {admin: alklepin, services: [http]}]
 
 - [ loa.imm.uran.ru ]
 - [ um64.imm.uran.ru ]
