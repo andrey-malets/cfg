@@ -20,7 +20,7 @@
 #  allow 192.168.0.0/24
 
 {% for host in hosts %}
-[{{ host.sname }}]
+[{{ host.name }}]
   path {{ prefix }}/{{ host.name }}
   allow {{ host.name }}
 {% endfor %}

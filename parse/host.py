@@ -74,6 +74,21 @@ class Host:
 
 def check_hosts(hosts):
     names = set()
-    dups = set(name for host in hosts for name in host.snames
+    dups = set(name for host in hosts for name in [host.name] + host.aliases
         if name in names or names.add(name))
     return map(lambda name: Exception('duplicate name %s' % name), dups)
+
+def get_sname_dups(hosts):
+    sname_to_host = dict()
+    for host in hosts:
+        for name in host.snames:
+            names = sname_to_host.get(name, [])
+            names.append(host.name)
+            sname_to_host[name] = names
+
+    dups = set()
+    for names in sname_to_host.itervalues():
+        if len(names) > 1:
+            dups.update(names)
+
+    return dups

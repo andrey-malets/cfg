@@ -1,5 +1,6 @@
 import jinja2, json
 from cmd import add_cmd
+from parse.host import get_sname_dups
 
 @add_cmd('slurm', True, 1)
 def gen_slurm(state, template, facts_path):
@@ -16,6 +17,10 @@ def gen_slurm(state, template, facts_path):
 
     default = state.defaults.slurm
     hosts = get_matching(state.hosts)
+
+    dups = get_sname_dups(hosts)
+    assert len(dups) == 0, ("cannot generate SLURM config with duplicate "
+        + "short names for hosts %s" % ", ".join(dups))
 
     groups = {}
     for group in filter(lambda group: len(get_matching(group.hosts)) > 0, state.groups):
