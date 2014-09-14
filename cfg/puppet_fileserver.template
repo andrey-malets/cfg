@@ -20,7 +20,9 @@
 #  allow 192.168.0.0/24
 
 {% for host in hosts %}
-[{{ host.name }}]
+{% if 'managed' in host.props %}
+[{{ host.sname }}]
   path {{ prefix }}/{{ host.name }}
   allow {{ host.name }}
+{% endif %}
 {% endfor %}
