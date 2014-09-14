@@ -202,7 +202,10 @@ hosts:
                                     backend_for: [ructf.org, www.ructf.org],
                                     services: [http]}]
 - [ ructfe.org,   194.226.235.189, {admin: znick, services: [http]}]
+
 - [ acm.timus.ru,                  {admin: alklepin, services: [http]}]
+- [ acm.usu.ru,                    {admin: alklepin, services: [http]}]
+- [ acm.urfu.ru,                   {admin: alklepin, services: [http]}]
 
 - [ loa.imm.uran.ru ]
 - [ um64.imm.uran.ru ]
