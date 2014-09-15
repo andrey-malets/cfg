@@ -393,10 +393,12 @@ gen_https_certs() {
     $MAIN https | while read hostspec; do
         local hostname=${hostspec%%,*} cn=${hostspec##*,}
         local KEY="$DIR/$cn.key" CRT="$DIR/$cn.crt" REQ="$DIR/$cn.req"
-        openssl req -nodes -newkey rsa:1024 -keyout "$KEY" -out "$REQ" -batch \
-            -config <($MAIN https_req $CFGDIR/https_req.template "$hostname" "$cn")
-        openssl ca -out "$CRT" -passin env:PWD -in "$REQ" -keyfile "$CA_KEY" \
-            -config <($MAIN https_ca $CFGDIR/https_ca.template "$DIR") -batch
+        if [[ ! -f "$CRT" ]]; then
+            openssl req -nodes -newkey rsa:1024 -keyout "$KEY" -out "$REQ" -batch \
+                -config <($MAIN https_req $CFGDIR/https_req.template "$hostname" "$cn")
+            openssl ca -out "$CRT" -passin env:PWD -in "$REQ" -keyfile "$CA_KEY" \
+                -config <($MAIN https_ca $CFGDIR/https_ca.template "$DIR") -batch
+        fi
     done
 }
 
