@@ -57,7 +57,7 @@ groups:
 - [mplan,      '.+-mplan',                  {services: [mplan], admin: uzer}]
 - [switches,   '.+-switch',                 {admin: uzer}]
 - [paper,      '.+-(printer|scanner)']
-- [ups,        '.+-ups']
+- [ups,        '.+-ups',                    {services: [ups], admin: uzer}]
 - [embedded,   [aps, switches, paper, ups], {services: [http], admin: uzer}]
 
 #- [621-pcs,   '621-\d\d',                   {admin: vsamun}]
