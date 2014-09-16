@@ -116,6 +116,7 @@ hosts:
 - [ hp-high-ups,          9.27,    00c0b798608d]
 - [ hp-low-ups,           9.28,    00c0b72f2677]
 - [[hog-high-ups, hhu],   9.29,    00c0b79860d9]
+- [[633-2-ups, bfu2],    '9.30',   00c0b72ea27c]
 #   dijkstra              9.254
 
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
