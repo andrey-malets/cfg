@@ -23,6 +23,9 @@ of utilities which generate uniform settings for many services, including:
   host name or alias, or build a network map using information from config
   file and ARP tables on network devices.
 
+
+### Project structure
+
 The structure of the project is as follows:
 
 - [`cfg/`](cfg/): this is the directory with the main config file
@@ -54,3 +57,52 @@ function in this file does some piece of configuration in such a way that
 a service is touched only if it is necessary. This enables the following
 scenario for the administrator: edit `conf.yaml`, check, commit, then
 simply execute `do.sh` and it will automatically apply all relevant changes.
+
+
+### The main configuration file
+
+The main configuration file ([`conf.yaml`](cfg/conf.yaml)) consists of a
+  number of *sections*, each of which represents a list of entities of some
+  kind:
+- **People**. This is a list of nicknames along with their associated contact
+  information, useful for e-mail notifications from monitoring, automatic
+  updates and other services.
+- **Defaults**. This section contanins a bunch of default values for other
+  sections, such as default monitoring host IP address or default network
+  prefix in host descriptions (which may be omitted to avoid duplication).
+- **Networks**. This is a list of IPv4 (and, in future, maybe IPv6) networks
+  known to the system. Each network may have some attributes, e.g. `rdns`
+  means that we should build reverse DNS zone for this network, while `dhcp`
+  defines a range of IP addresses that should be used by DHCP server for
+  dynamic IP address pool and so on.
+- **Groups**. Groups define properties common for a number of hosts to avoid
+  duplication and provide more structure. Their second purpose is to add some
+  grouping for hosts to services that support grouping functionality natively
+  (for example, Nagios or SLURM). Every group has unique name, may contain a
+  list of hosts (which are defined using Python regular expression syntax)
+  or other groups, and may define a list of *properties* which should apply to
+  all contained entities.
+- **Hosts**. The rest of main config file is a long list of hosts known to
+  the system. Each host has a host name as the only required attribute, which
+  goes first in it's description. It may have some shorter names called
+  *aliases*, which help to identify it with one or two letters in many places.
+  Host may have an IP address, a number of MAC addresses associated with it,
+  and a dictionary of *properties*. Host properties define some host-specific
+  data, for example who admins that host (see **People** above), which services
+  this host has, what UDP ports sholud be forwarded to that host or what UPS
+  powers it. Propertes may have arbitrary structure convenient for specific
+  purpose (for example, running services are most naturally expressed as a
+  list). The names and semantics of properties are defined by templates and
+  generation code which uses them. Unsupported properties are quietly skipped.
+
+As the main config file is read and written entirely by humans, there are two
+main thoughts which constitute it's philosophy:
+* All terms should be self-descripting. If someone sees something which looks
+  like MAC address, that should be so. And if there is `https` in some place,
+  you should't have to look through the documentation to find out what it is.
+* Duplication should be avoided as much as possible. Less duplication means
+  less code to read and, consequently, less errors. Group functionality,
+  although somewhat odd and complicated, was specifically developed for this
+  purpose. Also there are host aliases, default network prefixes, regular
+  expressions and generally beautiful and clean YAML markup which all serve
+  this purpose.
