@@ -83,20 +83,22 @@ groups:
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
 - [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer,
-                                                                 services: [adaptecraid]}]
+                                                                 services: [adaptecraid],
+                                                                 ups: bfu}]
 - [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
                                         backend_for: m.fb.urgu.org,
                                         services: [http],
+                                        ups: hlu,
                                         admin: uzer}]
 - [[mmarkov, mm],              9.4,     000c29dfeeff, {admin: uzer, services: [openvz]}]
-- [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {admin: uzer}]
+- [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {ups: hlu, admin: uzer}]
 - [[630-switch, bs],           9.6,     001b11c344e6]
 - [[hp-switch, hps],           9.7,     001ec1831c01]
 - [[hog-switch, hs],           9.8,     001ac1d1a981]
 - [[hog-ap, hap],              9.9,     00259c3171aa]
-- [ l,                        '9.10',   001a4bec0cec, {admin: znick}]
+- [ l,                        '9.10',   001a4bec0cec, {ups: [hpu, hpu2], admin: znick}]
 - [[hog-low-ups, hlu],         9.11,    00c0b7598b9d]
 - [[neumann, n],               9.12,   [90e2ba3f0fc2, 90e2ba3f0fc3], {admin: uzer}]
 - [[storage-mplan, s-m],       9.13,    001a4bec0cee]
@@ -107,12 +109,12 @@ hosts:
 - [[markov-ipmi, m-i],         9.18,    0015176b9b3e, {switch: hs}]
 - [[hamming-ipmi, h-i],        9.19,    000423d68970, {switch: hs}]
 - [ ap1,                      '9.20',  '001225557506']
-- [[tesla, t],                 9.21,    001e670fafcc, {admin: uzer}]
+- [[tesla, t],                 9.21,    001e670fafcc, {ups: hlu, admin: uzer}]
 - [[tesla-ipmi, t-i],          9.22,    001e670fafce, {switch: hs}]
 - [[631-near-low-ups, bfu],    9.23,    00c0b731da0e, {services: [ext_temp]}]
 - [[airlab-switch, as],        9.24,    001b11c34547]
 - [[ritchie-ipmi, r-i],        9.25,    001e670fac42, {switch: hs}]
-- [[ritchie, r],               9.26,   [001e670fac40, 001e670fac41], {admin: uzer}]
+- [[ritchie, r],               9.26,   [001e670fac40, 001e670fac41], {ups: hlu, admin: uzer}]
 - [[631-far-low-ups, hpu],     9.27,    00c0b798608d, {services: [ext_temp]}]
 - [[631-far-high-ups, hpu2],   9.28,    00c0b72f2677]
 #- [[hog-high-ups, hhu],        9.29,    00c0b79860d9]
@@ -147,8 +149,8 @@ hosts:
                                                   admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237,  001cc009f4ff]
-- [[itanium,it],          10.238, [001b789f0090, 001b789f0091], {admin: uzer}]
-- [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {admin: uzer}]
+- [[itanium,it],          10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer}]
+- [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'], admin: muzafarov}]
 #   free                  10.241
 #   free                  10.242
@@ -194,6 +196,7 @@ hosts:
                                     ssh_port: 1022,
                                     services: [nagios, autoupdate],
                                     nrpe_allowed: [195.19.132.20],
+                                    ups: hlu,
                                     fb: [10.254, 11.254, 12.254, 50.254]}]
 
 - [ babbage.usu,      194.226.235.251, {admin: znick}]

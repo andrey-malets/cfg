@@ -828,6 +828,18 @@ node '{{ host.name }}' {
             include adaptecraid
         {% endif %}
 
+        {% if 'ups' in host.props %}
+            {% if host.props['ups'] is string %}
+                $upsname = '{{ state.find(host.props['ups']).name }}'
+                $upsip = '{{ state.find(host.props['ups']).addr }}'
+            {% else %}
+                $upsname = '{{ state.find(host.props['ups'][0]).name }}'
+                $upsip = '{{ state.find(host.props['ups'][0]).addr }}'
+            {% endif %}
+
+            include ups
+        {% endif %}
+
         $host = '{{ state.get_canonical_hostname(host) }}'
         $nsca_host = '{{ state.defaults.nagios }}'
         $puppet_random_host = 'urgu.org'
