@@ -431,6 +431,8 @@ almost_all() {
 
     gen_ext_http
     gen_http_back
+
+    gen_ups_mrtg
 }
 
 all() {
