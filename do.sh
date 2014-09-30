@@ -402,6 +402,11 @@ gen_https_certs() {
     done
 }
 
+gen_ups_mrtg() {
+    local OUTPUT="$DATA"/ups_mrtg.cfg
+    $MAIN ups_mrtg $CFGDIR/mrtg.template > $OUTPUT
+}
+
 mkdir -p $DATA
 
 export ROUTER_DEV=$($ROUTER_ATTRS dev)

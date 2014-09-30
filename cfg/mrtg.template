@@ -1,0 +1,43 @@
+{% for host in state.hosts %}
+{% if 'ups' in host.props['services'] %}
+
+YLegend[{{ host.name }}.batt-cap]: Percent
+ShortLegend[{{ host.name }}.batt-cap]: %
+Directory[{{ host.name }}.batt-cap]: ups
+Legend1[{{ host.name }}.batt-cap]: Battery Capacity
+Legend2[{{ host.name }}.batt-cap]: Load
+Legend3[{{ host.name }}.batt-cap]: Max Capacity
+Legend4[{{ host.name }}.batt-cap]: Max Load
+LegendI[{{ host.name }}.batt-cap]: Battery Capacity
+LegendO[{{ host.name }}.batt-cap]: Load
+WithPeak[{{ host.name }}.batt-cap]: ywm
+Unscaled[{{ host.name }}.batt-cap]: dwmy
+MaxBytes[{{ host.name }}.batt-cap]: 110
+Options[{{ host.name }}.batt-cap]: growright, gauge, nopercent
+Title[{{ host.name }}.batt-cap]: {{ host.name }} battery capacity & load
+Target[{{ host.name }}.batt-cap]: 1.3.6.1.4.1.318.1.1.1.2.2.1.0&1.3.6.1.4.1.318.1.1.1.4.2.3.0:public@{{ host.name }}
+PageTop[{{ host.name }}.batt-cap]: <H1>{{ host.name }} battery capacity & load</H1>
+
+{% if 'ext_temp' in host.props['services'] %}
+
+YLegend[{{ host.name }}.temp]: Celsius
+ShortLegend[{{ host.name }}.temp]: C
+Directory[{{ host.name }}.temp]: ups
+Legend1[{{ host.name }}.temp]: Internal Temperature
+Legend2[{{ host.name }}.temp]: External Temperature
+Legend3[{{ host.name }}.temp]: Max Internal Temp
+Legend4[{{ host.name }}.temp]: Max External Temp
+LegendI[{{ host.name }}.temp]: Internal Temperature
+LegendO[{{ host.name }}.temp]: External Temperature
+WithPeak[{{ host.name }}.temp]: ywm
+Unscaled[{{ host.name }}.temp]: dwmy
+MaxBytes[{{ host.name }}.temp]: 50
+Options[{{ host.name }}.temp]: growright, gauge, nopercent
+Title[{{ host.name }}.temp]: {{ host.name }} temperature
+Target[{{ host.name }}.temp]: 1.3.6.1.4.1.318.1.1.1.2.2.2.0&1.3.6.1.4.1.318.1.1.10.2.3.2.1.4.1:public@{{ host.name }}
+PageTop[{{ host.name }}.temp]: <H1>{{ host.name }} temperature</H1>
+
+{% endif %}
+
+{% endif %}
+{% endfor %}
