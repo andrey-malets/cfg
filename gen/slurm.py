@@ -12,10 +12,9 @@ def gen_slurm(state, template, facts_path):
         except Exception as e:
             pass # that's OK
 
-    def matches(host): return 'managed' in host.props
-    def get_matching(hosts): return filter(matches, hosts)
-
     default = state.defaults.slurm
+    def get_matching(hosts): return filter(lambda host: default in host.props, hosts)
+
     hosts = get_matching(state.hosts)
 
     dups = get_sname_dups(hosts)

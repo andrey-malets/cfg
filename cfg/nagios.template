@@ -371,6 +371,16 @@ define service {
 }
 {% endif %}
 
+{% if 'slurm-master' in host.props['services'] %}
+define service {
+    use                 generic-service
+    service_description Slurm master
+    check_command       check_nrpe_1arg!check_slurm_master
+    host_name           {{ state.get_canonical_hostname(host) }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+}
+{% endif %}
+
 {% if 'megaraid' in host.props['services'] %}
 define service {
     use                 generic-service
@@ -402,6 +412,18 @@ define service {
     host_name           {{ state.get_canonical_hostname(host) }}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     servicegroups       hadoop
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
+}
+define service {
+    use                 generic-service
+    service_description Slurm node
+    check_command       check_nrpe_1arg!check_slurm_node
+    host_name           {{ state.get_canonical_hostname(host) }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
     flap_detection_enabled     0

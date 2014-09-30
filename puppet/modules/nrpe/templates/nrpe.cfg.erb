@@ -219,6 +219,12 @@ command[check_jobtracker]=sudo /usr/lib/nagios/plugins/check_hadoop JobTracker
 <% if @check_megaraid == 'true' -%>
 command[check_megaraid]=/usr/lib/nagios/plugins/check_megaraid_sas
 <% end -%>
+<% if @check_slurm_master == 'true' -%>
+command[check_slurm_master]=/usr/lib/nagios/plugins/check_procs -C slurmctld -w 1:1
+<% end -%>
+<% if @check_slurm_node == 'true' -%>
+command[check_slurm_node]=/usr/lib/nagios/plugins/check_procs -C slurmd -w 1:1
+<% end -%>
 
 # The following examples allow user-supplied arguments and can
 # only be used if the NRPE daemon was compiled with support for
