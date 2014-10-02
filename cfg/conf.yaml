@@ -36,9 +36,11 @@ networks:
     descr: 'Network for 621 computer classroom'}]
 - [172.16.12/24,       172.16.12.253,   {dhcp: '30-252', rdns: 1, fb: 1, vlan: 8,
     descr: 'Network for 150/151 computer classrooms'}]
-- [172.16.16/24,       172.16.16.254,   {rdns: 1, private: 1}]
+- [172.16.16/24,       172.16.16.254,   {rdns: 1, private: 1, vlan: 5,
+    descr: 'Private network for developers'}]
 - [172.16.18/24,       172.16.18.1,     {rdns: 1, private: 1}]
-- [172.16.19/24,       172.16.19.1,     {rdns: 1, private: 1}]
+- [172.16.19/24,       172.16.19.1,     {rdns: 1, private: 1},
+    descr: 'Network for OpenVPN']
 - [172.16.20/24,       172.16.20.254,   {rdns: 1, private: 1, vlan: 10,
     descr: 'Network for AMT interfaces'}]
 - [172.16.21/24,       172.16.21.254,   {rdns: 1, private: 1}]
