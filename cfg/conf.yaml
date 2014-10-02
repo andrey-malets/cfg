@@ -28,18 +28,26 @@ defaults:
     '.usu' : '.usu.edu.ru'
 
 networks:
-- [172.16.9/24,        172.16.9.254,    {rdns: 1, private: 1}]
-- [172.16.10/24,       172.16.10.253,   {dhcp: '1-128', rdns: 1, fb: 1}]
-- [172.16.11/24,       172.16.11.253,   {dhcp: '40-252', rdns: 1, fb: 1}]
-- [172.16.12/24,       172.16.12.253,   {dhcp: '30-252', rdns: 1, fb: 1}]
+- [172.16.9/24,        172.16.9.254,    {rdns: 1, private: 1, vlan: 1,
+    descr: 'Closed internal network for UPS/network equipment/physical machines'}]
+- [172.16.10/24,       172.16.10.253,   {dhcp: '1-128', rdns: 1, fb: 1, vlan: 3,
+    descr: 'Network for public servers'}]
+- [172.16.11/24,       172.16.11.253,   {dhcp: '40-252', rdns: 1, fb: 1, vlan: 4,
+    descr: 'Network for 621 computer classroom'}]
+- [172.16.12/24,       172.16.12.253,   {dhcp: '30-252', rdns: 1, fb: 1, vlan: 8,
+    descr: 'Network for 150/151 computer classrooms'}]
 - [172.16.16/24,       172.16.16.254,   {rdns: 1, private: 1}]
 - [172.16.18/24,       172.16.18.1,     {rdns: 1, private: 1}]
 - [172.16.19/24,       172.16.19.1,     {rdns: 1, private: 1}]
-- [172.16.20/24,       172.16.20.254,   {rdns: 1, private: 1}]
+- [172.16.20/24,       172.16.20.254,   {rdns: 1, private: 1, vlan: 10,
+    descr: 'Network for AMT interfaces'}]
 - [172.16.21/24,       172.16.21.254,   {rdns: 1, private: 1}]
-- [172.16.50/24,       172.16.50.254,   {dhcp: '1-240', rdns: 1, fb: 1}]
-- [194.226.235.128/25, 194.226.235.254]
-- [194.226.244.112/28, 194.226.244.114, {fb: 1}]
+- [172.16.50/24,       172.16.50.254,   {dhcp: '1-240', rdns: 1, fb: 1, vlan: 6,
+    descr: 'Network for DCIMAP lab'}]
+- [194.226.235.128/25, 194.226.235.254, {vlan: 7,
+    descr: 'USUNet network for Math faculty'}]
+- [194.226.244.112/28, 194.226.244.114, {fb: 1, vlan: 2,
+    descr: 'RUNC external network'}]
 
 groups:
 - [unix,       '^(.*-back|d|h|hog|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$',
