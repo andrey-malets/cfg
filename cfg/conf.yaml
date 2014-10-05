@@ -129,6 +129,7 @@ hosts:
 - [[631-far-high-ups, hpu2],   9.28,    00c0b72f2677]
 #- [[hog-high-ups, hhu],        9.29,    00c0b79860d9]
 #- [[631-near-high-ups, bfu2], '9.30',   00c0b72ea27c]
+- [[cluster-switch, cls],      9.32,    0004e279d328]
 #   dijkstra              9.254
 
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
