@@ -82,10 +82,12 @@ groups:
 - [bhogs,      'hog(0\d|1[0-7])']
 - [shogs,      'hog(1(8|9)|2\d)']
 
-- [managed,    [volatile], '(clt*|(uzer|znick)-pc)', {services: [unix],
-                                                      admin: uzer,
-                                                      dhcp: {ipxe.scriptlet: cow},
-                                                      managed: 1}]
+- [cl,         'clt\d',                     {modules: [w83627hf]}]
+
+- [managed,    [cl, volatile], '(uzer|znick)-pc', {services: [unix],
+                                                   admin: uzer,
+                                                   dhcp: {ipxe.scriptlet: cow},
+                                                   managed: 1}]
 
 - [notebooks,  '(asus(1|2|3)|canion|hewlett|packard)']
 - [volatile,   [hogs, notebooks], {volatile: 1}]
