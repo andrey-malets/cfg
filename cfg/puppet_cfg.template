@@ -733,6 +733,20 @@ node '{{ host.name }}' {
             ensure => installed,
         }
 
+        {% if 'modules' in host.props %}
+            exec { '/etc/init.d/kmod start':
+                refreshonly => true,
+            }
+
+            {% for module in host.props['modules'] %}
+                augeas { "module-{{ module }}" :
+                    context => "/files/etc/modules",
+                    changes => ["clear {{ module }}"],
+                    notify => Exec['/etc/init.d/kmod start'],
+                }
+            {% endfor %}
+        {% endif %}
+
         $nrpe_allowed = '{{ ([state.get_nagios(host.addr)]
             + host.props.get('nrpe_allowed', []))|join(',') }}'
         {% if host.addr %}
