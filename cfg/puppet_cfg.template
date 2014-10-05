@@ -153,9 +153,9 @@ class managed-update {
         owner => root,
         group => root,
         content => "#!/bin/bash
-            [ `w -h | grep -v '^user' | wc -l` -eq 0 ] && \
-            [ `pgrep tmux | wc -l` -eq 0 ] && \
-            [ `ls -A /var/run/screen | wc -l` -eq 0 ]
+            [[ $(w -h | grep -v '^user$' | wc -l) -eq 0 ]] && \
+            [[ $(pgrep tmux | wc -l) -eq 0 ]] && \
+            [[ $(find /var/run/screen -type p | wc -l) -eq 0 ]]
         ",
     }
 
