@@ -78,7 +78,7 @@ groups:
 - [bhs,        'h(0\d|1[0-7])']
 - [shs,        'h(1(8|9)|2\d)']
 
-- [hogs,       'hog\d\d',                   {services: [userqwer]}]
+- [hogs,       'hog\d\d',                   {services: [userqwer], localtime: 1}]
 - [bhogs,      'hog(0\d|1[0-7])']
 - [shogs,      'hog(1(8|9)|2\d)']
 

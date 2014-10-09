@@ -717,6 +717,14 @@ class smartmon {
     }
 }
 
+class localtime {
+    exec { 'set-localtime':
+        command => '/bin/sed -i "s/UTC/LOCAL/" /etc/adjtime && \
+            /etc/init.d/hwclock.sh reload',
+        onlyif => '/bin/grep UTC /etc/adjtime',
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -775,6 +783,10 @@ node '{{ host.name }}' {
                 $userqwer = 'true'
             {% endif %}
             $check_apt = 'false'
+
+            {% if 'localtime' in host.props %}
+            include localtime
+            {% endif %}
 
             include hadoop_slave
             $check_hadoop_slave = 'true'
