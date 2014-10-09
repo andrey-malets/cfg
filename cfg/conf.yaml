@@ -34,7 +34,7 @@ networks:
     descr: 'Network for public servers'}]
 - [172.16.11/24,       172.16.11.253,   {dhcp: '40-252', rdns: 1, fb: 1, vlan: 4,
     descr: 'Network for 621 computer classroom'}]
-- [172.16.12/24,       172.16.12.253,   {dhcp: '30-252', rdns: 1, fb: 1, vlan: 8,
+- [172.16.12/24,       172.16.12.253,   {dhcp: '101-252', rdns: 1, fb: 1, vlan: 8,
     descr: 'Network for 150/151 computer classrooms'}]
 - [172.16.16/24,       172.16.16.254,   {rdns: 1, private: 1, vlan: 5,
     descr: 'Private network for developers'}]
