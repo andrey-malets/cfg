@@ -204,7 +204,7 @@ hosts:
 - [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
-- [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, v, wiki],
+- [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, tracker, v, wiki],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
                                     services: [nagios, autoupdate],
