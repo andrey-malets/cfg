@@ -220,7 +220,7 @@ gen_ssh_known_hosts_updater() {
 cat <<END
 #!/bin/bash
 
-# usage (e.g. in crontab): [curl|wget -O-] https://ssl.urgu.org/known_hosts.sh | sh -s -- -y
+# usage (e.g. in crontab): [curl|wget -O-] https://ssl.urgu.org/known_hosts.sh | bash -s -- -y
 
 args=\$(getopt yf: \$*)
 set -- \$args
