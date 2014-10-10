@@ -277,7 +277,8 @@ hosts:
 #- [ hog26.runc,   12.26,   0019d17e9c6f]
 #- [ hog27.runc,   12.27,   0019d17e9d99]
 #- [ hog28.runc,   12.28,   0019d17e922d]
-- [ hog-vm.runc, '12.100', 000c29ad7762, {services: [rrdp]}]
+- [ hog-vm-new.runc, '12.99',  000c29ad7763, {services: [rrdp]}]
+- [ hog-vm.runc,     '12.100', 000c29ad7762, {services: [rrdp]}]
 
 - [ h01,  20.1,   0019d17ebccf, {nagios: { 2d_coords: '680,440', statusmap_image: 'base/cmp+180.png' } } ]
 - [ h02,  20.2,   0019d17ebba0, {nagios: { 2d_coords: '680,520', statusmap_image: 'base/cmp+180.png' } } ]
