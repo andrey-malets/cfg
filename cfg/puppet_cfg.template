@@ -755,6 +755,17 @@ node '{{ host.name }}' {
             {% endfor %}
         {% endif %}
 
+        {% if 'sudoers' in host.props %}
+            augeas { 'sudo':
+                context => '/files/etc/group/sudo',
+                changes => ['rm user',
+                {% for user in host.props['sudoers'] %}
+                            'set user[last()] {{ user }}',
+                {% endfor %}
+                           ],
+            }
+        {% endif %}
+
         $nrpe_allowed = '{{ ([state.get_nagios(host.addr)]
             + host.props.get('nrpe_allowed', []))|join(',') }}'
         {% if host.addr %}
