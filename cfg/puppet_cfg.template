@@ -755,6 +755,16 @@ node '{{ host.name }}' {
             {% endfor %}
         {% endif %}
 
+        {% if 'sensors' in host.props %}
+            $check_sensors = '{{ '+'.join(host.props['sensors']) }}'
+            file { '/usr/lib/nagios/plugins/check_sensors.py':
+                mode => 755,
+                owner => root,
+                group => root,
+                source => "puppet:///files/check_sensors.py",
+            }
+        {% endif %}
+
         {% if 'sudoers' in host.props %}
             augeas { 'sudo':
                 context => '/files/etc/group/sudo',

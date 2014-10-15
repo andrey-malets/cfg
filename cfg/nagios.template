@@ -342,6 +342,21 @@ define service {
     {% endif %}
 }
 
+{% if 'sensors' in host.props %}
+define service {
+    use                 generic-service
+    service_description Sensors
+    check_command       check_nrpe_1arg!check_sensors
+    host_name           {{ state.get_canonical_hostname(host) }}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
+}
+{% endif %}
+
 {% if 'hadoop-master' in host.props['services'] %}
 define service {
     use                 generic-service
