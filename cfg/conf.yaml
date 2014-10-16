@@ -62,6 +62,12 @@ groups:
 - [uzers_unix, '^(h|hog|m|mm|n|p|r|t|ts|it|it2)$',  {services: [exim_default, autoupdate]}]
 - [auto_vms,   '^((irc|school)-back|shannon)$',     {services: [exim_default, autoupdate]}]
 
+- [S5000PAL,   '^(m|h)$',                   {modules: [coretemp, i5k_amb],
+                                             sensors: ['coretemp:temp*:10,15,45,50',
+                                                       'i5k_amb:temp*:10,15,55,60']}]
+- [S5520UR,    '^(r|t)$',                   {modules: [coretemp],
+                                             sensors: ['coretemp:temp*:10,15,45,50']}]
+
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
 - [mplan,      '.+-mplan',                  {services: [mplan], admin: uzer}]
@@ -78,11 +84,16 @@ groups:
 - [bhs,        'h(0\d|1[0-7])']
 - [shs,        'h(1(8|9)|2\d)']
 
-- [hogs,       'hog\d\d',                   {services: [userqwer], localtime: 1}]
+- [hogs,       'hog\d\d',                   {services: [userqwer],
+                                             sensors: ['coretemp:temp2:10,15,60,65',
+                                                       'coretemp:temp3:10,15,60,65'],
+                                             localtime: 1}]
 - [bhogs,      'hog(0\d|1[0-7])']
 - [shogs,      'hog(1(8|9)|2\d)']
 
-- [cl,         'clt\d',                     {modules: [w83627hf]}]
+- [cl,         'clt\d',                     {modules: [w83627hf],
+                                             sensors: ['w83627thf:temp1:10,15,50,55',
+                                                       'w83627thf:temp2:10,15,50,55']}]
 
 - [managed,    [cl, volatile], '(uzer|znick)-pc', {services: [unix],
                                                    admin: uzer,
