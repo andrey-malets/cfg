@@ -102,7 +102,10 @@ groups:
 
 - [cl,         'clt\d',                     {modules: [w83627hf],
                                              sensors: ['w83627thf:temp1:10,15,50,55',
-                                                       'w83627thf:temp2:10,15,50,55']}]
+                                                       'w83627thf:temp2:10,15,50,55',
+                                                       'w83627thf:fan2:500,800,3000,4000']}]
+- [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
+                                             sensors: ['coretemp:temp*:10,16,50,60']}]
 
 - [managed,    [cl, volatile], '(uzer|znick)-pc', {services: [unix],
                                                    admin: uzer,
@@ -224,12 +227,13 @@ hosts:
 - [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
-- [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, tracker, v, wiki],
+- [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, tracker, v, wiki, hdfs, mapred],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
                                     services: [nagios, autoupdate],
                                     nrpe_allowed: [195.19.132.20],
                                     ups: hlu,
+                                    sensors: ['max1617:temp*:10,15,30,35'],
                                     fb: [10.254, 11.254, 12.254, 50.254]}]
 
 - [ babbage.usu,      194.226.235.251, {admin: znick}]
