@@ -730,6 +730,24 @@ node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
         include hadoop_master
         $check_hadoop_master = 'true'
+
+        file { '/etc/hadoop/rack.sh':
+          mode => 755,
+          owner => root,
+          group => root,
+          content => '#!/usr/bin/env bash
+            declare -A rack
+            {% for host in state.hosts %}
+              {% if 'hadoop_rack' in host.props %}
+                rack[{{ host.addr }}]="{{ host.props['hadoop_rack']}}"
+              {% endif %}
+            {% endfor %}
+            echo $@ >> /tmp/rack.log
+            for ip in "$@"; do
+              echo -n "/${rack[$ip]:-default-rack} "
+            done
+          ',
+        }
     {% endif %}
 
     {% if 'slurm-master' in host.props['services'] %}
@@ -809,6 +827,11 @@ node '{{ host.name }}' {
             include localtime
             {% endif %}
 
+            {% if 'hadoop_rack' in host.props %}
+            $hadoop_rack = '{{ host.props['hadoop_rack']}}'
+            {% else %}
+            $hadoop_rack = 'default-rack'
+            {% endif %}
             include hadoop_slave
             $check_hadoop_slave = 'true'
 
