@@ -97,10 +97,11 @@ groups:
                                              sensors: ['coretemp:temp2:10,15,60,65',
                                                        'coretemp:temp3:10,15,60,65'],
                                              localtime: 1}]
-- [bhogs,      'hog(0\d|1[0-7])']
-- [shogs,      'hog(1(8|9)|2\d)']
+- [bhogs,      'hog(0\d|1[0-7])',           {hadoop_rack: big_hog}]
+- [shogs,      'hog(1(8|9)|2\d)',           {hadoop_rack: small_hog}]
 
-- [cl,         'clt\d',                     {modules: [w83627hf],
+- [cl,         'clt\d',                     {hadoop_rack: runc,
+                                             modules: [w83627hf],
                                              sensors: ['w83627thf:temp1:10,15,50,55',
                                                        'w83627thf:temp2:10,15,50,55',
                                                        'w83627thf:fan2:500,800,3000,4000']}]
@@ -112,7 +113,7 @@ groups:
                                                    dhcp: {ipxe.scriptlet: cow},
                                                    managed: 1}]
 
-- [notebooks,  '(asus(1|2|3)|canion|hewlett|packard)']
+- [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
 
 hosts:
@@ -163,7 +164,9 @@ hosts:
 - [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
 - [ clt3,                 10.219, [00142a47b037, 0004e21c72d6]]
 - [ asus1,               '10.220', 14dae9c9a638, {services: [nvidia]}]
-- [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211}, tcp_fwd: {60211: 60211}}]
+- [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211},
+                                                  tcp_fwd: {60211: 60211},
+                                                  hadoop_rack: runc}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
                                                   backend_for: irclog.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
@@ -178,7 +181,9 @@ hosts:
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
 - [ hewlett,              10.232 , b499ba5732e9]
 - [ packard,              10.233 , b499ba5684d1]
-- [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234}, tcp_fwd: {60234: 60234}}]
+- [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234},
+                                                  tcp_fwd: {60234: 60234},
+                                                  hadoop_rack: small_hog}]
 - [ redmine-back,         10.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
                                                                 git.redmine.hackerdom.ru],
                                                   services: [autoupdate],
