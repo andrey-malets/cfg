@@ -242,13 +242,6 @@ class hadoop_base {
         source => 'puppet:///files/hadoop/core-site.xml',
     }
 
-    file { '/etc/hadoop/hdfs-site.xml':
-        mode => 644,
-        owner => root,
-        group => root,
-        source => 'puppet:///files/hadoop/hdfs-site.xml',
-    }
-
     file { '/etc/hadoop/mapred-site.xml':
         mode => 644,
         owner => root,
@@ -314,6 +307,13 @@ class hadoop_base {
 }
 
 class hadoop_slave inherits hadoop_base {
+    file { '/etc/hadoop/hdfs-site.xml':
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/hadoop/hdfs-site-slave.xml',
+    }
+
     service { 'hadoop-datanode':
         ensure => running,
         enable => true,
@@ -392,6 +392,13 @@ class hadoop_slave inherits hadoop_base {
 }
 
 class hadoop_master inherits hadoop_base {
+    file { '/etc/hadoop/hdfs-site.xml':
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/hadoop/hdfs-site.xml',
+    }
+
     file { '/etc/hadoop/hosts.exclude':
         ensure => present,
         owner => root,
