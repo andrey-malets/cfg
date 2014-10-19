@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-BASE=`dirname $0`
+BASE=$(dirname "$0")
 MAIN="python $BASE/main.py"
 SERIAL="python $BASE/util/serial.py"
 ROUTER_ATTRS="$BASE/util/router-attrs.sh"
@@ -73,7 +73,7 @@ gen_dns() {
 
     local CUR=$DATA/reverse.config
     local NEW=$DATA/reverse.config.new
-    
+
     $MAIN rdns_cfg $CFGDIR/rdns_cfg.template $DATA/%s.master /etc/bind/db.empty > $NEW
 
     if ! cmp_files $CUR $NEW; then
@@ -405,6 +405,11 @@ gen_https_certs() {
 gen_ups_mrtg() {
     local OUTPUT="$DATA"/ups_mrtg.cfg
     $MAIN ups_mrtg $CFGDIR/mrtg.template > $OUTPUT
+}
+
+gen_user_chains() {
+    local ipp=/etc/openvpn/runc/ipp.txt iface=tun0 target=UaA
+    python "$BASE/util/iptables_users.py" "$ipp" "$iface" "$target" | sh -s
 }
 
 mkdir -p $DATA
