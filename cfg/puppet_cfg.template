@@ -538,6 +538,14 @@ class xen {
         group => root,
         source => 'puppet:///files/xendomains',
     }
+
+    file { '/var/lib/puppet/lib/facter/util/xendomains.py':
+        ensure => present,
+        mode => '755',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/xendomains.py',
+    }
 }
 
 class userqwer {
