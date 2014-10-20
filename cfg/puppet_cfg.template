@@ -539,7 +539,7 @@ class xen {
         source => 'puppet:///files/xendomains',
     }
 
-    file { '/var/lib/puppet/lib/facter/util/xendomains.py':
+    file { '/usr/local/bin/xendomains.py':
         ensure => present,
         mode => '755',
         owner => root,
