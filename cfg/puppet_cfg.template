@@ -735,7 +735,8 @@ class smartmon {
 class localtime {
     exec { 'set-localtime':
         command => '/bin/sed -i "s/UTC/LOCAL/" /etc/adjtime && \
-            /etc/init.d/hwclock.sh reload',
+            /etc/init.d/hwclock.sh reload && \
+            sntp -s urgu.org',
         onlyif => '/bin/grep UTC /etc/adjtime',
     }
 }
