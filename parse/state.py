@@ -71,7 +71,11 @@ class State:
                     host.facts_expiration = raw_facts.get('expiration', None)
                     host.facts = raw_facts.get('values', {})
                     if 'pyxendomains' in host.facts:
-                        host.facts['pyxendomains'] = json.load(
+                        host.facts['pyxendomains'] = json.loads(
                             host.facts['pyxendomains'])
+                        for vm_name in host.facts['pyxendomains'].iterkeys():
+                            vm = self.find(vm_name)
+                            if vm != None:
+                                vm.vm_host = host
             except Exception as e:
                 pass # that's OK

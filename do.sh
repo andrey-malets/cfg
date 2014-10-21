@@ -390,6 +390,10 @@ gen_user_chains() {
     python "$BASE/util/iptables_users.py" "$ipp" "$iface" "$target" | sh -s
 }
 
+gen_iptables_access() {
+    $MAIN ipt_access access $FACTS | sh -s
+}
+
 mkdir -p $DATA
 
 export ROUTER_DEV=$($ROUTER_ATTRS dev)

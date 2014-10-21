@@ -1,5 +1,13 @@
 from cmd import add_cmd
 
+def init(table, chain):
+    print ('if iptables -t %s -L %s 2>/dev/null >/dev/null; '
+        'then iptables -t %s -F %s; '
+        'else iptables -t %s -N %s; fi' % ((table, chain) * 3))
+
+def cn2chain(cn):
+    return 'openvpn_%s' % cn
+
 def get_pub_port(host):
     comps = host.addr.split('.')
     return int(comps[2]) * 1000 + int(comps[3])
@@ -39,3 +47,29 @@ def gen_ports(state, dst, chain):
         for srcport, dstport in udp_forwardings(host).iteritems(): add('udp', srcport, dstport)
 
     return '\n'.join(lines)
+
+@add_cmd('ipt_access', False, 2)
+def gen_access(state, chain, facts_path):
+    def put_if_exists(user, rule):
+        return ('iptables -L "%s" 2>&1 >/dev/null && iptables -A "%s" %s -j "%s"' %
+            (cn2chain(user), chain, rule, cn2chain(user)))
+    state.parse_facts(facts_path)
+    init('filter', chain)
+    for host in state.hosts:
+        network = state.belongs_to(host)
+        if not host.admin:
+            continue
+        if network and network.private and host.addr:
+            print put_if_exists(host.admin, '-d "%s" -m state --state NEW' % host.addr)
+        vm_host = host.vm_host
+        if vm_host:
+            vms = vm_host.facts['pyxendomains']
+            assert(vms and host.sname in vms)
+            vm_descr = vms[host.sname]
+            if 'vnclisten' in vm_descr:
+                port = 5900 + int(vm_descr['vnclisten'].split(':')[1])
+                print put_if_exists(
+                    host.admin,
+                    '-d "%s" -p tcp -m state --state NEW --dport %d' % (
+                        vm_host.addr, port))
+    return ""
