@@ -6,45 +6,45 @@ ControlMachine=ts
 ControlAddr=slurm.fb.urgu.org
 #BackupController=
 #BackupAddr=
-# 
+#
 AuthType=auth/munge
 CacheGroups=0
-#CheckpointType=checkpoint/none 
+#CheckpointType=checkpoint/none
 CryptoType=crypto/munge
-#DisableRootJobs=NO 
-#EnforcePartLimits=NO 
+#DisableRootJobs=NO
+#EnforcePartLimits=NO
 #Epilog=
-#PrologSlurmctld= 
-#FirstJobId=1 
-#MaxJobId=999999 
-#GresTypes= 
-#GroupUpdateForce=0 
-#GroupUpdateTime=600 
-JobCheckpointDir=/var/lib/slurm-llnl/checkpoint 
+#PrologSlurmctld=
+#FirstJobId=1
+#MaxJobId=999999
+#GresTypes=
+#GroupUpdateForce=0
+#GroupUpdateTime=600
+JobCheckpointDir=/var/lib/slurm-llnl/checkpoint
 #JobCredentialPrivateKey=
 #JobCredentialPublicCertificate=
-#JobFileAppend=0 
-#JobRequeue=1 
-#JobSubmitPlugins=1 
-#KillOnBadExit=0 
-#Licenses=foo*4,bar 
-#MailProg=/usr/bin/mail 
-#MaxJobCount=5000 
-#MaxStepCount=40000 
-#MaxTasksPerNode=128 
+#JobFileAppend=0
+#JobRequeue=1
+#JobSubmitPlugins=1
+#KillOnBadExit=0
+#Licenses=foo*4,bar
+#MailProg=/usr/bin/mail
+#MaxJobCount=5000
+#MaxStepCount=40000
+#MaxTasksPerNode=128
 MpiDefault=none
-#MpiParams=ports=#-# 
-#PluginDir= 
-#PlugStackConfig= 
-#PrivateData=jobs 
+#MpiParams=ports=#-#
+#PluginDir=
+#PlugStackConfig=
+#PrivateData=jobs
 ProctrackType=proctrack/pgid
 #Prolog=
-#PrologSlurmctld= 
-#PropagatePrioProcess=0 
-#PropagateResourceLimits= 
-#PropagateResourceLimitsExcept= 
+#PrologSlurmctld=
+#PropagatePrioProcess=0
+#PropagateResourceLimits=
+#PropagateResourceLimitsExcept=
 ReturnToService=1
-#SallocDefaultCommand= 
+#SallocDefaultCommand=
 SlurmctldPidFile=/var/run/slurm-llnl/slurmctld.pid
 SlurmctldPort=6817
 SlurmdPidFile=/var/run/slurm-llnl/slurmd.pid
@@ -59,62 +59,62 @@ SwitchType=switch/none
 TaskPlugin=task/none
 #TaskPluginParam=
 #TaskProlog=
-#TopologyPlugin=topology/tree 
-#TmpFs=/tmp 
-#TrackWCKey=no 
-#TreeWidth= 
-#UnkillableStepProgram= 
-#UsePAM=0 
-# 
-# 
-# TIMERS 
-#BatchStartTimeout=10 
-#CompleteWait=0 
-#EpilogMsgTime=2000 
-#GetEnvTimeout=2 
-#HealthCheckInterval=0 
-#HealthCheckProgram= 
+#TopologyPlugin=topology/tree
+#TmpFs=/tmp
+#TrackWCKey=no
+#TreeWidth=
+#UnkillableStepProgram=
+#UsePAM=0
+#
+#
+# TIMERS
+#BatchStartTimeout=10
+#CompleteWait=0
+#EpilogMsgTime=2000
+#GetEnvTimeout=2
+#HealthCheckInterval=0
+#HealthCheckProgram=
 InactiveLimit=0
 KillWait=30
-#MessageTimeout=10 
-#ResvOverRun=0 
+#MessageTimeout=10
+#ResvOverRun=0
 MinJobAge=300
-#OverTimeLimit=0 
+#OverTimeLimit=0
 SlurmctldTimeout=120
 SlurmdTimeout=30
-#UnkillableStepTimeout=60 
-#VSizeFactor=0 
+#UnkillableStepTimeout=60
+#VSizeFactor=0
 Waittime=0
-# 
-# 
-# SCHEDULING 
-#DefMemPerCPU=0 
+#
+#
+# SCHEDULING
+#DefMemPerCPU=0
 FastSchedule=1
-#MaxMemPerCPU=0 
-#SchedulerRootFilter=1 
-#SchedulerTimeSlice=30 
+#MaxMemPerCPU=0
+#SchedulerRootFilter=1
+#SchedulerTimeSlice=30
 SchedulerType=sched/backfill
 SchedulerPort=7321
 SelectType=select/linear
 #SelectTypeParameters=
-# 
-# 
-# JOB PRIORITY 
-#PriorityType=priority/basic 
-#PriorityDecayHalfLife= 
-#PriorityCalcPeriod= 
-#PriorityFavorSmall= 
-#PriorityMaxAge= 
-#PriorityUsageResetPeriod= 
-#PriorityWeightAge= 
-#PriorityWeightFairshare= 
-#PriorityWeightJobSize= 
-#PriorityWeightPartition= 
-#PriorityWeightQOS= 
-# 
-# 
-# LOGGING AND ACCOUNTING 
-#AccountingStorageEnforce=0 
+#
+#
+# JOB PRIORITY
+#PriorityType=priority/basic
+#PriorityDecayHalfLife=
+#PriorityCalcPeriod=
+#PriorityFavorSmall=
+#PriorityMaxAge=
+#PriorityUsageResetPeriod=
+#PriorityWeightAge=
+#PriorityWeightFairshare=
+#PriorityWeightJobSize=
+#PriorityWeightPartition=
+#PriorityWeightQOS=
+#
+#
+# LOGGING AND ACCOUNTING
+#AccountingStorageEnforce=0
 #AccountingStorageHost=
 #AccountingStorageLoc=
 #AccountingStoragePass=
@@ -123,7 +123,7 @@ AccountingStorageType=accounting_storage/none
 #AccountingStorageUser=
 #AccountingStoreJobComment=YES
 ClusterName=runc
-#DebugFlags= 
+#DebugFlags=
 #JobCompHost=
 #JobCompLoc=
 #JobCompPass=
@@ -136,39 +136,39 @@ SlurmctldDebug=3
 SlurmctldLogFile=/var/log/slurm-llnl/slurmctld.log
 SlurmdDebug=3
 SlurmdLogFile=/var/log/slurm-llnl/slurmd.log
-#SlurmSchedLogFile= 
-#SlurmSchedLogLevel= 
-# 
-# 
-# POWER SAVE SUPPORT FOR IDLE NODES (optional) 
-#SuspendProgram= 
-#ResumeProgram= 
-#SuspendTimeout= 
-#ResumeTimeout= 
-#ResumeRate= 
-#SuspendExcNodes= 
-#SuspendExcParts= 
-#SuspendRate= 
-#SuspendTime= 
-# 
-# 
-# COMPUTE NODES 
+#SlurmSchedLogFile=
+#SlurmSchedLogLevel=
+#
+#
+# POWER SAVE SUPPORT FOR IDLE NODES (optional)
+#SuspendProgram=
+#ResumeProgram=
+#SuspendTimeout=
+#ResumeTimeout=
+#ResumeRate=
+#SuspendExcNodes=
+#SuspendExcParts=
+#SuspendRate=
+#SuspendTime=
+#
+#
+# COMPUTE NODES
 {%- for host in hosts %}
-{% if host.facts and host.facts['values']['slurm'] -%}
-{{ host.facts['values']['slurm'] }}
+{% if host.facts and host.facts['slurm'] -%}
+{{ host.facts['slurm'] }}
 {%- else -%}
 NodeName={{ host.sname }}
 {%- endif %}
 {%- endfor %}
 
 {%- for group, hosts in groups.iteritems() %}
-PartitionName={{ group }} Nodes={{ hosts|join(',') }} State=UP {%- 
+PartitionName={{ group }} Nodes={{ hosts|join(',') }} State=UP {%-
     if group == default %} Default=YES{% endif %} AllowGroups=slurm,slurm-{{ group }}
 {%- endfor %}
 
-#NodeName=hog01 CPUs=2 Sockets=2 State=UNKNOWN 
-#NodeName=hog02 CPUs=2 Sockets=2 State=UNKNOWN 
-#NodeName=hog03 CPUs=2 Sockets=2 State=UNKNOWN 
-#NodeName=hog04 CPUs=2 Sockets=2 State=UNKNOWN 
+#NodeName=hog01 CPUs=2 Sockets=2 State=UNKNOWN
+#NodeName=hog02 CPUs=2 Sockets=2 State=UNKNOWN
+#NodeName=hog03 CPUs=2 Sockets=2 State=UNKNOWN
+#NodeName=hog04 CPUs=2 Sockets=2 State=UNKNOWN
 #PartitionName=debug Nodes=hog01,hog02 Default=YES MaxTime=INFINITE State=UP
 #PartitionName=release Nodes=hog03,hog04 Default=YES MaxTime=INFINITE State=UP

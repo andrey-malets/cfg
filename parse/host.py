@@ -24,7 +24,7 @@ class Host:
 
         self.addr  = (defaults.expand_ip(data.pop(0))
             if (len(data) and type(data[0]) is not dict) else None)
-        
+
         if len(data) and type(data[0]) is not dict:
             macs = data.pop(0)
             self.macs = (map(Host.expand_mac, macs)
@@ -40,6 +40,7 @@ class Host:
         self.fb = map(defaults.expand_ip, self.props.get('fb', []))
 
         self.groups = []
+        self.vm_host = None
 
     @property
     def snames(self):

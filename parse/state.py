@@ -5,6 +5,17 @@ from network  import Network, belongs_to
 from user     import User
 
 import network
+import yaml
+
+def init_yaml_ruby_parsers():
+    def construct_ruby_object(loader, suffix, node):
+        return loader.construct_yaml_map(node)
+
+    def construct_ruby_sym(loader, node):
+        return loader.construct_yaml_str(node)
+
+    yaml.add_multi_constructor(u"!ruby/object:", construct_ruby_object)
+    yaml.add_constructor(u"!ruby/sym", construct_ruby_sym)
 
 class State:
     def __init__(self, config, router_attrs):
@@ -48,3 +59,15 @@ class State:
 
     def is_gray(self, host):
         return host.addr != None and host.addr.startswith(self.defaults.network_prefix)
+
+    def parse_facts(self, facts_path):
+        init_yaml_ruby_parsers()
+        for host in self.hosts:
+            try:
+                with open('%s/%s.yaml' % (facts_path, host.name)) as facts:
+                    raw_facts = yaml.load(facts)
+                    assert(raw_facts['name'] == host.name)
+                    host.facts_expiration = raw_facts.get('expiration', None)
+                    host.facts = raw_facts.get('values', {})
+            except Exception as e:
+                pass # that's OK

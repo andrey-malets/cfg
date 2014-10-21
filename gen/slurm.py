@@ -1,16 +1,10 @@
-import jinja2, json
+import jinja2
 from cmd import add_cmd
 from parse.host import get_sname_dups
 
 @add_cmd('slurm', True, 1)
 def gen_slurm(state, template, facts_path):
-    for host in state.hosts:
-        try:
-            host.facts = None
-            with open('%s/%s' % (facts_path, host.name)) as facts:
-                host.facts = json.load(facts)
-        except Exception as e:
-            pass # that's OK
+    state.parse_facts(facts_path)
 
     default = state.defaults.slurm
     def get_matching(hosts): return filter(lambda host: default in host.props, hosts)

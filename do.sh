@@ -6,7 +6,7 @@ SERIAL="python $BASE/util/serial.py"
 ROUTER_ATTRS="$BASE/util/router-attrs.sh"
 DATA=/var/lib/cfg
 
-FACTS=$DATA/facts
+FACTS=/var/lib/puppet/yaml/facts
 CFGDIR=$BASE/cfg
 
 export CFG=$CFGDIR/conf.yaml
@@ -191,28 +191,6 @@ gather_ssh_known_hosts() {
             chown -R puppet.puppet $DIR
         fi
     done
-}
-
-refresh_facts() {
-    get_wget() {
-        echo "wget
-            --header=Accept:$2
-            --certificate /var/lib/puppet/ssl/certs/$1.pem
-            --private-key /var/lib/puppet/ssl/private_keys/$1.pem
-            --ca-certificate /var/lib/puppet/ssl/certs/ca.pem"
-    }
-
-    local URL="https://$ROUTER_HOST:8140/production"
-    local WGET=$(get_wget $ROUTER_HOST yaml)
-
-    mkdir -p $FACTS
-
-    $WGET -O - $URL/facts_search/search 2>/dev/null | awk '{print $2}' | grep -v '^$' |\
-    while read host; do
-        WGET=$(get_wget $ROUTER_HOST pson)
-        $WGET -O $FACTS/$host $URL/facts/$host 2>/dev/null
-    done
-    chown -R puppet.puppet $FACTS
 }
 
 gen_ssh_known_hosts_updater() {
@@ -417,7 +395,7 @@ mkdir -p $DATA
 export ROUTER_DEV=$($ROUTER_ATTRS dev)
 export ROUTER_SRC=$($ROUTER_ATTRS src)
 
-almost_all() {
+all() {
     gen_dhcp
     gen_dns
     gen_iptables_ports
@@ -440,13 +418,8 @@ almost_all() {
     gen_ups_mrtg
 }
 
-all() {
-    refresh_facts
-    almost_all
-}
-
 if [ $# -eq 0 ]; then
-    almost_all
+    all
 else
     cmd=$1; shift
     $cmd "$@"
