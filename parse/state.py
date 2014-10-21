@@ -5,7 +5,7 @@ from network  import Network, belongs_to
 from user     import User
 
 import network
-import yaml
+import yaml, json
 
 def init_yaml_ruby_parsers():
     def construct_ruby_object(loader, suffix, node):
@@ -63,11 +63,15 @@ class State:
     def parse_facts(self, facts_path):
         init_yaml_ruby_parsers()
         for host in self.hosts:
+            host.facts = None
             try:
                 with open('%s/%s.yaml' % (facts_path, host.name)) as facts:
                     raw_facts = yaml.load(facts)
                     assert(raw_facts['name'] == host.name)
                     host.facts_expiration = raw_facts.get('expiration', None)
                     host.facts = raw_facts.get('values', {})
+                    if 'pyxendomains' in host.facts:
+                        host.facts['pyxendomains'] = json.load(
+                            host.facts['pyxendomains'])
             except Exception as e:
                 pass # that's OK
