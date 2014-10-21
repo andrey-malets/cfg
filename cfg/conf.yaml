@@ -213,6 +213,12 @@ hosts:
 
 #- [[pioneer, p],          18.1, {admin: uzer}]
 
+- [ r14-test1,            16.1,    000c29dfabc1, {admin: bay}]
+- [ r14-test2,            16.2,    000c29dfabc2, {admin: dimmo}]
+- [ r14-test3,            16.3,    000c29dfabc3, {admin: a799853}]
+- [ r14-test4,            16.4,    000c29dfabc4, {admin: kost}]
+- [ r14-test5,            16.5,    000c29dfabc5, {admin: last}]
+
 - [ uzer-work,            19.198,  {admin: uzer}]
 - [ uzer-hp,              19.202,  {admin: uzer}]
 
