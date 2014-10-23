@@ -85,7 +85,7 @@ groups:
 - [ups,        '.+-ups',                    {services: [ups], admin: uzer}]
 - [embedded,   [aps, switches, paper, ups], {services: [http], admin: uzer}]
 
-#- [621-pcs,   '621-\d\d',                   {admin: victor.samin}]
+#- [621-pcs,   '621-\d\d',                   {admin: victor.samun}]
 - [633-pcs,    '(stream|cuda)-pc',          {services: [rrdp], admin: kost}]
 - [hs,         'h\d\d',                     {services: [amt],
                                              admin: uzer,
