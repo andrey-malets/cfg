@@ -27,8 +27,14 @@ class State:
         self.groups   = map(Group,   config['groups'])
         self.networks = map(lambda item: Network(item, router_attrs),
                                          config['networks'])
-        self.users    = dict((user.nickname, user) for user in
-                            map(User, config['people']))
+
+        def is_group(line): return len(line) == 2
+        def is_user(line): return len(line) > 2
+
+        people = config['people']
+        self.users = dict((user.nickname, user) for user in
+            map(User, filter(is_user, people)))
+        self.user_groups = dict(filter(is_group, people))
 
         self.errors.extend(check_hosts(self.hosts))
         self.errors.extend(expand_groups(self.groups, self.hosts))
@@ -59,6 +65,10 @@ class State:
 
     def is_gray(self, host):
         return host.addr != None and host.addr.startswith(self.defaults.network_prefix)
+
+    def is_user(self, spec):
+        assert(spec in self.users or spec in self.user_groups)
+        return spec in self.users
 
     def parse_facts(self, facts_path):
         init_yaml_ruby_parsers()
