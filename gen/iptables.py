@@ -46,7 +46,7 @@ class Rule:
             self.chain, restrictions, self.target)
 
 def put_if_exists(user, rule):
-    print ("iptables -L '%s' 2>&1 >/dev/null && %s" %
+    print ("iptables -L '%s' 2>/dev/null >/dev/null && %s" %
         (cn2chain(user), rule.format()))
 
 def get_pub_port(host):
