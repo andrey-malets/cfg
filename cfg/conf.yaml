@@ -24,6 +24,9 @@ people:
 - [yariksuperman,  "Yaroslav Borcheninov", yariksuperman@gmail.com]
 - [yury.pliner,    "Yury Pliner",          yury.pliner@gmail.com]
 - [znick,          "Nickolai Zhuravlev",   znick@znick.ru]
+- [r14-t,          [uzer, and, bay, bosonojka5, dimmo, kopeicev, kost, znick,
+                    ld, eburgforever, kiskachi.maria, dqkrait, crassirostris,
+                    victor.samun, muzafarov, a799853, serg2443537]]
 
 defaults:
   mon: monitoring@urgu.org
@@ -115,6 +118,7 @@ groups:
 
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
+- [r14-t,      '^(r14-test[1-5])$',         {access: {r14-t: full}}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
