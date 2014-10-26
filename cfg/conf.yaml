@@ -175,7 +175,7 @@ hosts:
                                                   backend_for: irclog.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
-#   free                  10.225
+- [ clt4,                 10.225, [00142a496555, 0004e21c72ec]]
 - [ canion,               10.226,  001eec2cf0f2, {services: [nvidia], sudoers: [kost]}]
 - [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
@@ -197,8 +197,8 @@ hosts:
 - [[itanium,it],          10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer}]
 - [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'], admin: muzafarov}]
-#   free                  10.241
-#   free                  10.242
+- [ clt5,                 10.241, [00142a402267, 0004e21c71a4]]
+- [ clt6,                 10.242, [00142a49655a, 0004e21c72da]]
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru,
