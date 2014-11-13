@@ -14,7 +14,7 @@ echo "cfg_file=$output" >> "$config"
 chmod o+r "$output" "$config"
 
 python "$BASE/main.py" nagios "$CFGDIR/nagios.template" > "$output"
-/usr/bin/env nagios3 -v "$config"
+sudo -u nagios /usr/bin/env nagios3 -v "$config"
 rv=$?
 
 rm "$output" "$config"
