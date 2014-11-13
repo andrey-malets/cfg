@@ -3,7 +3,7 @@ python:
     - "2.7"
 before_install:
     - sudo apt-get update -qq
-    - sudo apt-get install nagios3-core
+    - sudo apt-get install nagios3-core nagios-nrpe-plugin
 install:
     - pip install pyyaml Jinja2
 script: nosetests && ./test/nagios.sh
