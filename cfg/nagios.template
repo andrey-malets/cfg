@@ -181,16 +181,10 @@ define host {
 
 {% if 'services' in host.props %}
 
-{% if 'unix' in host.props['services'] or 'ssh' in host.props['services'] %}
 define service {
     use                 generic-service
+    name                service-on-{{ state.get_canonical_hostname(host) }}
     host_name           {{ state.get_canonical_hostname(host) }}
-    service_description SSH server
-    {%- if 'ssh_port' in host.props %}
-    check_command       check_ssh_port!{{ host.props['ssh_port']}}
-    {%- else %}
-    check_command       check_ssh
-    {%- endif %}
     contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
@@ -198,14 +192,23 @@ define service {
     failure_prediction_enabled 0
     {% endif %}
 }
+
+{% if 'unix' in host.props['services'] or 'ssh' in host.props['services'] %}
+define service {
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
+    service_description SSH server
+    {%- if 'ssh_port' in host.props %}
+    check_command       check_ssh_port!{{ host.props['ssh_port']}}
+    {%- else %}
+    check_command       check_ssh
+    {%- endif %}
+}
 {% endif %}
 
 {% if 'unix' in host.props['services'] %}
 define service {
-    use                 generic-service
-    host_name           {{ state.get_canonical_hostname(host) }}
-    service_description Puppet client
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    use                     service-on-{{ state.get_canonical_hostname(host) }}
+    service_description     Puppet client
     active_checks_enabled   0
     passive_checks_enabled  1
     check_freshness         1
@@ -218,7 +221,7 @@ define service {
 {% if 'http' in host.props['services'] %}
 {% if not 'backend_for' in host.props or host.props['backend_for'] is string %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     {% if 'backend_for' in host.props %}
     service_description http://{{ host.props['backend_for'] }}
     check_command       check_http2!{{ host.props['backend_for'] }}
@@ -226,28 +229,14 @@ define service {
     service_description HTTP server
     check_command       check_http
     {% endif %}
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 {% else %}
 {% for vhost in host.props['backend_for'] %}
 {% if vhost.find('*') == -1 %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description http://{{ vhost }}
     check_command       check_http2!{{ vhost }}
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 {% endif %}   # find
 {% endfor %}  # for vhost in host.props['backend_for']
@@ -256,210 +245,115 @@ define service {
 
 {% if 'ups' in host.props['services'] %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Battery capacity
     check_command       check_ups_capacity!public
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
-
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Load
     check_command       check_ups_load!public
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
-
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Internal temperature
     check_command       check_ups_int_temp!public
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 {% if 'ext_temp' in host.props['services'] %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description External temperature
     check_command       check_ups_ext_temp!public
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 {% endif %}
 {% endif %}
 
 {% if 'unix' in host.props['services'] %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description CPU load
     check_command       check_nrpe_1arg!check_load
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
-
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Disk usage
     check_command       check_nrpe_1arg!check_disk
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
-
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Process count
     check_command       check_nrpe_1arg!check_total_procs
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
-
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Zombie processes
     check_command       check_nrpe_1arg!check_zombie_procs
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
-
 {% if 'sensors' in host.props %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Sensors
     check_command       check_nrpe_1arg!check_sensors
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 {% endif %}
 
 {% if 'hadoop-master' in host.props['services'] %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Hadoop NameNode
     check_command       check_nrpe_1arg!check_namenode
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     servicegroups       hadoop
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Hadoop JobTracker
     check_command       check_nrpe_1arg!check_jobtracker
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     servicegroups       hadoop
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 {% endif %}
 
 {% if 'slurm-master' in host.props['services'] %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Slurm master
     check_command       check_nrpe_1arg!check_slurm_master
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 {% endif %}
 
 {% if 'megaraid' in host.props['services'] %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description RAID status
     check_command       check_nrpe_1arg!check_megaraid
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
 }
 {% endif %}
 
 {% if 'managed' in host.props %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Hadoop DataNode
     check_command       check_nrpe_1arg!check_datanode
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     servicegroups       hadoop
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Hadoop TaskTracker
     check_command       check_nrpe_1arg!check_tasktracker
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
     servicegroups       hadoop
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Slurm node
     check_command       check_nrpe_1arg!check_slurm_node
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 {% endif %}
 
 {% if not 'managed' in host.props %}
 define service {
-    use                 generic-service
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description APT package state
     check_command       check_nrpe_1arg!check_apt
     check_interval      3600
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
 }
 {% endif %}
 
