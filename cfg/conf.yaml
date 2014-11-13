@@ -114,6 +114,8 @@ groups:
 - [managed,    [cl, volatile], '(uzer|znick)-pc', {services: [unix],
                                                    admin: uzer,
                                                    dhcp: {ipxe.scriptlet: cow},
+                                                   nagios:         {check_period: managed_up},
+                                                   nagios_service: {check_period: managed_up},
                                                    managed: 1}]
 
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]

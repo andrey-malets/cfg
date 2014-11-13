@@ -81,6 +81,18 @@ define timeperiod {
     alias           Never
 }
 
+define timeperiod {
+    timeperiod_name managed_up
+    alias           Uptime of managed machines
+    sunday          00:00-06:50,07:30-24:00
+    monday          00:00-06:50,07:30-24:00
+    tuesday         00:00-06:50,07:30-24:00
+    wednesday       00:00-06:50,07:30-24:00
+    thursday        00:00-06:50,07:30-24:00
+    friday          00:00-06:50,07:30-24:00
+    saturday        00:00-06:50,07:30-24:00
+}
+
 define contact {
     contact_name                    default
     alias                           "Default monitoring list"
@@ -191,6 +203,11 @@ define service {
     flap_detection_enabled     0
     failure_prediction_enabled 0
     {% endif %}
+    {%- if 'nagios_service' in host.props -%}
+    {%- for name, value in host.props['nagios_service'].iteritems() %}
+    {{ name }} {{ value }}
+    {%- endfor -%}
+    {%- endif %}
 }
 
 {% if 'unix' in host.props['services'] or 'ssh' in host.props['services'] %}
