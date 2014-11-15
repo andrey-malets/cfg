@@ -116,12 +116,14 @@ groups:
 - [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
                                              sensors: ['coretemp:temp*:10,16,55,60']}]
 
-- [managed,    [cl, volatile], '(uzer|znick)-pc', {services: [unix],
-                                                   admin: uzer,
-                                                   dhcp: {ipxe.scriptlet: cow},
-                                                   nagios:         {check_period: managed_up},
-                                                   nagios_service: {check_period: managed_up},
-                                                   managed: 1}]
+- [managed,    [managed-test, cl, volatile], '(uzer|znick)-pc',
+                                            {services: [unix],
+                                             admin: uzer,
+                                             dhcp: {ipxe.scriptlet: cow},
+                                             nagios:         {check_period: managed_up},
+                                             nagios_service: {check_period: managed_up},
+                                             managed: 1}]
+- [managed-test,   '^image(32|64)-test$']
 - [managed-master, '^image(32|64)$',        {admin: uzer,
                                              services: [smb, ad, managed-apt,
                                                         autoupdate, unix,
@@ -249,7 +251,7 @@ hosts:
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
 #   free
-#   free
+- [ image64-test,         10.251,  000c29ad7768, {dhcp: {ipxe.scriptlet: cow}}]
 - [ image64,              10.252,  000c29ad7767]
 #   main-switch           10.253
 #   dijkstra              10.254
@@ -332,7 +334,7 @@ hosts:
 - [[hog02.runc, hog2.runc], 12.2, 0019d17ebb9f]
 - [[hog03.runc, hog3.runc], 12.3, 0019d17e9e1f]
 - [[hog04.runc, hog4.runc], 12.4, 0019d17e94de]
-- [[hog05.runc, hog5.runc], 12.5, 000c29ad7768, {dhcp: {ipxe.scriptlet: cow}}] # test vm
+# there is no spoon
 - [[hog06.runc, hog6.runc], 12.6, 0019d17e934c]
 #- [[hog07.runc, hog7.runc], 12.7, 0019d17eb922]
 #- [[hog08.runc, hog8.runc], 12.8, 0019d17f037c]
