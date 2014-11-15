@@ -1,5 +1,5 @@
 import re
-from util import ValueFromGroup, ValidationError, fromgroup, primitive
+from util import ValueFromGroup, ValidationError, fromgroup, primitive, get_type
 
 class Group:
     def __init__(self, data):
@@ -36,10 +36,9 @@ def merge(src, dst):
     def check(name, prop, dst):
         valid = name not in dst
         if not valid:
-            stype, dtype = type(prop), type(dst[name])
+            stype, dtype = get_type(prop), get_type(dst[name])
             if stype == None: valid = True
-            elif stype in [str, ValueFromGroup]: valid = dtype in [str, ValueFromGroup]
-            elif stype in [dict, list]: valid = (stype == dtype)
+            else: valid = (stype == dtype)
         if not valid:
             errors.append(MergeError('property "%s" type mismatch: %s and %s' %
                 (name, type(prop), type(dst[name]))))
@@ -51,13 +50,17 @@ def merge(src, dst):
                 return
             if primitive(prop) or fromgroup(prop):
                 value = prop if primitive(prop) else prop.value
+                depth = 1 if primitive(prop) else prop.depth + 1
                 if name not in dprops:
-                    dprops[name] = ValueFromGroup(value, src)
+                    dprops[name] = ValueFromGroup(value, src, depth)
                 elif type(dprops[name]) == ValueFromGroup:
-                    errors.append(MergeError(
-                        ('value for "%s" is absent in "%s" but ' +
-                         'came from two diffrent groups: "%s" and "%s", can\'t merge') %
-                        (name, dst, src, dprops[name].source)))
+                    if dprops[name].depth == depth:
+                        errors.append(MergeError(
+                            ('value for "%s" is absent in "%s" but ' +
+                             'came from two diffrent groups: "%s" and "%s", can\'t merge') %
+                            (name, dst, src, dprops[name].source)))
+                    elif dprops[name].depth > depth:
+                        dprops[name] = ValueFromGroup(value, src, depth)
             elif type(prop) == list:
                 dprops[name] = (list(set(dprops[name] + prop))
                     if name in dprops else prop)
