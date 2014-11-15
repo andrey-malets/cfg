@@ -109,7 +109,7 @@ groups:
                                                        'w83627thf:temp2:10,15,50,55',
                                                        'w83627thf:fan2:500,800,3000,4000']}]
 - [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
-                                             sensors: ['coretemp:temp*:10,16,50,60']}]
+                                             sensors: ['coretemp:temp*:10,16,55,60']}]
 
 - [managed,    [cl, volatile], '(uzer|znick)-pc', {services: [unix],
                                                    admin: uzer,
