@@ -135,7 +135,10 @@ hosts:
                                         ups: hlu,
                                         admin: uzer}]
 - [[mmarkov, mm],              9.4,     000c29dfeeff, {admin: uzer, services: [openvz]}]
-- [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {ups: hlu, admin: uzer}]
+- [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {
+                                        fb: [10.228],
+                                        ups: hlu,
+                                        admin: uzer}]
 - [[630-switch, bs],           9.6,     001b11c344e6]
 - [[hp-switch, hps],           9.7,     001ec1831c01]
 - [[hog-switch, hs],           9.8,     001ac1d1a981]
@@ -180,7 +183,7 @@ hosts:
 - [ clt4,                 10.225, [00142a496555, 0004e21c72ec]]
 - [ canion,               10.226,  001eec2cf0f2, {services: [nvidia], sudoers: [kost]}]
 - [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
-#- [ site-back,            10.228,                {backend_for: site.hackerdom.ru}]  #?
+#   hamming-fastbone      10.228
 #   markov-fastbone       10.229
 - [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 3389: 3389, 6817: 6817},
                                                   admin: uzer, services: [hadoop-master, slurm-master]}]
