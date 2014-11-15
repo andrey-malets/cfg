@@ -168,10 +168,10 @@ hosts:
 #   dijkstra              9.254
 
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
-- [ clt1,                 10.216, [00142a485af5, 0004e21c735b]]
-- [ clt2,                 10.217, [00142a496556, 0004e21c716a]]
+#   free
+#   free
 - [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
-- [ clt3,                 10.219, [00142a47b037, 0004e21c72d6]]
+#   free
 - [ asus1,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211},
                                                   tcp_fwd: {60211: 60211},
@@ -180,7 +180,7 @@ hosts:
                                                   backend_for: irclog.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
-- [ clt4,                 10.225, [00142a496555, 0004e21c72ec]]
+#   free
 - [ canion,               10.226,  001eec2cf0f2, {services: [nvidia], sudoers: [kost]}]
 - [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #   hamming-fastbone      10.228
@@ -202,8 +202,8 @@ hosts:
 - [[itanium,it],          10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer}]
 - [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'], admin: muzafarov}]
-- [ clt5,                 10.241, [00142a402267, 0004e21c71a4]]
-- [ clt6,                 10.242, [00142a49655a, 0004e21c72da]]
+#   free
+#   free
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru,
@@ -214,9 +214,9 @@ hosts:
 - [ hog.runc,             10.247,  000c29ad7767, {admin: uzer, services: [managed-apt]}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
-#   free                  10.250
-#   free                  10.251
-#   free                  10.252
+#   free
+#   free
+#   free
 #   main-switch           10.253
 #   dijkstra              10.254
 
