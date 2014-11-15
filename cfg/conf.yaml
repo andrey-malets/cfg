@@ -103,8 +103,13 @@ groups:
 - [bhogs,      'hog(0\d|1[0-7])',           {hadoop_rack: big_hog}]
 - [shogs,      'hog(1(8|9)|2\d)',           {hadoop_rack: small_hog}]
 
-- [cl,         'clt\d',                     {hadoop_rack: runc,
-                                             modules: [w83627hf],
+- [cl,         [clh, clv],                  {hadoop_rack: runc}]
+- [clh,        'clh\d+',                    {dhcp: {ipxe.scriptlet: cow32},
+                                             modules: [lm85],
+                                             sensors: ['lm85c:temp1:10,15,50,55',
+                                                       'lm85c:temp2:10,15,50,55',
+                                                       'lm85c:fan1:1000,1500,5000,5500']}]
+- [clv,        'clv\d+',                    {modules: [w83627hf],
                                              sensors: ['w83627thf:temp1:10,15,50,55',
                                                        'w83627thf:temp2:10,15,50,55',
                                                        'w83627thf:fan2:500,800,3000,4000']}]
@@ -117,6 +122,7 @@ groups:
                                                    nagios:         {check_period: managed_up},
                                                    nagios_service: {check_period: managed_up},
                                                    managed: 1}]
+- [managed-master, '^(hog|image32)$',      {services: [smb, ad]}]
 
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
@@ -127,7 +133,7 @@ hosts:
 - [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer,
                                                                  services: [adaptecraid],
                                                                  ups: bfu}]
-- [[markov, m],           9.3,    [0015176b9b3c, 0015176b9b3d], {
+- [[markov, m],                9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
                                         backend_for: m.fb.urgu.org,
@@ -167,6 +173,34 @@ hosts:
 - [[cluster-switch, cls],      9.32,    0004e279d328]
 #   dijkstra              9.254
 
+- [ clv1,                '10.181', 0004e21c716a ]
+- [ clv2,                '10.182', 0004e21c735b ]
+- [ clv3,                '10.183', 0004e21c71a4 ]
+- [ clv4,                '10.184', 0004e2263d38 ]
+- [ clv5,                '10.185', 0004e21c72d6 ]
+- [ clv6,                '10.186', 0004e21c72da ]
+- [ clv7,                '10.187', 0004e21c71da ]
+- [ clv8,                '10.188', 0004e21c6ede ]
+- [ clv9,                '10.189', 0004e2263a48 ]
+- [ clv10,               '10.190', 0004e21c718a ]
+
+- [ clh1,                '10.201', 0007e9dd821d ]
+- [ clh2,                '10.202', 0007e9dd7fda ]
+- [ clh3,                '10.203', 0007e9dd7d4e ]
+- [ clh4,                '10.204', 0007e9dd83b8 ]
+- [ clh5,                '10.205', 0007e9dd9488 ]
+- [ clh6,                '10.206', 0007e9dd942e ]
+- [ clh7,                '10.207', 0007e9dd8fc1 ]
+- [ clh8,                '10.208', 0007e9e4808b ]
+- [ clh9,                '10.209', 0007e9dd8fb8 ]
+- [ clh10,               '10.210', 0007e9dd7aa6 ]
+
+- [ re14,                 10.212,  000c7bcf7768, {admin: ld, services: [ssh]}]
+- [ image32-test,         10.213,  000c29bcbcf8, {dhcp: {ipxe.scriptlet: cow32}}]
+- [ image32,              10.214,  000c29bcbcf7, {admin: uzer,
+                                                  services: [managed-apt,
+                                                             unix,
+                                                             exim_default]}]
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
 #   free
 #   free
