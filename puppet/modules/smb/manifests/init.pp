@@ -1,4 +1,4 @@
-class smb {
+class smb inherits place {
     file { '/etc/smb.pwd':
         ensure => present,
         mode => '400',

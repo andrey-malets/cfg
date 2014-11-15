@@ -220,7 +220,21 @@ class known_hosts {
     }
 }
 
-class hadoop_base {
+class place {
+    group { 'place':
+        ensure => 'present',
+        gid => 10010,
+    }
+
+    file { '/place':
+        ensure => directory,
+        mode => '+t,ug+rwx,o-rw,o+x',
+        owner => root,
+        group => place,
+    }
+}
+
+class hadoop_base inherits place {
     file { '/etc/hadoop/hadoop-env.sh':
         mode => 644,
         owner => root,
@@ -247,13 +261,6 @@ class hadoop_base {
         owner => root,
         group => root,
         source => 'puppet:///files/hadoop/mapred-site.xml',
-    }
-
-    file { '/place':
-        ensure => directory,
-        mode => '+t,ug+rwx,o-rw,o+x',
-        owner => root,
-        group => place,
     }
 
     file { '/place/hadoop':
@@ -671,6 +678,10 @@ class exchange {
         ensure => installed,
     }
 
+    package { 'winbind':
+        ensure => absent,
+    }
+
     mount { '/exchange':
         require => [File['/exchange'], Package['cifs-utils']],
         ensure => mounted,
@@ -741,6 +752,72 @@ class localtime {
     }
 }
 
+class ad inherits ldap {
+    package { 'nslcd': ensure => installed }
+
+    service { 'nslcd':
+        ensure => 'running',
+        enable => 'true',
+        require => Package['nslcd'],
+    }
+
+    file { '/etc/nslcd.conf':
+        require => Package['nslcd'],
+        mode => 640,
+        owner => root,
+        group => nslcd,
+        source => 'puppet:///files/nslcd.conf',
+        notify => Service['nslcd'],
+    }
+
+    package { 'nscd': ensure => installed }
+
+    service { 'nscd':
+        ensure => 'running',
+        enable => 'true',
+        require => Package['nscd'],
+    }
+
+    file { '/etc/nscd.conf':
+        require => Package['nscd'],
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/nscd.conf',
+        notify => Service['nscd'],
+    }
+
+    augeas { 'ldap':
+        require => [Package['nslcd']],
+        context => '/files/etc/nsswitch.conf',
+        changes => ["set database[. = 'passwd']/service[1] files",
+                    "set database[. = 'passwd']/service[2] ldap",
+                    "set database[. = 'group']/service[1] files",
+                    "set database[. = 'group']/service[2] ldap",
+                    "set database[. = 'shadow']/service[1] files",
+                    "set database[. = 'shadow']/service[2] ldap"],
+        notify => Service['nscd'],
+    }
+
+    package { 'krb5-user':
+        ensure => installed,
+    }
+
+    file { '/etc/krb5.conf':
+        require => Package['krb5-user'],
+        mode => 644,
+        owner => root,
+        group => root,
+        source => 'puppet:///files/krb5.conf',
+    }
+}
+
+class sensors {
+    package { 'lm-sensors':
+        ensure => installed,
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -797,6 +874,7 @@ node '{{ host.name }}' {
                 group => root,
                 source => "puppet:///files/check_sensors.py",
             }
+            include sensors
         {% endif %}
 
         {% if 'sudoers' in host.props %}
@@ -930,6 +1008,14 @@ node '{{ host.name }}' {
             {% endif %}
 
             include ups
+        {% endif %}
+
+        {% if 'smb' in host.services %}
+            include smb
+        {% endif %}
+
+        {% if 'ad' in host.services %}
+            include ad
         {% endif %}
 
         $host = '{{ state.get_canonical_hostname(host) }}'
