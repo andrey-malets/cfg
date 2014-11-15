@@ -64,14 +64,14 @@ networks:
     descr: 'RUNC external network'}]
 
 groups:
-- [unix,       '^(.*-back|d|h|hog|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$',
+- [unix,       '^(.*-back|d|h|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$',
                                                     {services: [unix]}]
 - [windows,    [633-pcs], '(lick|dc3|ld-xp)',       {services: [windows, rrdp]}]
 - [xen,        '^(h|m|r|t)$',                       {services: [xen]}]
 - [megaraid,   '^(m|r|t)$',                         {services: [megaraid]}]
 - [http,       '^(anytask|school|hackerdom)-back$', {services: [http]}]
 - [https,      'redmine-back',                      {services: [https]}]
-- [uzers_unix, '^(h|hog|m|mm|n|p|r|t|ts|it|it2)$',  {services: [exim_default, autoupdate]}]
+- [uzers_unix, '^(h|m|mm|n|p|r|t|ts|it|it2)$',      {services: [exim_default, autoupdate]}]
 - [auto_vms,   '^((irc|school)-back|shannon)$',     {services: [exim_default, autoupdate]}]
 
 - [S5000PAL,   '^(m|h)$',                   {modules: [coretemp, i5k_amb],
@@ -122,7 +122,10 @@ groups:
                                                    nagios:         {check_period: managed_up},
                                                    nagios_service: {check_period: managed_up},
                                                    managed: 1}]
-- [managed-master, '^(hog|image32)$',      {services: [smb, ad]}]
+- [managed-master, '^image(32|64)$',        {admin: uzer,
+                                             services: [smb, ad, managed-apt,
+                                                        autoupdate, unix,
+                                                        exim_default]}]
 
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
@@ -197,10 +200,7 @@ hosts:
 
 - [ re14,                 10.212,  000c7bcf7768, {admin: ld, services: [ssh]}]
 - [ image32-test,         10.213,  000c29bcbcf8, {dhcp: {ipxe.scriptlet: cow32}}]
-- [ image32,              10.214,  000c29bcbcf7, {admin: uzer,
-                                                  services: [managed-apt,
-                                                             unix,
-                                                             exim_default]}]
+- [ image32,              10.214,  000c29bcbcf7]
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
 #   free
 #   free
@@ -245,12 +245,12 @@ hosts:
                                                                 www.hackerdom.ru],
                                                   admin: znick}]
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
-- [ hog.runc,             10.247,  000c29ad7767, {admin: uzer, services: [managed-apt]}]
+#   free
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
 #   free
 #   free
-#   free
+- [ image64,              10.252,  000c29ad7767]
 #   main-switch           10.253
 #   dijkstra              10.254
 
