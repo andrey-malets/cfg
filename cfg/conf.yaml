@@ -139,7 +139,6 @@ hosts:
                                                                  services: [adaptecraid],
                                                                  ups: bfu}]
 - [[markov, m],                9.3,    [0015176b9b3c, 0015176b9b3d], {
-                                        tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
                                         backend_for: m.fb.urgu.org,
                                         services: [http],
@@ -148,6 +147,7 @@ hosts:
 - [[mmarkov, mm],              9.4,     000c29dfeeff, {admin: uzer, services: [openvz]}]
 - [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {
                                         fb: [10.228],
+                                        services: [http],
                                         ups: hlu,
                                         admin: uzer}]
 - [[630-switch, bs],           9.6,     001b11c344e6]
@@ -170,7 +170,13 @@ hosts:
 - [[631-near-low-ups, bfu],    9.23,    00c0b731da0e, {services: [ext_temp]}]
 - [[airlab-switch, as],        9.24,    001b11c34547]
 - [[ritchie-ipmi, r-i],        9.25,    001e670fac42, {switch: hs}]
-- [[ritchie, r],               9.26,   [001e670fac40, 001e670fac41], {ups: hlu, admin: uzer}]
+- [[ritchie, r],               9.26,   [001e670fac40, 001e670fac41],
+                                       {tcp_fwd: {3260: 3260},
+                                        fb: [10.225],
+                                        backend_for: r.fb.urgu.org,
+                                        services: [http],
+                                        ups: hlu,
+                                        admin: uzer}]
 - [[631-far-low-ups, hpu],     9.27,    00c0b798608d, {services: [ext_temp]}]
 - [[631-far-high-ups, hpu2],   9.28,    00c0b72f2677]
 #- [[hog-high-ups, hhu],        9.29,    00c0b79860d9]
@@ -216,7 +222,7 @@ hosts:
                                                   backend_for: irclog.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
-#   free
+#   ritchie-fastbone      10.225
 - [ canion,               10.226,  001eec2cf0f2, {services: [nvidia], sudoers: [kost]}]
 - [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #   hamming-fastbone      10.228
