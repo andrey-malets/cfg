@@ -228,7 +228,9 @@ hosts:
 #   hamming-fastbone      10.228
 #   markov-fastbone       10.229
 - [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 3389: 3389, 6817: 6817},
-                                                  admin: uzer, services: [hadoop-master, slurm-master]}]
+                                                  admin: uzer, services: [hadoop-master,
+                                                                          slurm-master,
+                                                                          managed-apt]}]
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
 - [ hewlett,              10.232 , b499ba5732e9]
 - [ packard,              10.233 , b499ba5684d1]
