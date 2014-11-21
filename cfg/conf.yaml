@@ -131,7 +131,7 @@ groups:
 
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
-- [r14-t,      '^(r14-test[1-5])$',         {access: {r14-t: full}}]
+- [r14-t,      '^(r14-test[1-5])(-[1-5])?$', {access: {r14-t: full}}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
@@ -267,8 +267,13 @@ hosts:
 - [ r14-test1,            16.1,    000c29dfabc1, {admin: bay}]
 - [ r14-test2,            16.2,    000c29dfabc2, {admin: dimmo}]
 - [ r14-test3,            16.3,    000c29dfabc3, {admin: a799853}]
-- [ r14-test4,            16.4,    000c29dfabc4, {admin: kost}]
+- [ r14-test4,            16.4,    000c29dfabc4, {admin: muzafarov}]
 - [ r14-test5,            16.5,    000c29dfabc5, {admin: last}]
+- [ r14-test4-1,          16.6,    {admin: muzafarov}]
+- [ r14-test4-2,          16.7,    {admin: muzafarov}]
+- [ r14-test4-3,          16.8,    {admin: muzafarov}]
+- [ r14-test4-4,          16.9,    {admin: muzafarov}]
+- [ r14-test4-5,         '16.10',  {admin: muzafarov}]
 
 - [ uzer-work,            19.198,  {admin: uzer}]
 - [ uzer-hp,              19.202,  {admin: uzer}]
