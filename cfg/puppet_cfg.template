@@ -818,6 +818,16 @@ class sensors {
     }
 }
 
+class essential_soft {
+    {% for pkg in ['ntp',
+                   'atop', 'htop',
+                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2',
+                   'iperf', 'bridge-utils', 'vlan',
+                   'stress', 'hdparm', 'sysbench'] %}
+    package { '{{ pkg }}': ensure => installed }
+    {% endfor %}
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -848,9 +858,7 @@ node '{{ host.name }}' {
     {% endif %}
 
     {% if 'unix' in host.services %}
-        package { 'ntp':
-            ensure => installed,
-        }
+        include essential_soft
 
         {% if 'modules' in host.props %}
             exec { '/etc/init.d/kmod start':
