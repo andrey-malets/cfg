@@ -268,7 +268,7 @@ hosts:
 
 - [ r14-test1,            16.1,    000c29dfabc1, {admin: bay}]
 - [ r14-test2,            16.2,    000c29dfabc2, {admin: dimmo}]
-- [ r14-test3,            16.3,    000c29dfabc3, {admin: a799853}]
+- [ r14-test3,            16.3,    000c29dfabc3, {admin: dqkrait}]
 - [ r14-test4,            16.4,    000c29dfabc4, {admin: muzafarov}]
 - [ r14-test5,            16.5,    000c29dfabc5, {admin: serg2443537}]
 - [ r14-test4-1,          16.6,    {admin: muzafarov}]
