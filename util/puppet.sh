@@ -18,6 +18,6 @@ $scp /var/lib/puppet/ssl/certs/ca.pem $host:puppet/certs
 $scp /var/lib/puppet/ssl/certs/$host.pem $host:puppet/certs
 $scp /var/lib/puppet/ssl/private_keys/$host.pem $host:puppet/private_keys
 
-$ssh $host "./conf.sh cp -r puppet {}; rm -rf puppet"
+$ssh $host "/root/cow/conf.sh cp -r puppet {}; rm -rf puppet"
 
 $ssh $host reboot
