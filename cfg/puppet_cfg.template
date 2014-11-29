@@ -186,10 +186,6 @@ class managed-apt {
 }
 
 class runc_ca {
-    package { 'ca-certificates':
-        ensure => installed
-    }
-
     file { 'dijkstra.urgu.org.crt':
         path => '/usr/local/share/ca-certificates/dijkstra.urgu.org.crt',
         mode => 644,
@@ -821,7 +817,8 @@ class sensors {
 class essential_soft {
     {% for pkg in ['ntp',
                    'vim',
-                   'atop', 'htop',
+                   'ca-certificates',
+                   'atop', 'htop', 'iotop',
                    'parted', 'gnu-fdisk', 'gdisk', 'lvm2',
                    'iperf', 'bridge-utils', 'vlan',
                    'stress', 'hdparm', 'sysbench'] %}
