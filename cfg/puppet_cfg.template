@@ -816,11 +816,11 @@ class sensors {
 
 class essential_soft {
     {% for pkg in ['ntp',
-                   'vim',
+                   'vim', 'git', 'screen',
                    'ca-certificates',
                    'atop', 'htop', 'iotop',
                    'parted', 'gnu-fdisk', 'gdisk', 'lvm2',
-                   'iperf', 'bridge-utils', 'vlan',
+                   'iperf', 'bridge-utils', 'vlan', 'ifenslave',
                    'stress', 'hdparm', 'sysbench'] %}
     package { '{{ pkg }}': ensure => installed }
     {% endfor %}
