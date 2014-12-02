@@ -995,6 +995,9 @@ node '{{ host.name }}' {
                 ensure => present,
                 recipient => '{{ state.users[host.props['admin']].email }}'
             }
+
+            $mdadm_admin = '{{ state.users[host.props['admin']].email }}'
+            include mdadm
         {% endif %}
 
         {% if 'megaraid' in host.services %}
