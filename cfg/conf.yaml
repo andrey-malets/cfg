@@ -68,7 +68,7 @@ groups:
                                                     {services: [unix]}]
 - [windows,    [633-pcs], '(lick|dc3|ld-xp)',       {services: [windows, rrdp]}]
 - [xen,        '^(h|m|r|t)$',                       {services: [xen]}]
-- [megaraid,   '^(m|r|t)$',                         {services: [megaraid]}]
+- [megaraid,   '^(h|m|r|t)$',                       {services: [megaraid]}]
 - [http,       '^(anytask|school|hackerdom)-back$', {services: [http]}]
 - [https,      'redmine-back',                      {services: [https]}]
 - [uzers_unix, '^(h|m|mm|n|p|r|t|ts|it|it2)$',      {services: [exim_default, autoupdate]}]
@@ -148,7 +148,7 @@ hosts:
 - [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {
                                         fb: [10.228],
                                         services: [http],
-                                        ups: hlu,
+                                        ups: bfu,
                                         admin: uzer}]
 - [[630-switch, bs],           9.6,     001b11c344e6]
 - [[hp-switch, hps],           9.7,     001ec1831c01]
