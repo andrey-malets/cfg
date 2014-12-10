@@ -75,10 +75,10 @@ groups:
 - [auto_vms,   '^((irc|school)-back|shannon)$',     {services: [exim_default, autoupdate]}]
 
 - [S5000PAL,   '^(m|h)$',                   {modules: [coretemp, i5k_amb],
-                                             sensors: ['coretemp:temp*:10,15,45,50',
-                                                       'i5k_amb:temp*:10,15,55,60']}]
+                                             sensors: ['coretemp:temp*:8,10,45,50',
+                                                       'i5k_amb:temp*:8,10,55,60']}]
 - [S5520UR,    '^(r|t)$',                   {modules: [coretemp],
-                                             sensors: ['coretemp:temp*:10,15,45,50']}]
+                                             sensors: ['coretemp:temp*:8,10,45,50']}]
 
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
