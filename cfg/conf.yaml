@@ -65,14 +65,14 @@ networks:
 
 groups:
 - [unix,       '^(.*-back|d|h|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$',
-                                                    {services: [unix]}]
-- [windows,    [633-pcs], '(lick|dc3|ld-xp)',       {services: [windows, rrdp]}]
-- [xen,        '^(h|m|r|t)$',                       {services: [xen]}]
-- [megaraid,   '^(h|m|r|t)$',                       {services: [megaraid]}]
-- [http,       '^(anytask|school|hackerdom)-back$', {services: [http]}]
-- [https,      'redmine-back',                      {services: [https]}]
-- [uzers_unix, '^(h|m|mm|n|p|r|t|ts|it|it2)$',      {services: [exim_default, autoupdate]}]
-- [auto_vms,   '^((irc|school)-back|shannon)$',     {services: [exim_default, autoupdate]}]
+                                                      {services: [unix]}]
+- [windows,    [633-pcs], '(lick|dc3|ld-xp)',         {services: [windows, rrdp]}]
+- [xen,        '^(h|m|r|t)$',                         {services: [xen]}]
+- [megaraid,   '^(h|m|r|t)$',                         {services: [megaraid]}]
+- [http,       '^(anytask|school|hackerdom)-back$',   {services: [http]}]
+- [https,      'redmine-back',                        {services: [https]}]
+- [uzers_unix, '^(h|m|mm|n|p|r|t|ts|it|it2)$',        {services: [exim_default, autoupdate]}]
+- [auto_vms,   '^((irc|school|ructf)-back|shannon)$', {services: [exim_default, autoupdate]}]
 
 - [S5000PAL,   '^(m|h)$',                   {modules: [coretemp, i5k_amb],
                                              sensors: ['coretemp:temp*:8,10,45,50',
@@ -258,7 +258,7 @@ hosts:
 #   free
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
-- [ ructf-back,           10.250,  000c2963e5d0]
+- [ ructf-back,          '10.250', 000c2963e5d0, {admin: uzer}]
 - [ image64-test,         10.251,  000c29ad7768, {dhcp: {ipxe.scriptlet: cow}}]
 - [ image64,              10.252,  000c29ad7767]
 #   main-switch           10.253
