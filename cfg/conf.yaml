@@ -258,7 +258,7 @@ hosts:
 #   free
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
-#   free
+- [ ructf-back,           10.250,  000c2963e5d0]
 - [ image64-test,         10.251,  000c29ad7768, {dhcp: {ipxe.scriptlet: cow}}]
 - [ image64,              10.252,  000c29ad7767]
 #   main-switch           10.253
