@@ -125,7 +125,7 @@ def gen_user_access(state, host, chain):
         for spec, service in host.props['access'].iteritems():
             if state.is_user(spec):
                 rule = Rule(chain, cn2chain(spec))
-                put_if_exists(user, add_access(rule, host, service))
+                put_if_exists(spec, add_access(rule, host, service))
             else:
                 rule = Rule(chain, gn2chain(spec))
                 print add_access(rule, host, service).format()
