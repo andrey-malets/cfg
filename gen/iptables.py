@@ -96,8 +96,11 @@ def add_vnc_access(rule, host, vnc_port):
     port = 5900 + vnc_port
     return add_base_access(rule, host).set_proto('tcp').set_dport(port)
 
+def add_ssh_access(rule, host):
+    return add_base_access(rule, host).set_proto('tcp').set_dport(22)
+
 def add_access(rule, host, service):
-    mapping = {'full': add_base_access}
+    mapping = {'full': add_base_access, 'ssh': add_ssh_access}
     assert service in mapping, 'unknown access "%s"' % service
     return mapping[service](rule, host)
 
