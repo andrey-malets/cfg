@@ -820,7 +820,8 @@ class essential_soft {
                    'ca-certificates', 'atop', 'htop', 'iotop',
                    'parted', 'gnu-fdisk', 'gdisk', 'lvm2',
                    'iperf', 'bridge-utils', 'vlan', 'ifenslave-2.6',
-                   'stress', 'hdparm', 'sysbench'] %}
+                   'stress', 'hdparm', 'sysbench',
+                   'p7zip-full', 'gzip', 'lzma', 'zip', 'unzip'] %}
     package { '{{ pkg }}': ensure => installed }
     {% endfor %}
 }
