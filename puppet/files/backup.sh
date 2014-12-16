@@ -2,22 +2,27 @@
 
 set -e
 
-build_findcmd() {
+exec_findcmd() {
     local paths=(boot
                  lib/modules vmlinuz initrd.img
                  dev proc run sys tmp
                  home root
+                 usr/share/mime
                  var/{cache,log,local,spool}
                  var/lib/{apt{,itude},dkms,dpkg,gems,nagios3/spool,puppet})
     local exts=(d o pyc)
-    local rv= start=1
+    local rv=(find /) start=1
     for path in "${paths[@]}"; do
-        cond="-path /$path -prune"
-        [[ -z "$start" ]] && rv="$rv -o $cond" || rv="$rv $cond"
+        if [[ -z "$start" ]]; then
+            rv+=(-o -path "/$path" -prune)
+        else
+            rv+=(-path "/$path" -prune)
+        fi
         start=
     done
-    for ext in "${exts[@]}"; do rv="$rv -o -name *.$ext"; done
-    echo "find / $rv -o -type f -a -print0"
+    for ext in "${exts[@]}"; do rv+=(-o -name "*.$ext"); done
+    rv+=(-o -type f -a -print0)
+    "${rv[@]}"
 }
 
 pkgs() {
@@ -49,13 +54,11 @@ systemfiles() {
         allfiles[$file]=1
     done
 
-    findcmd=$(build_findcmd)
-
     tar cf - -T <(while read -r -d ''; do
         if [[ -z "${allfiles[$REPLY]}" ]]; then
             echo "$REPLY"
         fi
-    done < <($findcmd))
+    done < <(exec_findcmd))
 }
 
 userfiles() {
