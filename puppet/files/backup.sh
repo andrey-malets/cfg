@@ -11,18 +11,14 @@ exec_findcmd() {
                  var/{cache,log,local,spool}
                  var/lib/{apt{,itude},dkms,dpkg,gems,nagios3/spool,puppet})
     local exts=(d o pyc)
-    local rv=(find /) start=1
+    local cmd=(find /) start=1
     for path in "${paths[@]}"; do
-        if [[ -z "$start" ]]; then
-            rv+=(-o -path "/$path" -prune)
-        else
-            rv+=(-path "/$path" -prune)
-        fi
-        start=
+        [[ -z "$start" ]] && cmd+=(-o) || start=
+        cmd+=(-path "/$path" -prune)
     done
-    for ext in "${exts[@]}"; do rv+=(-o -name "*.$ext"); done
-    rv+=(-o -type f -a -print0)
-    "${rv[@]}"
+    for ext in "${exts[@]}"; do cmd+=(-o -name "*.$ext"); done
+    cmd+=(-o -type f -a -print0)
+    "${cmd[@]}"
 }
 
 pkgs() {
