@@ -55,9 +55,19 @@ systemfiles() {
         allfiles[$file]=1
     done
 
+    declare -A md5sums
+    while read -r -d ''; do
+        md5sum=${REPLY%% *}
+        file=${REPLY#* }
+        md5sums[$file]=$md5sum
+    done
+
     tar cf - -T <(while read -r -d ''; do
         if [[ -z "${allfiles[$REPLY]}" ]]; then
-            echo "$REPLY"
+            if [[ -z "${md5sums[$REPLY]}" ]] || \
+               [[ "${md5sums[$REPLY]}" != "$(md5sum "$REPLY")" ]]; then
+                echo "$REPLY"
+            fi
         fi
     done < <(exec_findcmd))
 }
