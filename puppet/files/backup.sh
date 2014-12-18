@@ -58,15 +58,16 @@ systemfiles() {
     declare -A md5sums
     while read -r -d ''; do
         md5sum=${REPLY%% *}
-        file=${REPLY#* }
+        file="/${REPLY#* }"
         md5sums[$file]=$md5sum
     done
 
-    tar cf - -T <(while read -r -d ''; do
+    tar cf - --null -T <(while read -r -d ''; do
         if [[ -z "${allfiles[$REPLY]}" ]]; then
             if [[ -z "${md5sums[$REPLY]}" ]] || \
-               [[ "${md5sums[$REPLY]}" != "$(md5sum "$REPLY")" ]]; then
-                echo "$REPLY"
+               [[ "${md5sums[$REPLY]}" != \
+                    "$(md5sum "$REPLY" | awk '{print $1}')" ]]; then
+                echo -en "$REPLY\0"
             fi
         fi
     done < <(exec_findcmd))
@@ -76,10 +77,42 @@ userfiles() {
     tar cf - /home /root
 }
 
+remote_backup() {
+    local rhost=$1 rcmd=$2 sumfile=$3 output=$4
+    [[ -f "$sumfile" ]] || touch "$sumfile"
+    ssh "$rhost" "/root/cfg_backup.sh" "$rcmd" < "$sumfile" > "$output"
+}
+
+update() {
+    local sumfile=$1 backup=$2
+
+    declare -A md5sums
+    while read -r -d ''; do
+        md5sum=${REPLY%% *}
+        file=${REPLY#* }
+        md5sums[$file]=$md5sum
+    done < "$sumfile"
+
+    while read -r; do
+        md5sum=$(tar xf "$backup" -O "$REPLY" | md5sum | awk '{print $1}')
+        md5sums[$REPLY]=$md5sum
+    done < <(tar tf "$backup")
+
+    for file in "${!md5sums[@]}"; do
+        echo -en "${md5sums[$file]} $file\0"
+    done > "$sumfile.new"
+
+    mv "$sumfile.new" "$sumfile"
+}
+
 case "$1" in
     pkgs) manual_pkgs ;;
     conf) conffiles ;;
     sys)  systemfiles ;;
     user) userfiles ;;
+
+    remote_backup) shift; remote_backup "$@" ;;
+    update)        shift; update "$@" ;;
+
     *)    exit 1 ;;
 esac
