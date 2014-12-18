@@ -9,7 +9,7 @@ exec_findcmd() {
                  dev proc run sys tmp
                  home place root
                  usr/share/{mime,snmp}
-                 var/{cache,log,local,spool}
+                 var/{cache,log,local,spool,tmp}
                  var/lib/{apt{,itude},dkms,dpkg,gems,nagios3/spool,puppet})
     local exts=(d o pyc)
     local cmd=(find /) start=1
