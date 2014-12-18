@@ -5,9 +5,10 @@ set -e
 exec_findcmd() {
     local paths=(boot
                  lib/modules vmlinuz initrd.img
+                 etc/{blkid.,fs}tab
                  dev proc run sys tmp
-                 home root
-                 usr/share/mime
+                 home place root
+                 usr/share/{mime,snmp}
                  var/{cache,log,local,spool}
                  var/lib/{apt{,itude},dkms,dpkg,gems,nagios3/spool,puppet})
     local exts=(d o pyc)
