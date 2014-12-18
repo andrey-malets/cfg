@@ -21,12 +21,16 @@ exec_findcmd() {
     "${cmd[@]}"
 }
 
-pkgs() {
+manual_pkgs() {
+    apt-mark showmanual
+}
+
+all_pkgs() {
     dpkg-query -W -f '${Package}:${Architecture}\n'
 }
 
 conffiles() {
-    all_pkgs=($(pkgs))
+    all_pkgs=($(all_pkgs))
     declare -A conffiles
     for spec in $(dpkg-query -f '${Conffiles}\n' -W "${all_pkgs[@]}" | \
                   egrep -v '^[[:space:]]*$' | awk '{print $1":"$2}'); do
@@ -43,7 +47,7 @@ conffiles() {
 }
 
 systemfiles() {
-    all_pkgs=($(pkgs))
+    all_pkgs=($(all_pkgs))
     declare -A allfiles
     for file in $(dpkg-query -L "${all_pkgs[@]}" | \
                   egrep -v '^[[:space:]]*$'); do
@@ -62,7 +66,7 @@ userfiles() {
 }
 
 case "$1" in
-    pkgs) pkgs ;;
+    pkgs) manual_pkgs ;;
     conf) conffiles ;;
     sys)  systemfiles ;;
     user) userfiles ;;
