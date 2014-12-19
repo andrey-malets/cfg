@@ -93,10 +93,25 @@ update() {
         md5sums[$file]=$md5sum
     done < "$sumfile"
 
-    while read -r; do
-        md5sum=$(tar xf "$backup" -O "$REPLY" | md5sum | awk '{print $1}')
-        md5sums[$REPLY]=$md5sum
-    done < <(tar tf "$backup")
+    script='
+import md5, sys, tarfile
+
+with tarfile.open(sys.argv[1]) as tfile:
+    for member in tfile:
+        md5sum = md5.new()
+        memberfile = tfile.extractfile(member)
+        while True:
+            data = memberfile.read(4096)
+            if len(data) == 0:
+                break
+            md5sum.update(data)
+        sys.stdout.write("{} {}\0".format(md5sum.hexdigest(),
+                                          member.name))'
+    while read -r -d ''; do
+        md5sum=${REPLY%% *}
+        file=${REPLY#* }
+        md5sums[$file]=$md5sum
+    done < <(python -c "$script" "$backup")
 
     for file in "${!md5sums[@]}"; do
         echo -en "${md5sums[$file]} $file\0"
