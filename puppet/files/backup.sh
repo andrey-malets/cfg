@@ -69,15 +69,36 @@ systemfiles() {
         md5sums[$file]=$md5sum
     done
 
-    tar cf - --null -T <(while read -r -d ''; do
-        if [[ -z "${allfiles[$REPLY]}" ]]; then
-            if [[ -z "${md5sums[$REPLY]}" ]] || \
-               [[ "${md5sums[$REPLY]}" != \
-                    "$(md5sum "$REPLY" | awk '{print $1}')" ]]; then
-                echo -en "$REPLY\0"
+    tar cf - --null -T <(
+        to_check=()
+        while read -r -d ''; do
+            if [[ -z "${allfiles[$REPLY]}" ]]; then
+                if [[ -z "${md5sums[$REPLY]}" ]]; then
+                    echo -en "$REPLY\0"
+                else
+                    to_check+=("$REPLY")
+                fi
             fi
+        done < <(exec_findcmd)
+
+        if [[ "${#to_check[@]}" -gt 0 ]]; then
+            for file in "${to_check[@]}"; do
+                echo -en "$file\0"
+            done | xargs --null md5sum | while read -r; do
+                start=${REPLY:0:1}
+                filename=${REPLY#*  }
+                if [[ "$start" == '\' ]]; then
+                    filename=$(echo -en "$filename")
+                    sum=${REPLY:1:32}
+                else
+                    sum=${REPLY:0:32}
+                fi
+                if [[ "${md5sums[$filename]}" != "$sum" ]]; then
+                    echo -en "$filename\0"
+                fi
+            done
         fi
-    done < <(exec_findcmd))
+    )
 }
 
 userfiles() {
