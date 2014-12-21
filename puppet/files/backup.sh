@@ -33,27 +33,34 @@ all_pkgs() {
 conffiles() {
     all_pkgs=($(all_pkgs))
     declare -A conffiles
-    for spec in $(dpkg-query -f '${Conffiles}\n' -W "${all_pkgs[@]}" | \
-                  egrep -v '^[[:space:]]*$' | awk '{print $1":"$2}'); do
-        if [[ -r "${spec%%:*}" ]]; then
-            conffiles[${spec%%:*}]=${spec##*:}
+    while read -r; do
+        if ! [[ -z "$REPLY" ]]; then
+            spec="${REPLY# *}"
+            file="${spec% *}"
+            sum="${spec##* }"
+            if [[ -r "$file" ]]; then
+                conffiles[$file]=$sum
+            fi
         fi
-    done
+    done < <(dpkg-query -f '${Conffiles}\n' -W "${all_pkgs[@]}")
 
-    tar cf - -T <(md5sum "${!conffiles[@]}" | while read sum conffile; do
-        if [[ "${conffiles[$conffile]}" != "$sum" ]]; then
-            echo "$conffile"
+    tar cf - -T <(while read -r; do
+        local sum="${REPLY%%  *}" file="${REPLY#*  }"
+        if [[ "${conffiles[$file]}" != "$sum" ]]; then
+            echo "$file"
         fi
-    done)
+    done < <(md5sum "${!conffiles[@]}"))
 }
 
 systemfiles() {
     all_pkgs=($(all_pkgs))
     declare -A allfiles
-    for file in $(dpkg-query -L "${all_pkgs[@]}" | \
-                  egrep -v '^[[:space:]]*$'); do
-        allfiles[$file]=1
-    done
+
+    while read -r; do
+        if ! [[ -z "$REPLY" ]]; then
+            allfiles[$REPLY]=1
+        fi
+    done < <(dpkg-query -L "${all_pkgs[@]}")
 
     declare -A md5sums
     while read -r -d ''; do
