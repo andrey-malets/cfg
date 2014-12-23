@@ -867,6 +867,74 @@ node '{{ host.name }}' {
     {% if 'unix' in host.services %}
         include essential_soft
 
+        {% if 'backups' in host.props %}
+            group { 'backupers': ensure => present, }
+
+            {% set backup_root = host.props['backups'][0] %}
+
+            file { '{{ backup_root }}':
+                require => Group['backupers'],
+                ensure => directory,
+                owner => root,
+                group => backupers,
+                mode => 770,
+            }
+
+            {% for bhost, bprops in host.props['backups'][1].iteritems() %}
+                {% set backed_host = state.find(bhost) %}
+                {% set backup_user = 'backup-{}'.format(backed_host.name) %}
+                {% set backup_dir = '{}/{}'.format(backup_root,
+                                                   backed_host.name) %}
+                user { '{{ backup_user }}':
+                    require => Group['backupers'],
+                    home => '{{ backup_dir }}',
+                    ensure => present,
+                    gid => backupers,
+                }
+
+                file { '{{ backup_dir }}':
+                    require => User['{{ backup_user }}'],
+                    ensure => directory,
+                    owner => '{{ backup_user }}',
+                    group => backupers,
+                    mode => 770,
+                }
+
+                file { '{{ backup_dir }}/.ssh':
+                    require => User['{{ backup_user }}'],
+                    ensure => directory,
+                    owner => '{{ backup_user }}',
+                    group => backupers,
+                    mode => 700,
+                }
+            {% endfor %}
+
+            file { '/usr/local/bin/backup-auth.sh':
+                ensure => present,
+                owner => root,
+                group => backupers,
+                mode => 750,
+                content => '#!/usr/bin/env bash
+                    case "$1" in
+                        generate_id)
+                            keyfile="$HOME/.ssh/id_rsa"
+                            if ! [[ -f "$keyfile" ]]; then
+                                ssh-keygen -b 4096 -f "$keyfile" -N ""
+                            fi
+                        ;;
+                        *)
+                            for host in {%- for bhost in
+                                            host.props['backups'][1].iterkeys() -%}
+                                        {{ ' {}'.format(state.find(bhost).name) }}
+                                        {%- endfor -%}; do
+                                su "backup-$host" /usr/bin/env bash -c "$0 generate_id"
+                            done
+                        ;;
+                    esac
+                ',
+            }
+        {% endif %}
+
         {% if 'modules' in host.props %}
             exec { '/etc/init.d/kmod start':
                 refreshonly => true,
