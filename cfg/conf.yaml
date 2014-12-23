@@ -19,6 +19,7 @@ people:
 - [ld,             "Bogdan Melnik",        ld@hackerdom.ru]
 - [muzafarov,      "Maxim Muzafarov",      m.muzafarov@gmail.com]
 - [ns,             "Nickolai Shturkin",    ns@splinex.com]
+- [pahaz,          "Pavel Blinov",         pahaz.blinov@gmail.com]
 - [serg2443537,    "Sergey Patrushev",     serg2443537@rambler.ru]
 - [uzer,           "Andrey Malets",        andrey.malets@gmail.com]
 - [victor.samun,   "Victor Samun",         victor.samun@gmail.com]
@@ -66,14 +67,14 @@ networks:
 
 groups:
 - [unix,       '^(.*-back|d|h|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$',
-                                                      {services: [unix]}]
-- [windows,    [633-pcs], '(lick|dc3|ld-xp)',         {services: [windows, rrdp]}]
-- [xen,        '^(h|m|r|t)$',                         {services: [xen]}]
-- [megaraid,   '^(h|m|n|r|t)$',                       {services: [megaraid]}]
-- [http,       '^(anytask|school|hackerdom)-back$',   {services: [http]}]
-- [https,      'redmine-back',                        {services: [https]}]
-- [uzers_unix, '^(h|m|mm|n|p|r|t|ts|it|it2)$',        {services: [exim_default, autoupdate]}]
-- [auto_vms,   '^((irc|school|ructf)-back|shannon)$', {services: [exim_default, autoupdate]}]
+                                                               {services: [unix]}]
+- [windows,    [633-pcs], '(lick|dc3|ld-xp)',                  {services: [windows, rrdp]}]
+- [xen,        '^(h|m|r|t)$',                                  {services: [xen]}]
+- [megaraid,   '^(h|m|n|r|t)$',                                {services: [megaraid]}]
+- [http,       '^(anytask|school|hackerdom|kvkt|ructf)-back$', {services: [http]}]
+- [https,      'redmine-back',                                 {services: [https]}]
+- [uzers_unix, '^(h|m|mm|n|p|r|t|ts|it|it2)$',                 {services: [exim_default, autoupdate]}]
+- [auto_vms,   '^((irc|school|ructf|kvkt)-back|shannon)$',     {services: [exim_default, autoupdate]}]
 
 - [S5000PAL,   '^(m|h)$',                   {modules: [coretemp, i5k_amb],
                                              sensors: ['coretemp:temp*:8,10,45,50',
@@ -269,7 +270,11 @@ hosts:
                                                                 www.hackerdom.ru],
                                                   admin: znick}]
 - [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
-#   free
+- [ kvkt-back,            10.247,  000c29010247, {admin: pahaz,
+                                                  backend_for: [kvkt.imkn.urfu.ru,
+                                                             '*.kvkt.imkn.urfu.ru',
+                                                                urfuclub.ru,
+                                                             '*.urfuclub.ru']}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
 - [ ructf-back,          '10.250', 000c2963e5d0, {admin: uzer,
