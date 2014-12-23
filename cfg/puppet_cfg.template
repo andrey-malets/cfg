@@ -682,9 +682,9 @@ class exchange {
         require => [File['/exchange'], Package['cifs-utils']],
         ensure => mounted,
         atboot => true,
-        device => '//lick/exchange',
+        device => '//exchange/exchange',
         fstype => 'cifs',
-        options => 'user=guest,file_mode=0666,dir_mode=0777',
+        options => 'guest,file_mode=0666,dir_mode=0777',
     }
 }
 
