@@ -44,7 +44,7 @@ conffiles() {
         fi
     done < <(dpkg-query -f '${Conffiles}\n' -W "${all_pkgs[@]}")
 
-    tar cf - -T <(while read -r; do
+    tar cf - --numeric-owner -T <(while read -r; do
         local sum="${REPLY%%  *}" file="${REPLY#*  }"
         if [[ "${conffiles[$file]}" != "$sum" ]]; then
             echo "$file"
@@ -69,7 +69,7 @@ systemfiles() {
         md5sums[$file]=$md5sum
     done
 
-    tar cf - --null -T <(
+    tar cf - --null --numeric-owner -T <(
         to_check=()
         while read -r -d ''; do
             if [[ -z "${allfiles[$REPLY]}" ]]; then
@@ -102,7 +102,7 @@ systemfiles() {
 }
 
 userfiles() {
-    tar cf - /home /root
+    tar cf - --numeric-owner /home /root
 }
 
 remote_backup() {
