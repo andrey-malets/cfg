@@ -826,6 +826,15 @@ class essential_soft {
     {% endfor %}
 }
 
+class backup {
+    file {'/usr/local/bin/backup.sh':
+        mode => 500,
+        owner => root,
+        group => root,
+        source => "puppet:///files/backup.sh",
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
     {% if 'hadoop-master' in host.props['services'] %}
@@ -1032,6 +1041,7 @@ node '{{ host.name }}' {
         $puppet_random_host = 'urgu.org'
         include random
 
+        include backup
         include btsync
         include distcc
         include gdm
