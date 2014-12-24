@@ -880,6 +880,15 @@ node '{{ host.name }}' {
                 mode => 770,
             }
 
+            file { '/usr/local/bin/backuper.sh':
+                require => Group['backupers'],
+                ensure => present,
+                owner => root,
+                group => backupers,
+                mode => 755,
+                source => 'puppet:///files/backuper.sh',
+            }
+
             {% for bhost, bprops in host.props['backups'][1].iteritems() %}
                 {% set backed_host = state.find(bhost) %}
                 {% set backup_user = 'backup-{}'.format(backed_host.name) %}
@@ -906,6 +915,13 @@ node '{{ host.name }}' {
                     owner => '{{ backup_user }}',
                     group => backupers,
                     mode => 700,
+                }
+
+                cron { 'backuper':
+                    user => '{{ backup_user }}',
+                    command => '/usr/local/bin/backuper.sh "{{ backed_host }}" pkgs{%
+                        for bprop in bprop %} {{ bprop }}{% endfor %}',
+                    minute => '*/10',
                 }
             {% endfor %}
 
