@@ -915,22 +915,30 @@ node '{{ host.name }}' {
                 group => backupers,
                 mode => 750,
                 content => '#!/usr/bin/env bash
-                    case "$1" in
-                        generate_id)
-                            keyfile="$HOME/.ssh/id_rsa"
-                            if ! [[ -f "$keyfile" ]]; then
-                                ssh-keygen -b 4096 -f "$keyfile" -N ""
-                            fi
-                        ;;
-                        *)
-                            for host in {%- for bhost in
-                                            host.props['backups'][1].iterkeys() -%}
-                                        {{ ' {}'.format(state.find(bhost).name) }}
-                                        {%- endfor -%}; do
-                                su "backup-$host" /usr/bin/env bash -c "$0 generate_id"
-                            done
-                        ;;
-                    esac
+set -e
+case "$1" in
+    generate_id)
+        keyfile="$HOME/.ssh/id_rsa"
+        if ! [[ -f "$keyfile" ]]; then
+            ssh-keygen -b 4096 -f "$keyfile" -N ""
+        fi
+    ;;
+    *)
+        for host in {%- for bhost in
+                        host.props['backups'][1].iterkeys() -%}
+                    {{ ' {}'.format(state.find(bhost).name) }}
+                    {%- endfor -%}; do
+            su "backup-$host" /usr/bin/env bash -c "$0 generate_id"
+            pubkey=$(su "backup-$host" -c \'cat "$HOME/.ssh/id_rsa.pub"\')
+            if ssh "$host" "[[ -f .ssh/authorized_keys ]]"; then
+                ssh "$host" sed -i "/${pubkey##* }/d" .ssh/authorized_keys
+                echo "$pubkey" | ssh "$host" "cat >> .ssh/authorized_keys"
+            else
+                echo "no .ssh/authorized_keys on $host" 1>&2
+            fi
+        done
+    ;;
+esac
                 ',
             }
         {% endif %}
