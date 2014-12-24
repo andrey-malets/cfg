@@ -917,7 +917,7 @@ node '{{ host.name }}' {
                     mode => 700,
                 }
 
-                cron { 'backuper':
+                cron { 'backup-{{ backed_host}}':
                     user => '{{ backup_user }}',
                     command => '/usr/local/bin/backuper.sh "{{ backed_host }}" pkgs{%
                         for bprop in bprop %} {{ bprop }}{% endfor %}',
