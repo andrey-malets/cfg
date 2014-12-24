@@ -108,7 +108,7 @@ userfiles() {
 remote_backup() {
     local rhost=$1 rcmd=$2 sumfile=$3 output=$4
     [[ -f "$sumfile" ]] || touch "$sumfile"
-    ssh "$rhost" "/root/cfg_backup.sh" "$rcmd" < "$sumfile" > "$output"
+    ssh "$rhost" "$0" "$rcmd" < "$sumfile" > "$output"
 }
 
 update() {
