@@ -828,7 +828,7 @@ class essential_soft {
 
 class backup {
     file {'/usr/local/bin/backup.sh':
-        mode => 500,
+        mode => 555,
         owner => root,
         group => root,
         source => "puppet:///files/backup.sh",
@@ -897,7 +897,7 @@ node '{{ host.name }}' {
                     ensure => directory,
                     owner => '{{ backup_user }}',
                     group => backupers,
-                    mode => 770,
+                    mode => 700,
                 }
 
                 file { '{{ backup_dir }}/.ssh':
