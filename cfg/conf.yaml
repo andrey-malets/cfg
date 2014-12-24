@@ -154,7 +154,8 @@ hosts:
                                         ups: bfu,
                                         admin: uzer,
                                         backups: [/place/backup,
-                                                  {m: [], r: [], t: []}]}]
+                                                  {image64: [conf, sys],
+                                                   neumann: [conf, sys]}]}]
 - [[630-switch, bs],           9.6,     001b11c344e6]
 - [[hp-switch, hps],           9.7,     001ec1831c01]
 - [[hog-switch, hs],           9.8,     001ac1d1a981]
