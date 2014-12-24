@@ -901,6 +901,12 @@ node '{{ host.name }}' {
                     gid => backupers,
                 }
 
+                mailalias { '{{ backup_user }}':
+                    name => '{{ backup_user }}',
+                    ensure => present,
+                    recipient => '{{ state.users[host.props['admin']].email }}'
+                }
+
                 file { '{{ backup_dir }}':
                     require => User['{{ backup_user }}'],
                     ensure => directory,
