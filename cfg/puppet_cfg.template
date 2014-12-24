@@ -926,8 +926,8 @@ node '{{ host.name }}' {
                 cron { 'backup-{{ backed_host}}':
                     user => '{{ backup_user }}',
                     command => '/usr/local/bin/backuper.sh "{{ backed_host }}" pkgs{%
-                        for bprop in bprop %} {{ bprop }}{% endfor %}',
-                    minute => '*/10',
+                        for bprop in bprops %} {{ bprop }}{% endfor %}',
+                    minute => '*/2',
                 }
             {% endfor %}
 
