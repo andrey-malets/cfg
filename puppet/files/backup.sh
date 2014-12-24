@@ -2,6 +2,8 @@
 
 set -e
 
+tarcmd=(tar cf - --numeric-owner -C /)
+
 exec_findcmd() {
     local paths=(boot
                  lib/modules vmlinuz initrd.img
@@ -44,10 +46,10 @@ conffiles() {
         fi
     done < <(dpkg-query -f '${Conffiles}\n' -W "${all_pkgs[@]}")
 
-    tar cf - --numeric-owner -T <(while read -r; do
+    "${tarcmd[@]}" -T <(while read -r; do
         local sum="${REPLY%%  *}" file="${REPLY#*  }"
         if [[ "${conffiles[$file]}" != "$sum" ]]; then
-            echo "$file"
+            echo "${file:1}"
         fi
     done < <(md5sum "${!conffiles[@]}"))
 }
@@ -69,12 +71,12 @@ systemfiles() {
         md5sums[$file]=$md5sum
     done
 
-    tar cf - --null --numeric-owner -T <(
+    "${tarcmd[@]}" --null -T <(
         to_check=()
         while read -r -d ''; do
             if [[ -z "${allfiles[$REPLY]}" ]]; then
                 if [[ -z "${md5sums[$REPLY]}" ]]; then
-                    echo -en "$REPLY\0"
+                    echo -en "${REPLY:1}\0"
                 else
                     to_check+=("$REPLY")
                 fi
@@ -94,7 +96,7 @@ systemfiles() {
                     sum=${REPLY:0:32}
                 fi
                 if [[ "${md5sums[$filename]}" != "$sum" ]]; then
-                    echo -en "$filename\0"
+                    echo -en "${filename:1}\0"
                 fi
             done
         fi
@@ -102,7 +104,7 @@ systemfiles() {
 }
 
 userfiles() {
-    tar cf - --numeric-owner /home /root
+    "${tarcmd[@]}" home root
 }
 
 remote_backup() {
