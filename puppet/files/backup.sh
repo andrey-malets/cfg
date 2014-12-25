@@ -9,7 +9,7 @@ exec_findcmd() {
                  lib/modules vmlinuz initrd.img
                  etc/{blkid.,fs}tab
                  dev proc run sys tmp
-                 data home place root
+                 data home place
                  usr/share/{mime,snmp}
                  var/{cache,log,local,spool,tmp}
                  var/lib/{apt{,itude},dkms,dpkg,gems,nagios3/spool,puppet})
