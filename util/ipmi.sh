@@ -17,7 +17,7 @@ shift
 spec=$(grep "$host::" "$pwds" | cut -f3 -d:)
 if [[ -z "$spec" ]]; then shit "no pwd for $host"; fi
 
-export IPMI_PASSWORD="${spec#*,}" #ipmitool -I lanplus -U root -H "$host" -E -e @ "$@"
+export IPMI_PASSWORD="${spec#*,}"
 case "${spec%%,*}" in
     1) ipmitool -I lanplus -o intelplus -H "$host" -E -e @ $@ ;;
     2) ipmitool -I lanplus -U root -H "$host" -E -e @ $@ ;;
