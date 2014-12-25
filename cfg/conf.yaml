@@ -153,16 +153,21 @@ hosts:
                                         services: [http],
                                         ups: bfu,
                                         admin: uzer,
-                                        backups: [/place/backup,
-                                                  {image64: [conf, sys],
-                                                   neumann: [conf, sys]}]}]
+                                        backups: [/place/backup, {image32: [conf, sys],
+                                                                  image64: [conf, sys],
+                                                                  hamming: [conf, sys]}]}]
 - [[630-switch, bs],           9.6,     001b11c344e6]
 - [[hp-switch, hps],           9.7,     001ec1831c01]
 - [[hog-switch, hs],           9.8,     001ac1d1a981]
 - [[hog-ap, hap],              9.9,     00259c3171aa, {admin: dimmo}]
 - [ l,                        '9.10',   001a4bec0cec, {ups: [hpu, hpu2], admin: znick}]
 - [[hog-low-ups, hlu],         9.11,    00c0b7598b9d]
-- [[neumann, n],               9.12,   [90e2ba3f0fc2, 90e2ba3f0fc3, 000e0c6a2691], {admin: uzer}]
+- [[neumann, n],               9.12,   [90e2ba3f0fc2, 90e2ba3f0fc3, 000e0c6a2691], {
+                                        ups: hlu,
+                                        admin: uzer,
+                                        backups: [/place/backup, {image32: [conf, sys],
+                                                                  image64: [conf, sys],
+                                                                  hamming: [conf, sys]}]}]
 - [[storage-mplan, s-m],       9.13,    001a4bec0cee]
 - [[it2-mplan,it2-m],          9.14,    001b789f92a6]
 - [[it-mplan,it-m],            9.15,    002b789fa22f]
