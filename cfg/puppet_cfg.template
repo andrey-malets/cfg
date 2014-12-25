@@ -922,13 +922,26 @@ node '{{ host.name }}' {
                     group => backupers,
                     mode => 700,
                 }
+            {% endfor %}
 
-                cron { 'backup-{{ backed_host}}':
+            {% for item in state.build_backup_schedule(host) %}
+                {% set backed_host = state.find(item.bhost) %}
+                {% set backup_user = 'backup-{}'.format(backed_host.name) %}
+                cron { 'backup-{{ backed_host }}':
                     user => '{{ backup_user }}',
                     command => '/usr/local/bin/backuper.sh "{{ backed_host }}" pkgs{%
-                        for bprop in bprops %} {{ bprop }}{% endfor %}',
-                    hour => '4',
-                    minute => '0',
+                        for bprop in item.bprops %} {{ bprop }}{% endfor %}',
+                    {% if item.hour != None %}
+                    hour => '{{ item.hour }}',
+                    {% else %}
+                    hour => absent,
+                    {% endif %}
+                    {% if item.minute != None %}
+
+                    minute => '{{ item.minute }}',
+                    {% else %}
+                    minute => absent,
+                    {% endif %}
                 }
             {% endfor %}
 

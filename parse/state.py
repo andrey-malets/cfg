@@ -17,6 +17,11 @@ def init_yaml_ruby_parsers():
     yaml.add_multi_constructor(u"!ruby/object:", construct_ruby_object)
     yaml.add_constructor(u"!ruby/sym", construct_ruby_sym)
 
+class BackupItem:
+    def __init__(self, bhost, bprops, hour=None, minute=None):
+        self.bhost, self.bprops = bhost, bprops
+        self.hour, self.minute = hour, minute
+
 class State:
     def __init__(self, config, router_attrs):
         self.errors = []
@@ -69,6 +74,19 @@ class State:
     def is_user(self, spec):
         assert(spec in self.users or spec in self.user_groups)
         return spec in self.users
+
+    def build_backup_schedule(self, host):
+        from datetime import datetime, date, time, timedelta
+
+        assert 'backups' in host.props
+        fakedate = date(1970, 1, 1)
+        starttime = time(3)
+        btime = datetime.combine(fakedate, starttime)
+        for bhost, bprops in host.props['backups'][1].iteritems():
+            yield BackupItem(bhost, bprops, hour=btime.hour, minute=btime.minute)
+            btime = btime + timedelta(minutes=10)
+            # do not build too big schedule
+            assert btime < datetime.combine(fakedate, time(7))
 
     def parse_facts(self, facts_path):
         init_yaml_ruby_parsers()
