@@ -9,10 +9,12 @@ exec_findcmd() {
                  lib/modules vmlinuz initrd.img
                  etc/{blkid.,fs}tab
                  dev proc run sys tmp
-                 data home place
+                 home place
                  usr/share/{mime,snmp}
                  var/{cache,log,local,spool,tmp}
-                 var/lib/{apt{,itude},dkms,dpkg,gems,nagios3/spool,puppet})
+                 var/lib/{apt{,itude},dpkg}
+                 {data/,var/lib/}vz/{dump,lock,private,root}
+                 var/lib/{dkms,gems,nagios3/spool,puppet})
     local exts=(d o pyc)
     local cmd=(find /) start=1
     for path in "${paths[@]}"; do
