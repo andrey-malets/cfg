@@ -26,9 +26,6 @@ people:
 - [yariksuperman,  "Yaroslav Borcheninov", yariksuperman@gmail.com]
 - [yury.pliner,    "Yury Pliner",          yury.pliner@gmail.com]
 - [znick,          "Nickolai Zhuravlev",   znick@znick.ru]
-- [r14-t,          [uzer, and, bay, bosonojka5, dimmo, dscheg, kopeicev, kost, znick,
-                    ld, eburgforever, kiskachi.maria, dqkrait, crassirostris,
-                    victor.samun, muzafarov, a799853, serg2443537]]
 
 defaults:
   mon: monitoring@urgu.org
@@ -133,14 +130,12 @@ groups:
 
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
-- [r14-t,      '^(r14-test[1-5])(-[1-5])?$', {access: {r14-t: full}}]
 
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
 - [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer,
                                                                  services: [adaptecraid],
-                                                                 ups: bfu,
-                                                                 access: {dqkrait: ssh}}]
+                                                                 ups: bfu}]
 - [[markov, m],                9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
                                         backend_for: m.fb.urgu.org,
@@ -297,17 +292,6 @@ hosts:
 - [ image64,              10.252,  000c29ad7767]
 #   main-switch           10.253
 #   dijkstra              10.254
-
-- [ r14-test1,            16.1,    000c29dfabc1, {admin: bay}]
-- [ r14-test2,            16.2,    000c29dfabc2, {admin: dimmo}]
-- [ r14-test3,            16.3,    000c29dfabc3, {admin: dqkrait}]
-- [ r14-test4,            16.4,    000c29dfabc4, {admin: muzafarov}]
-- [ r14-test5,            16.5,    000c29dfabc5, {admin: serg2443537}]
-- [ r14-test4-1,          16.6,    {admin: muzafarov}]
-- [ r14-test4-2,          16.7,    {admin: muzafarov}]
-- [ r14-test4-3,          16.8,    {admin: muzafarov}]
-- [ r14-test4-4,          16.9,    {admin: muzafarov}]
-- [ r14-test4-5,         '16.10',  {admin: muzafarov}]
 
 - [ uzer-work,            19.198,        {admin: uzer}]
 - [ uzer-hp,              19.202,        {admin: uzer}]
