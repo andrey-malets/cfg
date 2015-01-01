@@ -16,16 +16,22 @@ people:
 - [kopeicev,       "Vyacheslav Kopeivev",  kopeicev@kasperskyclub.com]
 - [kost,           "Konstantin Plotnikov", kost@hackerdom.ru]
 - [last,           "Sergey Azovskov",      last_g@hackerdom.ru]
-- [ld,             "Bogdan Melnik",        ld@hackerdom.ru]
+- [ld,             "Bogdan Melnik",        ld@hackerdom.ru,
+                                           {CNs: ['ld', 'ld2']}]
 - [muzafarov,      "Maxim Muzafarov",      m.muzafarov@gmail.com]
 - [ns,             "Nickolai Shturkin",    ns@splinex.com]
 - [pahaz,          "Pavel Blinov",         pahaz.blinov@gmail.com]
 - [serg2443537,    "Sergey Patrushev",     serg2443537@rambler.ru]
-- [uzer,           "Andrey Malets",        andrey.malets@gmail.com]
+- [uzer,           "Andrey Malets",        andrey.malets@gmail.com,
+                                           {CNs: ['uzer', 'uzer-cubie',
+                                                  'uzer-work', 'uzer-hp']}]
 - [victor.samun,   "Victor Samun",         victor.samun@gmail.com]
 - [yariksuperman,  "Yaroslav Borcheninov", yariksuperman@gmail.com]
 - [yury.pliner,    "Yury Pliner",          yury.pliner@gmail.com]
-- [znick,          "Nickolai Zhuravlev",   znick@znick.ru]
+- [znick,          "Nickolai Zhuravlev",   znick@znick.ru,
+                                           {CNs: ['znick', 'znick2',
+                                                  'znick-ideco', 'znick-eeepc',
+                                                  'znick-yandex']}]
 
 defaults:
   mon: monitoring@urgu.org
