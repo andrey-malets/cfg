@@ -5,7 +5,7 @@ def init(table, chain):
         "then iptables -t '%s' -F '%s'; "
         "else iptables -t '%s' -N '%s'; fi" % ((table, chain) * 3))
 
-def cn2chain(cn):
+def user2chain(cn):
     return 'openvpn_%s' % cn
 
 def gn2chain(cn):
@@ -17,20 +17,30 @@ class Rule:
         self.target = target
 
         self.new    = None
-        self.dest   = None
+        self.iiface = None
         self.proto  = None
+        self.src    = None
+        self.dest   = None
         self.dport  = None
 
     def set_new(self):
         self.new = '-m state --state NEW'
         return self
 
-    def set_dest(self, dest):
-        self.dest = "-d '%s'" % dest
+    def set_iiface(self, iiface):
+        self.iiface = "-i '%s'" % iiface
         return self
 
     def set_proto(self, proto):
         self.proto = "-p '%s'" % proto
+        return self
+
+    def set_src(self, src):
+        self.dest = "-s '%s'" % src
+        return self
+
+    def set_dest(self, dest):
+        self.dest = "-d '%s'" % dest
         return self
 
     def set_dport(self, dport):
@@ -39,7 +49,9 @@ class Rule:
 
     def format(self):
         restrictions = ''
-        for restriction in [self.new, self.dest, self.proto, self.dport]:
+        for restriction in [self.new, self.iiface,
+                            self.proto,
+                            self.src, self.dest, self.dport]:
             if restriction != None:
                 restrictions += (' ' + restriction)
         return "iptables -A '{}'{} -j '{}'".format(
@@ -47,7 +59,7 @@ class Rule:
 
 def put_if_exists(user, rule):
     print ("iptables -L '%s' 2>/dev/null >/dev/null && %s" %
-        (cn2chain(user), rule.format()))
+        (user2chain(user), rule.format()))
 
 def get_pub_port(host):
     comps = host.addr.split('.')
@@ -84,8 +96,10 @@ def gen_ports(state, dst, chain):
                                'dstport' : dstport })
 
     for host in state.hosts:
-        for srcport, dstport in tcp_forwardings(host).iteritems(): add('tcp', srcport, dstport)
-        for srcport, dstport in udp_forwardings(host).iteritems(): add('udp', srcport, dstport)
+        for srcport, dstport in tcp_forwardings(host).iteritems():
+            add('tcp', srcport, dstport)
+        for srcport, dstport in udp_forwardings(host).iteritems():
+            add('udp', srcport, dstport)
 
     return '\n'.join(lines)
 
@@ -109,7 +123,7 @@ def gen_admin_access(state, host, chain):
         return
     network = state.belongs_to(host)
     if network and network.private and host.addr:
-        rule = Rule(chain, cn2chain(host.admin)).set_new().set_dest(host.addr)
+        rule = Rule(chain, user2chain(host.admin)).set_new().set_dest(host.addr)
         put_if_exists(host.admin, rule)
     vm_host = host.vm_host
     if vm_host:
@@ -119,7 +133,7 @@ def gen_admin_access(state, host, chain):
         listen = vm_descr.get('vnclisten', None)
         if listen:
             vnc_port = int(listen.split(':')[1])
-            rule = add_vnc_access(Rule(chain, cn2chain(host.admin)),
+            rule = add_vnc_access(Rule(chain, user2chain(host.admin)),
                                   vm_host, vnc_port)
             put_if_exists(host.admin, rule)
 
@@ -127,11 +141,38 @@ def gen_user_access(state, host, chain):
     if 'access' in host.props:
         for spec, service in host.props['access'].iteritems():
             if state.is_user(spec):
-                rule = Rule(chain, cn2chain(spec))
+                rule = Rule(chain, user2chain(spec))
                 put_if_exists(spec, add_access(rule, host, service))
             else:
                 rule = Rule(chain, gn2chain(spec))
                 print add_access(rule, host, service).format()
+
+@add_cmd('ipt_users', False, 3)
+def gen_user_chains(state, ipp_name, iface, target):
+    def ipp2src(ipp_ip):
+        octets = ipp_ip.split('.')
+        octets[3] = str(int(octets[3]) + 2)
+        return '.'.join(octets)
+
+    cn2user = {}
+    for user in state.users.itervalues():
+        for CN in user.CNs:
+            assert(CN not in cn2user)
+            cn2user[CN] = user
+    user2ips = {}
+    with open(ipp_name, 'r') as ipp:
+        for line in ipp:
+            CN, ip = line.strip().split(',')
+            if CN in cn2user:
+                user2ips.setdefault(cn2user[CN], []).append(ipp2src(ip))
+    for user, ips in user2ips.iteritems():
+        chain = user2chain(user.nickname)
+        init('filter', chain)
+        for ip in ips:
+            rule = Rule(chain, target).set_new().set_src(ip).set_iiface(iface)
+            print rule.set_proto('tcp').format()
+            print rule.set_proto('udp').format()
+    return ""
 
 @add_cmd('ipt_access', False, 2)
 def gen_access(state, chain, facts_path):
@@ -142,7 +183,7 @@ def gen_access(state, chain, facts_path):
         group_chain = gn2chain(user_group)
         init('filter', group_chain)
         for user in users:
-            put_if_exists(user, Rule(group_chain, cn2chain(user)))
+            put_if_exists(user, Rule(group_chain, user2chain(user)))
 
     for host in state.hosts:
         gen_admin_access(state, host, chain)

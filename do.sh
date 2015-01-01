@@ -386,8 +386,7 @@ gen_ups_mrtg() {
 }
 
 gen_user_chains() {
-    local ipp=/etc/openvpn/runc/ipp.txt iface=tun0 target=UaA
-    python "$BASE/util/iptables_users.py" "$ipp" "$iface" "$target" | sh -s
+    $MAIN ipt_users /etc/openvpn/runc/ipp.txt tun0 UaA | sh -s
 }
 
 gen_iptables_access() {
