@@ -818,7 +818,7 @@ class essential_soft {
     {% for pkg in ['ntp', 'arping', 'telnet', 'tcpdump',
                    'vim', 'git', 'screen', 'augeas-tools',
                    'ca-certificates', 'atop', 'htop', 'iotop', 'lsof',
-                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2',
+                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx',
                    'iperf', 'bridge-utils', 'vlan', 'ifenslave-2.6',
                    'stress', 'hdparm', 'sysbench',
                    'p7zip-full', 'gzip', 'lzma', 'zip', 'unzip'] %}
