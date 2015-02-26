@@ -33,7 +33,7 @@ pioneer 	3600	IN	SPF	"v=spf1 a"
 pioneer 	3600	IN	TXT	"v=spf1 a"
 pioneer		3600	IN	AAAA	2a02:17d0:341:5a01::1
 
-tigra		3600	IN	CNAME	tigra.usaaa.ru.
+tigra		3600	IN	CNAME	stor.math.usu.ru.
 
 mirrors		3600	IN	CNAME	mirror.yandex.ru.
 mirror		3600	IN	CNAME	mirror.yandex.ru.
