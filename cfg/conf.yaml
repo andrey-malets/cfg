@@ -193,7 +193,9 @@ hosts:
 - [[631-far-high-ups, hpu2],   9.28,    00c0b72f2677]
 #- [[hog-high-ups, hhu],        9.29,    00c0b79860d9]
 #- [[631-near-high-ups, bfu2], '9.30',   00c0b72ea27c]
-- [[cluster-switch, cls],      9.32,    0004e279d328]
+- [smc-8624t,                  9.32,    0004e279d328]
+- [dgs-3100-24,                9.33,    001e58047d32]
+- [catalyst-2950,              9.34,    000d28d0a8c0]
 #   dijkstra              9.254
 
 - [ clv1,                '10.181', 0004e21c716a ]
