@@ -162,6 +162,7 @@ define servicegroup {
 }
 
 {% for host in state.hosts %}
+{% if not external or not state.is_gray(host) %}
 define host {
     use        generic-host
     host_name  {{ state.get_canonical_hostname(host) }}
@@ -372,6 +373,8 @@ define service {
     check_command       check_nrpe_1arg!check_apt
     check_interval      3600
 }
+{% endif %}
+
 {% endif %}
 
 {% endif %}

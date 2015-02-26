@@ -157,6 +157,11 @@ gen_nagios() {
     fi
 }
 
+gen_ext_nagios() {
+    local DIR=$DATA/nagios
+    $MAIN ext_nagios $CFGDIR/nagios.template > $DIR/ext_nagios.cfg
+}
+
 gen_ssh_known_hosts() {
     (
         $MAIN ssh_known_hosts $ROUTER_HOST $ROUTER_IP | while read name line; do
@@ -413,6 +418,8 @@ all() {
     gen_ssh_known_hosts_updater
 
     gen_nagios
+    gen_ext_nagios
+
     gen_slurm
 
     gen_ext_http
