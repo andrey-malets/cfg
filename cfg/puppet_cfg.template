@@ -817,7 +817,7 @@ class sensors {
 class essential_soft {
     {% for pkg in ['ntp', 'arping', 'telnet', 'tcpdump',
                    'vim', 'git', 'screen', 'augeas-tools',
-                   'ca-certificates', 'atop', 'htop', 'iotop', 'lsof',
+                   'ca-certificates', 'atop', 'htop', 'iotop', 'lsof', 'jnettop',
                    'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx',
                    'iperf', 'bridge-utils', 'vlan', 'ifenslave-2.6',
                    'stress', 'hdparm', 'sysbench',
