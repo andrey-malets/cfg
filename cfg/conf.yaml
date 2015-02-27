@@ -303,7 +303,7 @@ hosts:
 
 - [ uzer-work,            19.198,        {admin: uzer}]
 - [ uzer-hp,              19.202,        {admin: uzer}]
-- [ pioneer,              46.48.110.120, {admin: uzer}]
+- [[pioneer, estatus],    46.48.110.120, {admin: uzer, services: [http]}]
 
 
 - [ dcimap-vm,           '50.100', 000c29ad8762, {admin: andgein}]
