@@ -162,6 +162,26 @@ define servicegroup {
 }
 
 {% for host in state.hosts %}
+
+define service {
+    use                 generic-service
+    name                service-on-{{ state.get_canonical_hostname(host) }}
+    {% if not external %}
+    host_name           {{ state.get_canonical_hostname(host) }}
+    {% endif %}
+    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
+    {%- if 'volatile' in host.props %}
+    notifications_enabled      0
+    flap_detection_enabled     0
+    failure_prediction_enabled 0
+    {% endif %}
+    {%- if 'nagios_service' in host.props -%}
+    {%- for name, value in host.props['nagios_service'].iteritems() %}
+    {{ name }} {{ value }}
+    {%- endfor -%}
+    {%- endif %}
+}
+
 {% if not external or not state.is_gray(host) %}
 define host {
     use        generic-host
@@ -194,23 +214,6 @@ define host {
 
 {% if 'services' in host.props %}
 
-define service {
-    use                 generic-service
-    name                service-on-{{ state.get_canonical_hostname(host) }}
-    host_name           {{ state.get_canonical_hostname(host) }}
-    contacts            {% if 'admin' in host.props %}{{ host.props['admin'] }},{% endif %}default
-    {%- if 'volatile' in host.props %}
-    notifications_enabled      0
-    flap_detection_enabled     0
-    failure_prediction_enabled 0
-    {% endif %}
-    {%- if 'nagios_service' in host.props -%}
-    {%- for name, value in host.props['nagios_service'].iteritems() %}
-    {{ name }} {{ value }}
-    {%- endfor -%}
-    {%- endif %}
-}
-
 {% if 'unix' in host.props['services'] or 'ssh' in host.props['services'] %}
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
@@ -236,30 +239,6 @@ define service {
 }
 {% endif %}
 
-{% if 'http' in host.props['services'] %}
-{% if not 'backend_for' in host.props or host.props['backend_for'] is string %}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    {% if 'backend_for' in host.props %}
-    service_description http://{{ host.props['backend_for'] }}
-    check_command       check_http2!{{ host.props['backend_for'] }}
-    {% else %}
-    service_description HTTP server
-    check_command       check_http
-    {% endif %}
-}
-{% else %}
-{% for vhost in host.props['backend_for'] %}
-{% if vhost.find('*') == -1 %}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description http://{{ vhost }}
-    check_command       check_http2!{{ vhost }}
-}
-{% endif %}   # find
-{% endfor %}  # for vhost in host.props['backend_for']
-{% endif %}   # not 'backend_for' in host.props or ...
-{% endif %}   # if 'http' in host.props['services']
 
 {% if 'ups' in host.props['services'] %}
 define service {
@@ -381,4 +360,38 @@ define service {
 
 {% endif %}
 
+{% endfor %}
+
+{% for host in state.hosts %}
+  {% if 'http' in host.props['services'] %}
+    {% if 'backend_for' in host.props %}
+      {% if host.props['backend_for'] is string %}
+        {% set hostnames = [host.props['backend_for']] %}
+      {% else %}
+        {% set hostnames = host.props['backend_for'] %}
+     {% endif %}
+    {% else %}
+      {% if external and not state.is_gray(host) %}
+        {% set hostnames = [state.get_canonical_hostname(host)] %}
+      {% endif %}
+    {% endif %}
+    {% for vhost in hostnames %}
+      {% if vhost.find('*') == -1 %}
+      define service {
+          use                 service-on-{{ state.get_canonical_hostname(host) }}
+          {% if external %}
+            host_name           {{ state.get_canonical_hostname(
+                                       state.find(state.defaults.frontend)) }}
+          {% endif %}
+          {% if 'backend_for' in host.props %}
+          service_description http://{{ vhost }}
+          check_command       check_http2!{{ vhost }}
+          {% else %}
+          service_description HTTP server
+          check_command       check_http
+          {% endif %}
+      }
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}

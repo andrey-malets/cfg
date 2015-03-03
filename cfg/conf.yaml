@@ -37,7 +37,7 @@ defaults:
   mon: monitoring@urgu.org
   slurm: managed
   nagios: 194.226.244.126
-  frontend: 194.226.244.126
+  frontend: dijkstra
   network_prefix: '172.16'
   domains:
     default: 'urgu.org'

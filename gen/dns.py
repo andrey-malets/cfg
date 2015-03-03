@@ -27,7 +27,8 @@ def gen_fwd(state, zone):
             prop = host.props['backend_for']
             backends = [prop] if type(prop) == str else prop
         for backend in filter(matches, backends):
-            yield(get_sname(backend), 'A', state.defaults.frontend)
+            yield(get_sname(backend), 'A', state.find(
+                state.get_canonical_hostname(state.defaults.frontend)).addr)
 
 @add_cmd('rdns', True, 2)
 @dns_fn
