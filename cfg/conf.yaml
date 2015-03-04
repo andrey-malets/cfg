@@ -94,7 +94,10 @@ groups:
 - [embedded,   [aps, switches, paper, ups], {services: [http], admin: uzer}]
 
 #- [621-pcs,   '621-\d\d',                   {admin: victor.samun}]
-- [633-pcs,    '(stream|cuda)-pc',          {services: [rrdp], admin: kost}]
+- [633-pcs,    '(stream|cuda)-pc',          {services: [rrdp],
+                                             admin: kost,
+                                             dhcp: {ipxe.scriptlet: local},
+                                             hadoop_rack: runc}]
 - [hs,         'h\d\d',                     {services: [amt],
                                              admin: uzer,
                                              nagios: {check_interval: 1}}]
@@ -121,7 +124,7 @@ groups:
 - [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
                                              sensors: ['coretemp:temp*:10,16,55,60']}]
 
-- [managed,    [managed-test, cl, volatile], '(uzer|znick)-pc',
+- [managed,    [managed-test, cl, volatile, 633-pcs], '(uzer|znick|)-pc',
                                             {services: [unix],
                                              admin: uzer,
                                              dhcp: {ipxe.scriptlet: cow},
@@ -256,7 +259,7 @@ hosts:
                                                   services: [autoupdate],
                                                   admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
-- [ cuda-pc.runc,         10.237,  001cc009f4ff]
+- [ cuda-pc.runc,         10.237,  001cc009f4ff, {services: [nvidia]}]
 - [[itanium,it,exchange], 10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer}]
 - [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'],
