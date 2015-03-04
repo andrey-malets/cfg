@@ -297,7 +297,7 @@ hosts:
                                                                 ructf.net, www.ructf.net,
                                                                 ructfe.ru, www.ructfe.ru,
                                                                 ructfe.org, www.ructfe.org]}]
-- [ image64-test,         10.251,  000c29ad7768, {dhcp: {ipxe.scriptlet: cow}}]
+- [ image64-test,         10.251, [000c29ad7768, 000c29ad7769], {dhcp: {ipxe.scriptlet: cow}}]
 - [ image64,              10.252,  000c29ad7767]
 #   main-switch           10.253
 #   dijkstra              10.254
