@@ -693,14 +693,14 @@ class hwraid {
         ensure => installed,
     }
 
-    apt::key { 'hwraid':
+    apt::key { '23B3D3B4':
         key_source => 'http://hwraid.le-vert.net/debian/hwraid.le-vert.net.gpg.key',
     }
 
     apt::source { 'hwraid':
         location => 'http://hwraid.le-vert.net/debian',
         repos => 'main',
-        require => Apt::Key['hwraid'],
+        require => Apt::Key['23B3D3B4'],
     }
 }
 
