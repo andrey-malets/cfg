@@ -188,8 +188,6 @@ hosts:
 - [[ritchie, r],               9.26,   [001e670fac40, 001e670fac41],
                                        {tcp_fwd: {3260: 3260},
                                         fb: [10.225],
-                                        backend_for: r.fb.urgu.org,
-                                        services: [http],
                                         ups: hlu,
                                         admin: uzer}]
 - [[631-far-low-ups, hpu],     9.27,    00c0b798608d, {services: [ext_temp]}]
