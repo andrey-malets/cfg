@@ -124,6 +124,9 @@ groups:
 - [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
                                              sensors: ['coretemp:temp*:10,16,55,60']}]
 
+- [docker,     [volatile, 633-pcs], '^((uzer|znick)-pc|image64(|-test)|ts)$',
+                                            {services: [docker]}]
+
 - [managed,    [managed-test, cl, volatile, 633-pcs], '(uzer|znick|)-pc',
                                             {services: [unix],
                                              admin: uzer,

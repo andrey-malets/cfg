@@ -1037,6 +1037,10 @@ esac
             $check_megaraid = 'true'
         {% endif %}
 
+        {% if 'docker' in host.services %}
+        $check_docker = 'true'
+        {% endif %}
+
         {% if 'managed' in host.props %}
             {% if 'userqwer' in host.services %}
                 include userqwer

@@ -228,6 +228,9 @@ command[check_slurm_node]=/usr/lib/nagios/plugins/check_procs -C slurmd -w 1:1
 <% if @check_sensors -%>
 command[check_sensors]=/usr/lib/nagios/plugins/check_sensors.py <%= check_sensors %>
 <% end -%>
+<% if @check_docker -%>
+command[check_docker]=sudo /usr/lib/nagios/plugins/check_docker
+<% end -%>
 
 # The following examples allow user-supplied arguments and can
 # only be used if the NRPE daemon was compiled with support for
