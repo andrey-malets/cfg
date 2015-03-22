@@ -310,7 +310,7 @@ hosts:
                                                              exim_default,
                                                              ext_http,
                                                              unix]}]
-- [ pi2,                  16.2,   {admin: muzafarov}]
+- [ pi2,                  16.2,          {admin: muzafarov}]
 
 - [ uzer-work,            19.198,        {admin: uzer}]
 - [ uzer-hp,              19.202,        {admin: uzer}]
