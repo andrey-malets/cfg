@@ -306,7 +306,10 @@ hosts:
 #   dijkstra              10.254
 
 - [ ructf-test,           16.1,    0018513ca316, {admin: a799853,
-                                                  services: [exim_default, autoupdate, unix]}]
+                                                  services: [autoupdate,
+                                                             exim_default,
+                                                             ext_http,
+                                                             unix]}]
 
 - [ uzer-work,            19.198,        {admin: uzer}]
 - [ uzer-hp,              19.202,        {admin: uzer}]
