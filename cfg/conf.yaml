@@ -33,6 +33,9 @@ people:
                                            {CNs: ['znick', 'znick2',
                                                   'znick-ideco', 'znick-eeepc',
                                                   'znick-yandex']}]
+- [r15,            [a799853, and, bosonojka5, crassirostris, vdashenko, dimmo,
+                    dqkrait, kiskachi.maria, kopeicev, kost, muzafarov, dscheg,
+                    victor.samun, znick, pahaz]]
 
 defaults:
   mon: monitoring@urgu.org
@@ -311,7 +314,8 @@ hosts:
                                                              exim_default,
                                                              ext_http,
                                                              unix]}]
-- [ pi2,                  16.2,          {admin: muzafarov}]
+- [ pi2,                  16.2,          {admin: muzafarov,
+                                          access: {r15: full}}]
 
 - [ uzer-work,            19.198,        {admin: uzer}]
 - [ uzer-hp,              19.202,        {admin: uzer}]
