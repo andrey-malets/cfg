@@ -3,8 +3,29 @@
 set -e
 
 tarcmd=(tar cf - --numeric-owner -C /)
+common_findopts=(-type f -a -print0)
 
-exec_findcmd() {
+all_pkgs() {
+    dpkg-query -W -f '${Package}:${Architecture}\n'
+}
+
+declare -A SYSTEM_FILES
+
+collect_systemfiles() {
+    local all_pkgs=($(all_pkgs))
+
+    while read -r; do
+        if ! [[ -z "$REPLY" ]]; then
+            SYSTEM_FILES[$REPLY]=1
+        fi
+    done < <(dpkg-query -L "${all_pkgs[@]}")
+}
+
+not_systemfile() {
+    [[ -z "${SYSTEM_FILES[$1]}" ]]
+}
+
+find_systemfiles() {
     local paths=(boot
                  lib/modules vmlinuz initrd.img
                  etc/{blkid.,fs}tab
@@ -22,16 +43,16 @@ exec_findcmd() {
         cmd+=(-path "/$path" -prune)
     done
     for ext in "${exts[@]}"; do cmd+=(-o -name "*.$ext"); done
-    cmd+=(-o -type f -a -print0)
+    cmd+=(-o "${common_findopts[@]}")
     "${cmd[@]}"
+}
+
+find_userfiles() {
+    find /home "${common_findopts[@]}"
 }
 
 manual_pkgs() {
     apt-mark showmanual
-}
-
-all_pkgs() {
-    dpkg-query -W -f '${Package}:${Architecture}\n'
 }
 
 conffiles() {
@@ -56,15 +77,8 @@ conffiles() {
     done < <(md5sum "${!conffiles[@]}"))
 }
 
-systemfiles() {
-    all_pkgs=($(all_pkgs))
-    declare -A allfiles
-
-    while read -r; do
-        if ! [[ -z "$REPLY" ]]; then
-            allfiles[$REPLY]=1
-        fi
-    done < <(dpkg-query -L "${all_pkgs[@]}")
+diff_backup() {
+    local findcmd=$1 filtercmd=$2
 
     declare -A md5sums
     while read -r -d ''; do
@@ -76,14 +90,14 @@ systemfiles() {
     "${tarcmd[@]}" --null -T <(
         to_check=()
         while read -r -d ''; do
-            if [[ -z "${allfiles[$REPLY]}" ]]; then
+            if "$filtercmd" "$REPLY"; then
                 if [[ -z "${md5sums[$REPLY]}" ]]; then
                     echo -en "${REPLY:1}\0"
                 else
                     to_check+=("$REPLY")
                 fi
             fi
-        done < <(exec_findcmd)
+        done < <("$findcmd")
 
         if [[ "${#to_check[@]}" -gt 0 ]]; then
             for file in "${to_check[@]}"; do
@@ -155,8 +169,9 @@ with tarfile.open(sys.argv[1]) as tfile:
 case "$1" in
     pkgs) manual_pkgs ;;
     conf) conffiles ;;
-    sys)  systemfiles ;;
-    user) userfiles ;;
+
+    sys)  collect_systemfiles; diff_backup find_systemfiles not_systemfile ;;
+    user) diff_backup find_userfiles true ;;
 
     remote_backup) shift; remote_backup "$@" ;;
     update)        shift; update "$@" ;;

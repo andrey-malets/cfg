@@ -43,6 +43,12 @@ backup_sysfiles() {
     "$backup" update "$sumfile" "$output"
 }
 
+backup_userfiles() {
+    local sumfile=$1 output=$2
+    "$backup" remote_backup "root@$host" user "$sumfile" "$output"
+    "$backup" update "$sumfile" "$output"
+}
+
 full_backup() {
     local stamp=$(generate_timestamp)
     local dest="$HOME/${fullprefix}_${stamp}"
@@ -59,8 +65,10 @@ full_backup() {
 
     for type in "$@"; do
         case "$type" in
-            sys) backup_sysfiles "$dest/sysfiles.md5sums" \
-                                 "$dest/sysfiles_${stamp}.tar" ;;
+            sys)  backup_sysfiles "$dest/sysfiles.md5sums" \
+                                  "$dest/sysfiles_${stamp}.tar" ;;
+            user) backup_userfiles "$dest/userfiles.md5sums" \
+                                   "$dest/userfiles_${stamp}.tar" ;;
             *)   echo "unknown type: $type" 1>&2; exit 1 ;;
         esac
     done
@@ -79,9 +87,11 @@ diff_backup() {
 
         for type in "$@"; do
             case "$type" in
-                sys) backup_sysfiles "$last_full/sysfiles.md5sums" \
-                                     "$last_full/sysfiles_${stamp}.tar" ;;
-                *)   echo "unknown type: $type" 1>&2; exit 1 ;;
+                sys)  backup_sysfiles "$last_full/sysfiles.md5sums" \
+                                      "$last_full/sysfiles_${stamp}.tar" ;;
+                user) backup_userfiles "$last_full/userfiles.md5sums" \
+                                       "$last_full/userfiles_${stamp}.tar" ;;
+                *)    echo "unknown type: $type" 1>&2; exit 1 ;;
             esac
         done
     fi
