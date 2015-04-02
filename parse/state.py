@@ -1,3 +1,4 @@
+import backup
 from defaults import Defaults
 from host     import Host, check_hosts
 from group    import Group, expand_groups
@@ -32,6 +33,7 @@ class State:
         self.groups   = map(Group,   config['groups'])
         self.networks = map(lambda item: Network(item, router_attrs),
                                          config['networks'])
+        self.backup_schedule = None
 
         def is_group(line): return len(line) == 2
         def is_user(line): return len(line) > 2
@@ -75,18 +77,13 @@ class State:
         assert(spec in self.users or spec in self.user_groups)
         return spec in self.users
 
-    def build_backup_schedule(self, host):
-        from datetime import datetime, date, time, timedelta
+    def build_backup_schedule(self):
+        self.backup_schedule = backup.build_schedule(self)
 
-        assert 'backups' in host.props
-        fakedate = date(1970, 1, 1)
-        starttime = time(3)
-        btime = datetime.combine(fakedate, starttime)
-        for bhost, bprops in host.props['backups'][1].iteritems():
-            yield BackupItem(bhost, bprops, hour=btime.hour, minute=btime.minute)
-            btime = btime + timedelta(minutes=10)
-            # do not build too big schedule
-            assert btime < datetime.combine(fakedate, time(7))
+    def get_backup_schedule(self, host):
+        if self.backup_schedule == None:
+            self.build_backup_schedule()
+        return self.backup_schedule[host]
 
     def parse_facts(self, facts_path):
         init_yaml_ruby_parsers()

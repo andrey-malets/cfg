@@ -924,24 +924,17 @@ node '{{ host.name }}' {
                 }
             {% endfor %}
 
-            {% for item in state.build_backup_schedule(host) %}
-                {% set backed_host = state.find(item.bhost) %}
+            {% for item in state.get_backup_schedule(host.name) %}
+                {% set backed_host = item.host %}
                 {% set backup_user = 'backup-{}'.format(backed_host.name) %}
-                cron { 'backup-{{ backed_host }}':
+                cron { 'backup-{{ backed_host }}-{{ item.day }}':
                     user => '{{ backup_user }}',
-                    command => '/usr/local/bin/backuper.sh "{{ backed_host }}" full{%
+                    command => '/usr/local/bin/backuper.sh "{{ backed_host }}" {{ item.btype }}{%
                         for bprop in item.bprops %} {{ bprop }}{% endfor %}',
-                    {% if item.hour != None %}
-                    hour => '{{ item.hour }}',
-                    {% else %}
-                    hour => absent,
-                    {% endif %}
-                    {% if item.minute != None %}
 
+                    weekday => '{{ item.day }}',
+                    hour => '{{ item.hour }}',
                     minute => '{{ item.minute }}',
-                    {% else %}
-                    minute => absent,
-                    {% endif %}
                 }
             {% endfor %}
 
