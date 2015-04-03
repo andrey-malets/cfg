@@ -92,10 +92,11 @@ get_destination() {
 get_name() {
     local type=$1 dest=$2 stamp=$3
     case "$type" in
-        pkgs) fn="pkgs_$stamp" ;;
-        conf) fn="conffiles_$stamp.tar" ;;
-        sys)  fn="sysfiles_$stamp.tar" ;;
-        user) fn="userfiles_$stamp.tar" ;;
+        pkgs)       fn="pkgs_$stamp" ;;
+        conf)       fn="conffiles_$stamp.tar" ;;
+        sys)        fn="sysfiles_$stamp.tar" ;;
+        user)       fn="userfiles_$stamp.tar" ;;
+        postgresql) fn="pg_dumpall_$stamp.gz" ;;
         *)    echo "unknown type: $type" >&2; exit 1 ;;
     esac
     echo "$dest/$fn"
@@ -129,10 +130,12 @@ backup_bigfiles() {
     local host=$1 dest=$2 stamp=$3; shift 3
     for type in "$@"; do
         case "$type" in
-            sys|user) backup_with_sums "$host" "$type" \
-                                       "$(get_sumname "$type" "$dest")" \
-                                       "$(get_name "$type" "$dest" "$stamp")" ;;
-            *)        echo "unknown type: $type" 1>&2; exit 1 ;;
+            sys|user)   backup_with_sums "$host" "$type" \
+                                         "$(get_sumname "$type" "$dest")" \
+                                         "$(get_name "$type" "$dest" "$stamp")" ;;
+            postgresql) remote_backup "$host" "$type" > \
+                                      "$(get_name "$type" "$dest" "$stamp")" ;;
+            *)          echo "unknown type: $type" 1>&2; exit 1 ;;
         esac
     done
 }

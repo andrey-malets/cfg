@@ -116,9 +116,10 @@ diff_backup() {
 }
 
 case "$1" in
-    pkgs) apt-mark showmanual ;;
-    conf) conffiles ;;
-    sys)  collect_systemfiles; diff_backup find_systemfiles not_systemfile ;;
-    user) diff_backup find_userfiles true ;;
+    pkgs)       apt-mark showmanual ;;
+    conf)       conffiles ;;
+    sys)        collect_systemfiles; diff_backup find_systemfiles not_systemfile ;;
+    user)       diff_backup find_userfiles true ;;
+    postgresql) su postgres pg_dumpall | gzip ;;
     *)    exit 1 ;;
 esac

@@ -9,6 +9,10 @@ class BackupItem:
         self.btype  = None
         self.bprops = None
 
+def append_props(bprops, host):
+    if 'postgresql' in host.props['services']:
+        bprops.append('postgresql')
+
 def build_schedule(state):
     days          = 7
     slots_number  = 12
@@ -36,6 +40,7 @@ def build_schedule(state):
     for backuper in backupers:
         for hostname, bprops in backuper.props['backups'][1].iteritems():
             host = state.find(hostname)
+            append_props(bprops, host)
             for day in range(days):
                 sn = 0
                 while sn != slots_number:
