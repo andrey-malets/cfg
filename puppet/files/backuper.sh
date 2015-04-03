@@ -157,7 +157,7 @@ diff_backup() {
     shift
     if [[ -z "$last_full" ]] || ! [[ -d "$last_full" ]]; then
         echo 'No full backup exists, creating one now.' >&2
-        full_backup "$@"
+        full_backup "$host" "$@"
     else
         local stamp=$(generate_timestamp)
         backup_smallfiles "$host" "$last_full" "$stamp"
