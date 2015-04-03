@@ -169,6 +169,7 @@ hosts:
                                         admin: uzer,
                                         backups: [/place/backup, {image32: [sys],
                                                                   image64: [sys],
+                                                                  mysql:   [sys, user],
                                                                   neumann: [sys],
                                                                   ructf-back: [sys, user]}]}]
 - [[630-switch, bs],           9.6,     001b11c344e6]

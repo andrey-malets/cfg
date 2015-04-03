@@ -10,8 +10,9 @@ class BackupItem:
         self.bprops = None
 
 def append_props(bprops, host):
-    if 'postgresql' in host.props['services']:
-        bprops.append('postgresql')
+    for service in ['mysql', 'postgresql']:
+        if service in host.props['services']:
+            bprops.append(service)
 
 def build_schedule(state):
     days          = 7

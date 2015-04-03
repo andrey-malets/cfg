@@ -97,6 +97,7 @@ get_name() {
         sys)        fn="sysfiles_$stamp.tar" ;;
         user)       fn="userfiles_$stamp.tar" ;;
         special)    fn="specialfiles_$stamp.tar" ;;
+        mysql)      fn="mysqldump_$stamp.gz" ;;
         postgresql) fn="pg_dumpall_$stamp.gz" ;;
         *)    echo "unknown type: $type" >&2; exit 1 ;;
     esac
@@ -135,7 +136,7 @@ backup_bigfiles() {
             sys|user|special) backup_with_sums "$host" "$type" \
                 "$(get_sumname "$type" "$dest")" \
                 "$(get_name "$type" "$dest" "$stamp")" ;;
-            postgresql)       remote_backup "$host" "$type" > \
+            mysql|postgresql) remote_backup "$host" "$type" > \
                 "$(get_name "$type" "$dest" "$stamp")" ;;
             *)                echo "unknown type: $type" 1>&2; exit 1 ;;
         esac

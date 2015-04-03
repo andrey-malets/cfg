@@ -127,12 +127,23 @@ diff_backup() {
     )
 }
 
+backup_mysql() {
+    mysqldump \
+        --defaults-extra-file=/etc/mysql/debian.cnf \
+        --lock-tables \
+        --all-databases \
+        --events --ignore-table=mysql.event \
+        --default-character-set=utf8 | \
+    gzip
+}
+
 case "$1" in
     pkgs)       apt-mark showmanual ;;
     conf)       conffiles ;;
     sys)        collect_systemfiles; diff_backup find_systemfiles not_systemfile ;;
     user)       diff_backup find_userfiles true ;;
     special)    diff_backup find_specialfiles true ;;
+    mysql)      backup_mysql ;;
     postgresql) su postgres -c 'pg_dumpall | gzip' ;;
     *)          exit 1 ;;
 esac
