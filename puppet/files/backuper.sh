@@ -96,6 +96,7 @@ get_name() {
         conf)       fn="conffiles_$stamp.tar" ;;
         sys)        fn="sysfiles_$stamp.tar" ;;
         user)       fn="userfiles_$stamp.tar" ;;
+        special)    fn="specialfiles_$stamp.tar" ;;
         postgresql) fn="pg_dumpall_$stamp.gz" ;;
         *)    echo "unknown type: $type" >&2; exit 1 ;;
     esac
@@ -105,8 +106,9 @@ get_name() {
 get_sumname() {
     local type=$1 dest=$2
     case "$type" in
-        sys)  fn=sysfiles ;;
-        user) fn=userfiles ;;
+        sys)     fn=sysfiles ;;
+        user)    fn=userfiles ;;
+        special) fn=specialfiles ;;
         *)    echo "unknown type: $type" >&2; exit 1 ;;
     esac
     echo "$dest/$fn.md5sums"
@@ -130,12 +132,12 @@ backup_bigfiles() {
     local host=$1 dest=$2 stamp=$3; shift 3
     for type in "$@"; do
         case "$type" in
-            sys|user)   backup_with_sums "$host" "$type" \
-                                         "$(get_sumname "$type" "$dest")" \
-                                         "$(get_name "$type" "$dest" "$stamp")" ;;
-            postgresql) remote_backup "$host" "$type" > \
-                                      "$(get_name "$type" "$dest" "$stamp")" ;;
-            *)          echo "unknown type: $type" 1>&2; exit 1 ;;
+            sys|user|special) backup_with_sums "$host" "$type" \
+                "$(get_sumname "$type" "$dest")" \
+                "$(get_name "$type" "$dest" "$stamp")" ;;
+            postgresql)       remote_backup "$host" "$type" > \
+                "$(get_name "$type" "$dest" "$stamp")" ;;
+            *)                echo "unknown type: $type" 1>&2; exit 1 ;;
         esac
     done
 }
@@ -175,8 +177,8 @@ fi
 
 host=$1; btype=$2; shift 2
 case "$btype" in
-    full)  full_backup "$host" "$@" ;;
-    diff)  diff_backup "$host" "$@" ;;
+    full)  full_backup "$host" special "$@" ;;
+    diff)  diff_backup "$host" special "$@" ;;
     clean) clean_older_than "$@" ;;
     *)     echo "unknown backup type: $btype" 1>&2; exit 1 ;;
 esac

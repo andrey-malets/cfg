@@ -4,6 +4,11 @@ set -e
 
 tarcmd=(tar cf - --numeric-owner -C /)
 common_findopts=(-type f -a -print0)
+specialfiles=(
+    boot
+    lib/modules var/lib/dkms
+    vmlinuz initrd.img
+    etc/{blkid.,fs}tab)
 
 all_pkgs() {
     dpkg-query -W -f '${Package}:${Architecture}\n'
@@ -26,19 +31,18 @@ not_systemfile() {
 }
 
 find_systemfiles() {
-    local paths=(boot
-                 lib/modules vmlinuz initrd.img
-                 etc/{blkid.,fs}tab
-                 dev proc run sys tmp
-                 home place
-                 usr/share/{mime,snmp}
-                 var/{cache,log,local,spool,tmp}
-                 var/lib/{apt{,itude},dpkg}
-                 {data/,var/lib/}vz/{dump,lock,private,root}
-                 var/lib/{dkms,gems,nagios3/spool,puppet})
+    local excludes=(
+        "${specialfiles[@]}"
+        dev proc run sys tmp
+        home place
+        usr/share/{mime,snmp}
+        var/{cache,log,local,spool,tmp}
+        var/lib/{apt{,itude},dpkg}
+        {data/,var/lib/}vz/{dump,lock,private,root}
+        var/lib/{gems,nagios3/spool,puppet})
     local exts=(d o pyc)
     local cmd=(find /) start=1
-    for path in "${paths[@]}"; do
+    for path in "${excludes[@]}"; do
         [[ -z "$start" ]] && cmd+=(-o) || start=
         cmd+=(-path "/$path" -prune)
     done
@@ -71,6 +75,14 @@ conffiles() {
             echo "${file:1}"
         fi
     done < <(md5sum "${!conffiles[@]}"))
+}
+
+find_specialfiles() {
+    files=()
+    for file in "${specialfiles[@]}"; do
+        [[ -e "/$file" ]] && files+=("/$file")
+    done
+    find "${files[@]}" "${common_findopts[@]}"
 }
 
 diff_backup() {
@@ -120,6 +132,7 @@ case "$1" in
     conf)       conffiles ;;
     sys)        collect_systemfiles; diff_backup find_systemfiles not_systemfile ;;
     user)       diff_backup find_userfiles true ;;
+    special)    diff_backup find_specialfiles true ;;
     postgresql) su postgres -c 'pg_dumpall | gzip' ;;
-    *)    exit 1 ;;
+    *)          exit 1 ;;
 esac
