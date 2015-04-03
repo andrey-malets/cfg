@@ -231,6 +231,9 @@ command[check_sensors]=/usr/lib/nagios/plugins/check_sensors.py <%= check_sensor
 <% if @check_docker -%>
 command[check_docker]=sudo /usr/lib/nagios/plugins/check_docker
 <% end -%>
+<% if @check_postgresql -%>
+command[check_postgresql]=sudo -u postgres /usr/lib/nagios/plugins/check_pgsql
+<% end -%>
 
 # The following examples allow user-supplied arguments and can
 # only be used if the NRPE daemon was compiled with support for

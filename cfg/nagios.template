@@ -333,6 +333,14 @@ define service {
 }
 {% endif %}
 
+{% if 'postgresql' in host.props['services'] %}
+define service {
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
+    service_description PostgreSQL
+    check_command       check_nrpe_1arg!check_postgresql
+}
+{% endif %}
+
 {% if 'managed' in host.props %}
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}

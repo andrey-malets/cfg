@@ -283,7 +283,7 @@ hosts:
                                                   admin: muzafarov}]
 #   free
 #   free
-- [ mysql,                10.243,  0018512e4ea0, {admin: znick}]
+- [ mysql,                10.243,  0018512e4ea0, {admin: znick, services: [mysql]}]
 - [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
 - [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru,
                                                                 seminar.hackerdom.ru,
@@ -297,7 +297,7 @@ hosts:
                                                              '*.urfuclub.ru']}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
 # - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
-- [ ructf-back,          '10.250', 000c2963e5d0, {admin: uzer,
+- [ ructf-back,          '10.250', 000c2963e5d0, {admin: uzer, services: [postgresql],
                                                   backend_for: [ructf.org, www.ructf.org,
                                                                 ructf.ru, www.ructf.ru,
                                                                 ructf.com, www.ructf.com,

@@ -726,6 +726,33 @@ class adaptecraid inherits hwraid {
     }
 }
 
+class db {
+    package { 'nagios-plugins-standard':
+        ensure => installed,
+        install_options => ['--no-install-recommends'],
+    }
+}
+
+class mysql inherits db {
+}
+
+class postgresql inherits db {
+    package { 'sudo':
+        ensure => installed,
+    }
+
+    file { '/etc/sudoers.d/nagios-postgresql':
+        require => Package['sudo'],
+        ensure => present,
+        mode => '440',
+        owner => root,
+        group => root,
+        content =>
+            'nagios ALL=(postgres) NOPASSWD: /usr/lib/nagios/plugins/check_pgsql
+            ',
+    }
+}
+
 class smartmon {
     package { 'smartmontools':
         ensure => installed,
@@ -1098,6 +1125,15 @@ esac
             $check_nagios = 'true'
         {% else %}
             $check_nagios = 'false'
+        {% endif %}
+
+        {% if 'mysql' in host.services %}
+            include mysql
+        {% endif %}
+
+        {% if 'postgresql' in host.services %}
+            $check_postgresql = 'true'
+            include postgresql
         {% endif %}
 
         {% if 'xen' in host.services %}
