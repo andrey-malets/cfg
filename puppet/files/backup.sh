@@ -39,7 +39,7 @@ find_systemfiles() {
         var/{cache,log,local,spool,tmp}
         var/lib/{apt{,itude},dpkg}
         {data/,var/lib/}vz/{dump,lock,private,root}
-        var/lib/{gems,nagios3/spool,puppet})
+        var/lib/{cron-apt,gems,mysql,nagios3/spool,puppet})
     local exts=(d o pyc)
     local cmd=(find /) start=1
     for path in "${excludes[@]}"; do
