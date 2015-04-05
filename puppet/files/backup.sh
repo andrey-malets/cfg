@@ -2,7 +2,7 @@
 
 set -e
 
-tarcmd=(tar cf - --numeric-owner -C /)
+tarcmd=(tar cf - --numeric-owner --ignore-failed-read -C /)
 common_findopts=(-type f -a -print0)
 specialfiles=(
     boot
