@@ -35,6 +35,9 @@ pioneer 	3600	IN	SPF	"v=spf1 a"
 pioneer 	3600	IN	TXT	"v=spf1 a"
 pioneer		3600	IN	AAAA	2a02:17d0:341:5a01::1
 
+uzer-work	3600	IN	SPF	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
+uzer-work	3600	IN	TXT	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
+
 tigra		3600	IN	CNAME	stor.math.usu.ru.
 
 mirrors		3600	IN	CNAME	mirror.yandex.ru.
