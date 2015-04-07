@@ -8,6 +8,7 @@ urgu.org.  36000   IN      SOA     dijkstra.urgu.org. uzer.hackerdom.ru. (
 	3600	IN	MX	5  ALT2.ASPMX.L.GOOGLE.COM.
 	3600	IN	MX	10 ASPMX2.GOOGLEMAIL.COM.
 	3600	IN	MX	10 ASPMX3.GOOGLEMAIL.COM.
+	3600	IN	TXT	"v=spf1 include:_spf.google.com ~all"
 
 $ORIGIN urgu.org.
 
@@ -15,6 +16,7 @@ ns0		36000	IN	A	195.19.132.27
 ns1		36000	IN	A	194.226.244.126
 
 mail		3600	IN	CNAME	ghs.google.com.
+google._domainkey 3600	IN	TXT	"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZtTOyBGwX+iDBxZVWx1tMJHsQFGLJHZTncSQec5PbrtnVRHmih0uLFT6gMKJLOktZsCPmlnd7ingGSPRSvRSEqLu92h55npBx68yGhTcXVcqCuaubdxSJDDCGyuiUmANSiv0jDUhiT7B44DCC0dxXipP4qsPy40fAYkMG6BJuTQIDAQAB"
 
 fb		36000	IN	NS	ns1
 runc		36000	IN	NS	dijkstra
