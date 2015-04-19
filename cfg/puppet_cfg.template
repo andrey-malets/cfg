@@ -956,9 +956,12 @@ node '{{ host.name }}' {
                 {% set backup_user = 'backup-{}'.format(backed_host.name) %}
                 cron { 'backup-{{ backed_host }}-{{ item.day }}':
                     user => '{{ backup_user }}',
-                    command => '/usr/local/bin/backuper.sh "{{ backed_host }}" {{ item.btype }}{%
-                        for bprop in item.bprops %} {{ bprop }}{% endfor %}',
-
+                    command => '{% for btype in item.btypes %}{%
+                        if loop.index0 == 0 %}/usr/local/bin/backuper.sh "{{ backed_host }}" {{ btype }}{%
+                            for bprop in item.bprops[loop.index0] %} {{ bprop }}{% endfor %}{%
+                        else %} && /usr/local/bin/backuper.sh "{{ backed_host }}" {{ btype }}{%
+                            for bprop in item.bprops[loop.index0] %} {{ bprop }}{% endfor %}{%
+                        endif %}{% endfor %}',
                     weekday => '{{ item.day }}',
                     hour => '{{ item.hour }}',
                     minute => '{{ item.minute }}',

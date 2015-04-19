@@ -6,8 +6,8 @@ class BackupItem:
         self.hour   = hour
         self.minute = minute
         self.host   = None
-        self.btype  = None
-        self.bprops = None
+        self.btypes = []
+        self.bprops = []
 
 def append_props(bprops, host):
     for service in ['mysql', 'postgresql']:
@@ -53,8 +53,12 @@ def build_schedule(state):
                     raise OverflowError
                 slot = slots[backuper.name][day][sn]
                 slot.host = host
-                slot.btype = 'full' if day == 0 else 'diff'
-                slot.bprops = bprops
+                slot.bprops = [bprops]
+                if day == 0:
+                    slot.btypes = ['full', 'clean']
+                    slot.bprops.append(['days={}'.format(days*2)])
+                else:
+                    slot.btypes = ['diff']
 
     for backuper, items in slots.items():
         slots[backuper] = []
