@@ -144,6 +144,6 @@ case "$1" in
     user)       diff_backup find_userfiles true ;;
     special)    diff_backup find_specialfiles true ;;
     mysql)      backup_mysql ;;
-    postgresql) su postgres -c 'pg_dumpall | gzip' ;;
+    postgresql) cd / && su postgres -c 'pg_dumpall | gzip' ;;
     *)          exit 1 ;;
 esac
