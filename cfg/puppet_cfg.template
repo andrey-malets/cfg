@@ -961,7 +961,7 @@ node '{{ host.name }}' {
                             for bprop in item.bprops[loop.index0] %} {{ bprop }}{% endfor %}{%
                         else %} && /usr/local/bin/backuper.sh "{{ backed_host }}" {{ btype }}{%
                             for bprop in item.bprops[loop.index0] %} {{ bprop }}{% endfor %}{%
-                        endif %}{% endfor %}',
+                        endif %}{% endfor %} || echo "{{ backed_host }} backup FAILED."',
                     weekday => '{{ item.day }}',
                     hour => '{{ item.hour }}',
                     minute => '{{ item.minute }}',
