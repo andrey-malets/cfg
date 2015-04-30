@@ -8,6 +8,7 @@ urgu.org.  36000   IN      SOA     dijkstra.urgu.org. uzer.hackerdom.ru. (
 	3600	IN	MX	5  ALT2.ASPMX.L.GOOGLE.COM.
 	3600	IN	MX	10 ASPMX2.GOOGLEMAIL.COM.
 	3600	IN	MX	10 ASPMX3.GOOGLEMAIL.COM.
+	3600	IN	SPF	"v=spf1 include:_spf.google.com ~all"
 	3600	IN	TXT	"v=spf1 include:_spf.google.com ~all"
 
 $ORIGIN urgu.org.
