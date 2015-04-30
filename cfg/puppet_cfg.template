@@ -652,7 +652,9 @@ class exim_default {
         ensure => installed,
     }
 
-    service { 'exim4': }
+    service { 'exim4':
+        ensure => running,
+    }
 
     file { '/etc/exim4/update-exim4.conf.conf':
         require => Package['exim4-daemon-light'],
