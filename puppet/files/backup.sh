@@ -52,7 +52,7 @@ find_systemfiles() {
 }
 
 find_userfiles() {
-    find /home "${common_findopts[@]}"
+    find /home -mount "${common_findopts[@]}"
 }
 
 conffiles() {
