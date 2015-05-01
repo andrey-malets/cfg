@@ -79,9 +79,11 @@ print goal.strftime("%Y-%m-%d_%H-%M-%S")' "$@")"
 }
 
 remote_backup() {
-    local host=$1; shift
+    local host=${1%:*} port=
+    if [[ "$1" == "${1##*:}" ]]; then port=22; else port=${1##*:}; fi
+    shift
     local backup_cmd="/usr/local/bin/backup.sh"
-    ssh -l root "$host" "$backup_cmd" "$@"
+    ssh -l root -p "$port" "$host" "$backup_cmd" "$@"
 }
 
 get_destination() {

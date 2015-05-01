@@ -967,7 +967,8 @@ node '{{ host.name }}' {
                 cron { 'backup-{{ backed_host }}-{{ item.day }}':
                     user => '{{ backup_user }}',
                     command => '{% for btype in item.btypes %}{%
-                        if loop.index0 == 0 %}/usr/local/bin/backuper.sh "{{ backed_host }}" {{ btype }}{%
+                        if loop.index0 == 0 %}/usr/local/bin/backuper.sh "{{ backed_host }}:{{
+                                backed_host.props.get('ssh_port', 22) }}" {{ btype }}{%
                             for bprop in item.bprops[loop.index0] %} {{ bprop }}{% endfor %}{%
                         else %} && /usr/local/bin/backuper.sh "{{ backed_host }}" {{ btype }}{%
                             for bprop in item.bprops[loop.index0] %} {{ bprop }}{% endfor %}{%
@@ -993,15 +994,20 @@ case "$1" in
         fi
     ;;
     *)
-        for host in {%- for bhost in
+        for spec in {%- for bhost in
                         host.props['backups'][1].iterkeys() -%}
-                    {{ ' {}'.format(state.find(bhost).name) }}
+                    {{ ' {}:{}'.format(
+                        state.find(bhost).name,
+                        state.find(bhost).props.get('ssh_port', 22)) }}
                     {%- endfor -%}; do
+            host=${spec%:*}
+            if [[ "$spec" == "${spec##*:}" ]]; then port=22; else port=${spec##*:}; fi
             su "backup-$host" /usr/bin/env bash -c "$0 generate_id"
             pubkey=$(su "backup-$host" -c \'cat "$HOME/.ssh/id_rsa.pub"\')
-            if ssh "$host" "[[ -f .ssh/authorized_keys ]]"; then
-                ssh "$host" sed -i "/${pubkey##* }/d" .ssh/authorized_keys
-                echo "$pubkey" | ssh "$host" "cat >> .ssh/authorized_keys"
+            ssh=(ssh -l root -p "$port" "$host")
+            if "${ssh[@]}" "[[ -f .ssh/authorized_keys ]]"; then
+                "${ssh[@]}" sed -i "/${pubkey##* }/d" .ssh/authorized_keys
+                echo "$pubkey" | "${ssh[@]}" "cat >> .ssh/authorized_keys"
             else
                 echo "no .ssh/authorized_keys on $host" 1>&2
             fi
