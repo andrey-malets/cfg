@@ -260,9 +260,7 @@ hosts:
 - [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
 - [ hewlett,              10.232 , b499ba5732e9]
 - [ packard,              10.233 , b499ba5684d1]
-- [ uzer-pc.runc,         10.234,  0019d17f04ba, {udp_fwd: {60234: 60234},
-                                                  tcp_fwd: {60234: 60234},
-                                                  hadoop_rack: small_hog}]
+- [ uzer-pc.runc,         10.234,  0019d17f04ba, {hadoop_rack: small_hog}]
 - [ redmine-back,         10.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
                                                                 git.redmine.hackerdom.ru],
                                                   services: [autoupdate],
@@ -299,7 +297,7 @@ hosts:
                                                                 urfuclub.ru,
                                                              '*.urfuclub.ru']}]
 - [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
-# - [ dc4.runc,             10.249,  00163a34f855, {admin: uzer}]
+#   free
 - [ ructf-back,          '10.250', 000c2963e5d0, {admin: uzer, services: [postgresql],
                                                   backend_for: [ructf.org, www.ructf.org,
                                                                 ructf.ru, www.ructf.ru,
