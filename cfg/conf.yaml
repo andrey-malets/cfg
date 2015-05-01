@@ -69,10 +69,13 @@ networks:
 - [172.16.21/24,       172.16.21.254,   {rdns: 1, private: 1}]
 - [172.16.50/24,       172.16.50.254,   {dhcp: '1-240', rdns: 1, fb: 1, vlan: 6,
     descr: 'Network for DCIMAP lab'}]
-- [194.226.235.128/25, 194.226.235.254, {vlan: 7,
+- [194.226.235.128/25, 194.226.235.254, {vlan: 7, noicmp: 1,
     descr: 'USUNet network for Math faculty'}]
-- [194.226.244.112/28, 194.226.244.114, {fb: 1, vlan: 2,
+- [194.226.244.112/28, 194.226.244.126, {fb: 1, vlan: 2,
     descr: 'RUNC external network'}]
+
+- [194.226.235.22/32,  194.226.235.22, {noicmp: 1}]
+- [194.226.255.33/32,  194.226.255.33, {noicmp: 1}]
 
 groups:
 - [unix,       '^(.*-back|d|h|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$',
