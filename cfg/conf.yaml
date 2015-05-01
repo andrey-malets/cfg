@@ -35,9 +35,6 @@ people:
                                            {CNs: ['znick', 'znick2',
                                                   'znick-ideco', 'znick-eeepc',
                                                   'znick-yandex']}]
-- [r15,            [a799853, and, bosonojka5, crassirostris, vdashenko, dimmo,
-                    dqkrait, kiskachi.maria, kopeicev, kost, muzafarov, dscheg,
-                    victor.samun, znick, pahaz]]
 
 defaults:
   mon: monitoring@urgu.org
@@ -172,11 +169,11 @@ hosts:
                                         services: [http],
                                         ups: bfu,
                                         admin: uzer,
-                                        backups: [/place/backup, {dijkstra: [sys, user],
-                                                                  image32: [sys],
-                                                                  image64: [sys],
-                                                                  mysql:   [sys, user],
-                                                                  neumann: [sys],
+                                        backups: [/place/backup, {dijkstra:   [sys, user],
+                                                                  image32:    [sys],
+                                                                  image64:    [sys],
+                                                                  mysql:      [sys, user],
+                                                                  neumann:    [sys],
                                                                   ructf-back: [sys, user]}]}]
 - [[630-switch, bs],           9.6,     001b11c344e6]
 - [[hp-switch, hps],           9.7,     001ec1831c01]
@@ -188,9 +185,9 @@ hosts:
                                         ups: hlu,
                                         admin: uzer,
                                         backups: [/place/backup, {dijkstra: [sys, user],
-                                                                  image32: [sys],
-                                                                  image64: [sys],
-                                                                  hamming: [sys]}]}]
+                                                                  image32:  [sys],
+                                                                  image64:  [sys],
+                                                                  hamming:  [sys]}]}]
 - [[storage-mplan, s-m],       9.13,    001a4bec0cee]
 - [[it2-mplan,it2-m],          9.14,    001b789f92a6]
 - [[it-mplan,it-m],            9.15,    002b789fa22f]
@@ -210,32 +207,32 @@ hosts:
 - [[631-far-high-ups, hpu2],   9.28,    00c0b72f2677]
 #- [[hog-high-ups, hhu],        9.29,    00c0b79860d9]
 #- [[631-near-high-ups, bfu2], '9.30',   00c0b72ea27c]
-- [smc-8624t,                  9.32,    0004e279d328]
-- [dgs-3100-24,                9.33,    001e58047d32]
-- [catalyst-2950,              9.34,    000d28d0a8c0]
+#- [smc-8624t,                  9.32,    0004e279d328]
+#- [dgs-3100-24,                9.33,    001e58047d32]
+#- [catalyst-2950,              9.34,    000d28d0a8c0]
 #   dijkstra              9.254
 
-- [ clv1,                '10.181', 0004e21c716a ]
-- [ clv2,                '10.182', 0004e21c735b ]
-- [ clv3,                '10.183', 0004e21c71a4 ]
-- [ clv4,                '10.184', 0004e2263d38 ]
-- [ clv5,                '10.185', 0004e21c72d6 ]
-- [ clv6,                '10.186', 0004e21c72da ]
-- [ clv7,                '10.187', 0004e21c71da ]
-- [ clv8,                '10.188', 0004e21c6ede ]
-- [ clv9,                '10.189', 0004e2263a48 ]
-- [ clv10,               '10.190', 0004e21c718a ]
-
-- [ clh1,                '10.201', 0007e9dd94a9 ]
-- [ clh2,                '10.202', 0007e9dd7fda ]
-- [ clh3,                '10.203', 0007e9dd7d4e ]
-- [ clh4,                '10.204', 0007e9dd83b8 ]
-- [ clh5,                '10.205', 0007e9dd9488 ]
-- [ clh6,                '10.206', 0007e9dd7eb3 ]
-- [ clh7,                '10.207', 0007e9dd8fc1 ]
-- [ clh8,                '10.208', 0007e9e4808b ]
-- [ clh9,                '10.209', 0007e9dd8fb8 ]
-- [ clh10,               '10.210', 0007e9dd7aa6 ]
+#- [ clv1,                '10.181', 0004e21c716a ]
+#- [ clv2,                '10.182', 0004e21c735b ]
+#- [ clv3,                '10.183', 0004e21c71a4 ]
+#- [ clv4,                '10.184', 0004e2263d38 ]
+#- [ clv5,                '10.185', 0004e21c72d6 ]
+#- [ clv6,                '10.186', 0004e21c72da ]
+#- [ clv7,                '10.187', 0004e21c71da ]
+#- [ clv8,                '10.188', 0004e21c6ede ]
+#- [ clv9,                '10.189', 0004e2263a48 ]
+#- [ clv10,               '10.190', 0004e21c718a ]
+#
+#- [ clh1,                '10.201', 0007e9dd94a9 ]
+#- [ clh2,                '10.202', 0007e9dd7fda ]
+#- [ clh3,                '10.203', 0007e9dd7d4e ]
+#- [ clh4,                '10.204', 0007e9dd83b8 ]
+#- [ clh5,                '10.205', 0007e9dd9488 ]
+#- [ clh6,                '10.206', 0007e9dd7eb3 ]
+#- [ clh7,                '10.207', 0007e9dd8fc1 ]
+#- [ clh8,                '10.208', 0007e9e4808b ]
+#- [ clh9,                '10.209', 0007e9dd8fb8 ]
+#- [ clh10,               '10.210', 0007e9dd7aa6 ]
 
 - [ re14,                 10.212,  000c7bcf7768, {admin: ld, services: [ssh]}]
 - [ image32-test,         10.213,  000c29bcbcf8, {dhcp: {ipxe.scriptlet: cow32}}]
@@ -262,7 +259,7 @@ hosts:
                                                   admin: uzer, services: [hadoop-master,
                                                                           slurm-master,
                                                                           managed-apt]}]
-- [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
+#- [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
 - [ hewlett,              10.232 , b499ba5732e9]
 - [ packard,              10.233 , b499ba5684d1]
 - [ uzer-pc.runc,         10.234,  0019d17f04ba, {hadoop_rack: small_hog}]
@@ -321,17 +318,12 @@ hosts:
                                                              exim_default,
                                                              ext_http,
                                                              unix]}]
-- [ pi2,                  16.2,          {admin: muzafarov,
-                                          access: {r15: full}}]
 
-- [ uzer-work,            19.198,        {admin: uzer}]
-- [ uzer-hp,              19.202,        {admin: uzer}]
-- [[pioneer, estatus],    46.48.110.120, {admin: uzer, services: [http]}]
-
-
-- [ dcimap-vm,           '50.100', 000c29ad8762, {admin: andgein}]
-- [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
+#- [ dcimap-vm,           '50.100', 000c29ad8762, {admin: andgein}]
+#- [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
 - [ dcimap-printer,       50.246,  00c0ee1c78a8, {admin: yariksuperman}]
+
+- [[pioneer, estatus],    46.48.110.120, {admin: uzer, services: [http]}]
 
 #   free                  194.226.244.113
 - [[main-switch, ms],     194.226.244.114, 001cc534d301, {services: [ext_http]}]
@@ -343,14 +335,13 @@ hosts:
 #   free                 '194.226.244.120'
 #   free                  194.226.244.121
 #   free                  194.226.244.122
-- [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
+#- [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
 - [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, tracker, v, wiki, hdfs, mapred],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
                                     services: [nagios, autoupdate, dns],
-                                    nrpe_allowed: [195.19.132.20],
                                     ups: hlu,
                                     sensors: ['max1617:temp*:10,15,30,35'],
                                     fb: [10.254, 11.254, 12.254, 50.254]}]
@@ -361,9 +352,6 @@ hosts:
 - [ acm.timus.ru,     194.226.235.253, {admin: alklepin, services: [http]}]
 - [ acm.usu.ru,       194.226.235.238, {admin: alklepin, services: [http]}]
 - [ acm.urfu.ru,      194.226.235.238, {admin: alklepin, services: [http]}]
-
-- [ loa.imm.uran.ru ]
-- [ um64.imm.uran.ru ]
 
 - [ mx1.eunnet.net,  194.226.255.33,   {services: [dns]}]
 - [ usu-math.usu.ru, 194.226.235.254]
@@ -416,8 +404,8 @@ hosts:
 #- [ hog26.runc,   12.26,   0019d17e9c6f]
 #- [ hog27.runc,   12.27,   0019d17e9d99]
 #- [ hog28.runc,   12.28,   0019d17e922d]
-- [ hog-vm-new.runc, '12.99',  000c29ad7763, {services: [rrdp]}]
-- [ hog-vm.runc,     '12.100', 000c29ad7762, {services: [rrdp]}]
+#- [ hog-vm-new.runc, '12.99',  000c29ad7763, {services: [rrdp]}]
+#- [ hog-vm.runc,     '12.100', 000c29ad7762, {services: [rrdp]}]
 
 - [ h01,  20.1,   0019d17ebccf, {nagios: { 2d_coords: '680,440', statusmap_image: 'base/cmp+180.png' } } ]
 - [ h02,  20.2,   0019d17ebba0, {nagios: { 2d_coords: '680,520', statusmap_image: 'base/cmp+180.png' } } ]
