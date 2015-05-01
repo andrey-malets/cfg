@@ -167,7 +167,8 @@ hosts:
                                         services: [http],
                                         ups: bfu,
                                         admin: uzer,
-                                        backups: [/place/backup, {image32: [sys],
+                                        backups: [/place/backup, {dijkstra: [sys, user],
+                                                                  image32: [sys],
                                                                   image64: [sys],
                                                                   mysql:   [sys, user],
                                                                   neumann: [sys],
@@ -181,7 +182,8 @@ hosts:
 - [[neumann, n],               9.12,   [90e2ba3f0fc2, 90e2ba3f0fc3, 000e0c6a2691], {
                                         ups: hlu,
                                         admin: uzer,
-                                        backups: [/place/backup, {image32: [sys],
+                                        backups: [/place/backup, {dijkstra: [sys, user],
+                                                                  image32: [sys],
                                                                   image64: [sys],
                                                                   hamming: [sys]}]}]
 - [[storage-mplan, s-m],       9.13,    001a4bec0cee]
