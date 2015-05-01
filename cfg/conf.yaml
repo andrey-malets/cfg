@@ -349,26 +349,27 @@ hosts:
 - [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, tracker, v, wiki, hdfs, mapred],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
-                                    services: [nagios, autoupdate],
+                                    services: [nagios, autoupdate, dns],
                                     nrpe_allowed: [195.19.132.20],
                                     ups: hlu,
                                     sensors: ['max1617:temp*:10,15,30,35'],
                                     fb: [10.254, 11.254, 12.254, 50.254]}]
 
 - [ babbage.usu,      194.226.235.251, {admin: znick}]
-- [ shannon.usu,      194.226.235.185, {admin: znick}]
+- [ shannon.usu,      194.226.235.185, {admin: znick, services: [http]}]
 
-- [ acm.timus.ru,                  {admin: alklepin, services: [http]}]
-- [ acm.usu.ru,                    {admin: alklepin, services: [http]}]
-- [ acm.urfu.ru,                   {admin: alklepin, services: [http]}]
+- [ acm.timus.ru,     194.226.235.253, {admin: alklepin, services: [http]}]
+- [ acm.usu.ru,       194.226.235.238, {admin: alklepin, services: [http]}]
+- [ acm.urfu.ru,      194.226.235.238, {admin: alklepin, services: [http]}]
 
 - [ loa.imm.uran.ru ]
 - [ um64.imm.uran.ru ]
 
-- [ mx1.eunnet.net,  194.226.255.33]
+- [ mx1.eunnet.net,  194.226.255.33,   {services: [dns]}]
 - [ usu-math.usu.ru, 194.226.235.254]
-- [ codd.runc,       194.226.235.240,  00163a34e94d, {admin: uzer}]
-- [ ns.usu.ru,       194.226.235.22]
+- [ codd.runc,       194.226.235.240,  00163a34e94d, {admin: uzer,
+                                                      services: [http]}]
+- [ ns.usu.ru,       194.226.235.22,   {services: [dns]}]
 
 - [ splinex.dyndns.org, {admin: ns}]
 
