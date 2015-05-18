@@ -2,7 +2,12 @@
 
 set -e
 
-tarcmd=(tar cf - --numeric-owner --ignore-failed-read -C /)
+tarcmd() {
+    opts=(cf - --numeric-owner --ignore-failed-read -C /)
+    set +e; tar "${opts[@]}" "$@"; rv=$?; set -e
+    [[ "$rv" -eq 0 ]] || [[ "$rv" -eq 1 ]]
+}
+
 common_findopts=(-type f -a -print0)
 specialfiles=(
     boot
@@ -69,7 +74,7 @@ conffiles() {
         fi
     done < <(dpkg-query -f '${Conffiles}\n' -W "${all_pkgs[@]}")
 
-    "${tarcmd[@]}" -T <(while read -r; do
+    tarcmd -T <(while read -r; do
         local sum="${REPLY%%  *}" file="${REPLY#*  }"
         if [[ "${conffiles[$file]}" != "$sum" ]]; then
             echo "${file:1}"
@@ -95,7 +100,7 @@ diff_backup() {
         md5sums[$file]=$md5sum
     done
 
-    "${tarcmd[@]}" --null -T <(
+    tarcmd --null -T <(
         to_check=()
         while read -r -d ''; do
             if "$filtercmd" "$REPLY"; then
