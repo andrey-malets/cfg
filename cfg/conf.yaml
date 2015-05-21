@@ -335,7 +335,7 @@ hosts:
 #   free                 '194.226.244.120'
 #   free                  194.226.244.121
 #   free                  194.226.244.122
-#- [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: last}]
+- [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: znick}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
 - [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, tracker, v, wiki, hdfs, mapred],
