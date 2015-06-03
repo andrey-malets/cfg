@@ -39,7 +39,7 @@ find_systemfiles() {
     local excludes=(
         "${specialfiles[@]}"
         dev proc run sys tmp
-        home place
+        home place mnt
         usr/share/{mime,snmp}
         var/{cache,log,local,spool,tmp}
         var/lib/{apt{,itude},dpkg}
