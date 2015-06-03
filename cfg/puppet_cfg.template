@@ -709,6 +709,7 @@ class hwraid {
 
     apt::source { 'hwraid':
         location => 'http://hwraid.le-vert.net/debian',
+        release => 'wheezy',
         repos => 'main',
         require => Apt::Key['23B3D3B4'],
     }
