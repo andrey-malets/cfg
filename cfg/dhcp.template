@@ -7,10 +7,10 @@ option ipxe-encap-opts code 175 = encapsulate ipxe;
 option ipxe.keep-san   code 8   = unsigned integer 8;
 option ipxe.scriptlet  code 81  = string;
 
-option domain-search "runc.urgu.org", "urgu.org", "usu.local";
+option domain-search "runc.urgu.org", "urgu.org", "at.urfu.ru";
 
 option w-d code 135 = domain-list;
-option w-d "runc.urgu.org", "urgu.org", "usu.local";
+option w-d "runc.urgu.org", "urgu.org", "at.urfu.ru";
 
 option classless-route code 121 = string;
 
