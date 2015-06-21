@@ -8,7 +8,7 @@ tarcmd() {
     [[ "$rv" -eq 0 ]] || [[ "$rv" -eq 1 ]]
 }
 
-common_findopts=(-type f -a -print0)
+common_findopts=(-type f -a -print0 -or -type l -print0)
 specialfiles=(
     boot
     lib/modules var/lib/dkms
