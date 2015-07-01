@@ -31,16 +31,18 @@ update() {
 
     script='
 try:
-    import md5, sys, tarfile
+    import base64, md5, sys, tarfile
 
     with tarfile.open(sys.argv[1]) as tfile:
         for member in tfile:
-            md5sum = md5.new()
-            if member.issym():
-                md5sum.update(member.linkname)
-                sys.stdout.write("L{} {}\0".format(md5sum.hexdigest(),
-                                                   member.name))
+            if member.issym() or member.islnk():
+                code = "L" if member.issym() else "H"
+                sys.stdout.write("{}{} {}\0".format(
+                    code,
+                    base64.encodestring(member.linkname).strip(),
+                    member.name))
             elif member.isfile():
+                md5sum = md5.new()
                 memberfile = tfile.extractfile(member)
                 while True:
                     data = memberfile.read(4096)

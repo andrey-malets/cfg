@@ -3,7 +3,7 @@
 set -e
 
 tarcmd() {
-    opts=(cf - --numeric-owner --ignore-failed-read -C /)
+    opts=(cf - --numeric-owner --ignore-failed-read -C / -l)
     set +e; tar "${opts[@]}" "$@"; rv=$?; set -e
     [[ "$rv" -eq 0 ]] || [[ "$rv" -eq 1 ]]
 }
@@ -101,16 +101,22 @@ diff_backup() {
     done
 
     tarcmd --null -T <(
+        hardlinks_to_check=()
+        symlinks_to_check=()
         files_to_check=()
-        links_to_check=()
         while read -r -d ''; do
             if "$filtercmd" "$REPLY"; then
                 if [[ -z "${sums[$REPLY]}" ]]; then
                     echo -en "${REPLY:1}\0"
                 else
+                    if [[ "$(stat -c "%h" "$REPLY")" -gt 1 ]]; then
+                        sum=${sums[$REPLY]}
+                        if [[ "${sum:0:1}" == 'H' ]]; then
+                            hardlinks_to_check+=("$REPLY")
+                        fi
                     # symlinks first, as -f gives OK if the target exists
-                    if [[ -L "$REPLY" ]]; then
-                        links_to_check+=("$REPLY")
+                    elif [[ -L "$REPLY" ]]; then
+                        symlinks_to_check+=("$REPLY")
                     elif [[ -f "$REPLY" ]]; then
                         files_to_check+=("$REPLY")
                     else
@@ -119,6 +125,26 @@ diff_backup() {
                 fi
             fi
         done < <("$findcmd")
+
+        if [[ "${#hardlinks_to_check[@]}" -gt 0 ]]; then
+            for link in "${hardlinks_to_check[@]}"; do
+                sum=${sums[$link]}
+                target=$(echo -n "${sum:1}" | base64 -d)
+                if [[ "$(ls -i "$link" | cut -f1 -d' ')" -ne \
+                      "$(ls -i "/$target" | cut -f1 -d' ')" ]]; then
+                    echo -en "${link:1}\0"
+                fi
+            done
+        fi
+
+        if [[ "${#symlinks_to_check[@]}" -gt 0 ]]; then
+            for link in "${symlinks_to_check[@]}"; do
+                sum=$(readlink -n "$link" | base64)
+                if [[ "${sums[$link]}" != "L$sum" ]]; then
+                    echo -en "${link:1}\0"
+                fi
+            done
+        fi
 
         if [[ "${#files_to_check[@]}" -gt 0 ]]; then
             for file in "${files_to_check[@]}"; do
@@ -134,15 +160,6 @@ diff_backup() {
                 fi
                 if [[ "${sums[$filename]}" != "F$sum" ]]; then
                     echo -en "${filename:1}\0"
-                fi
-            done
-        fi
-
-        if [[ "${#links_to_check[@]}" -gt 0 ]]; then
-            for link in "${links_to_check[@]}"; do
-                sum=$(readlink -n "$link" | md5sum | cut -f1 -d' ')
-                if [[ "${sums[$link]}" != "L$sum" ]]; then
-                    echo -en "${link:1}\0"
                 fi
             done
         fi
