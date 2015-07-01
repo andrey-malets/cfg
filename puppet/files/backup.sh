@@ -93,27 +93,35 @@ find_specialfiles() {
 diff_backup() {
     local findcmd=$1 filtercmd=$2
 
-    declare -A md5sums
+    declare -A sums
     while read -r -d ''; do
-        md5sum=${REPLY%% *}
+        sum=${REPLY%% *}
         file="/${REPLY#* }"
-        md5sums[$file]=$md5sum
+        sums[$file]=$sum
     done
 
     tarcmd --null -T <(
-        to_check=()
+        files_to_check=()
+        links_to_check=()
         while read -r -d ''; do
             if "$filtercmd" "$REPLY"; then
-                if [[ -z "${md5sums[$REPLY]}" ]]; then
+                if [[ -z "${sums[$REPLY]}" ]]; then
                     echo -en "${REPLY:1}\0"
                 else
-                    to_check+=("$REPLY")
+                    # symlinks first, as -f gives OK if the target exists
+                    if [[ -L "$REPLY" ]]; then
+                        links_to_check+=("$REPLY")
+                    elif [[ -f "$REPLY" ]]; then
+                        files_to_check+=("$REPLY")
+                    else
+                        echo "$REPLY: file type is not supported" >&2
+                    fi
                 fi
             fi
         done < <("$findcmd")
 
-        if [[ "${#to_check[@]}" -gt 0 ]]; then
-            for file in "${to_check[@]}"; do
+        if [[ "${#files_to_check[@]}" -gt 0 ]]; then
+            for file in "${files_to_check[@]}"; do
                 echo -en "$file\0"
             done | xargs --null md5sum | while read -r; do
                 start=${REPLY:0:1}
@@ -124,8 +132,17 @@ diff_backup() {
                 else
                     sum=${REPLY:0:32}
                 fi
-                if [[ "${md5sums[$filename]}" != "$sum" ]]; then
+                if [[ "${sums[$filename]}" != "F$sum" ]]; then
                     echo -en "${filename:1}\0"
+                fi
+            done
+        fi
+
+        if [[ "${#links_to_check[@]}" -gt 0 ]]; then
+            for link in "${links_to_check[@]}"; do
+                sum=$(readlink -n "$link" | md5sum | cut -f1 -d' ')
+                if [[ "${sums[$link]}" != "L$sum" ]]; then
+                    echo -en "${link:1}\0"
                 fi
             done
         fi

@@ -22,35 +22,46 @@ last_fullname() {
 update() {
     local sumfile=$1 backup=$2
 
-    declare -A md5sums
+    declare -A sums
     while read -r -d ''; do
-        md5sum=${REPLY%% *}
+        sum=${REPLY%% *}
         file=${REPLY#* }
-        md5sums[$file]=$md5sum
+        sums[$file]=$sum
     done < "$sumfile"
 
     script='
-import md5, sys, tarfile
+try:
+    import md5, sys, tarfile
 
-with tarfile.open(sys.argv[1]) as tfile:
-    for member in tfile:
-        md5sum = md5.new()
-        memberfile = tfile.extractfile(member)
-        while True:
-            data = memberfile.read(4096)
-            if len(data) == 0:
-                break
-            md5sum.update(data)
-        sys.stdout.write("{} {}\0".format(md5sum.hexdigest(),
-                                          member.name))'
+    with tarfile.open(sys.argv[1]) as tfile:
+        for member in tfile:
+            md5sum = md5.new()
+            if member.issym():
+                md5sum.update(member.linkname)
+                sys.stdout.write("L{} {}\0".format(md5sum.hexdigest(),
+                                                   member.name))
+            elif member.isfile():
+                memberfile = tfile.extractfile(member)
+                while True:
+                    data = memberfile.read(4096)
+                    if len(data) == 0:
+                        break
+                    md5sum.update(data)
+                sys.stdout.write("F{} {}\0".format(md5sum.hexdigest(),
+                                                   member.name))
+            else:
+                print >> sys.stderr, \
+                    "unknown type for {}: {}".format(member.name, member.type)
+except Exception as e:
+    print >> sys.stderr, e'
     while read -r -d ''; do
-        md5sum=${REPLY%% *}
+        sum=${REPLY%% *}
         file=${REPLY#* }
-        md5sums[$file]=$md5sum
+        sums[$file]=$sum
     done < <(python -c "$script" "$backup")
 
-    for file in "${!md5sums[@]}"; do
-        echo -en "${md5sums[$file]} $file\0"
+    for file in "${!sums[@]}"; do
+        echo -en "${sums[$file]} $file\0"
     done > "$sumfile.new"
 
     mv "$sumfile.new" "$sumfile"
