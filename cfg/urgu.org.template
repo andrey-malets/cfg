@@ -8,8 +8,8 @@ urgu.org.  36000   IN      SOA     dijkstra.urgu.org. uzer.hackerdom.ru. (
 	3600	IN	MX	5  ALT2.ASPMX.L.GOOGLE.COM.
 	3600	IN	MX	10 ASPMX2.GOOGLEMAIL.COM.
 	3600	IN	MX	10 ASPMX3.GOOGLEMAIL.COM.
-	3600	IN	SPF	"v=spf1 include:_spf.google.com ~all"
-	3600	IN	TXT	"v=spf1 include:_spf.google.com ~all"
+	3600    IN      SPF     "v=spf1 a include:_spf.google.com ~all"
+	3600    IN      TXT     "v=spf1 a include:_spf.google.com ~all"
 
 $ORIGIN urgu.org.
 
@@ -32,8 +32,8 @@ y._domainkey.dijkstra	IN	TXT	"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB
 dijkstra	3600	IN	SPF	"v=spf1 a"
 dijkstra	3600	IN	TXT	"v=spf1 a"
 
-pioneer 	3600	IN	SPF	"v=spf1 a"
-pioneer 	3600	IN	TXT	"v=spf1 a"
+pioneer		3600	IN	SPF	"v=spf1 a"
+pioneer		3600	IN	TXT	"v=spf1 a"
 pioneer		3600	IN	AAAA	2a02:17d0:341:5a01::1
 
 uzer-work	3600	IN	SPF	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
