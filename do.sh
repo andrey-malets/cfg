@@ -45,7 +45,7 @@ gen_dns() {
         local OLD=$CUR.old NEW=$CUR.new
 
         set +e; SOLD=$($SERIAL get $SFILE 2>/dev/null); rv=$?; set -e
-        if [ $rv -ne 0 ]; then
+        if [[ "$rv" -ne 0 ]] || [[ "$TEMPLATE" -nt "$CUR" ]]; then
             RELOAD=1
             local SNEW=$($SERIAL inc $SFILE)
             $MAIN $CMD $TEMPLATE $SNEW $ZONE > $CUR
