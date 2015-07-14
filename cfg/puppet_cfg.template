@@ -898,10 +898,6 @@ node '{{ host.name }}' {
         }
     {% endif %}
 
-    {% if 'slurm-master' in host.props['services'] %}
-        $check_slurm_master = 'true'
-    {% endif %}
-
     {% if 'unix' in host.services %}
         include essential_soft
 
@@ -1103,8 +1099,6 @@ esac
             include smartmon
             $check_smartmon = 'true'
 
-            $check_slurm_node = 'true'
-
             include exchange
             include managed-apt
             include managed-ssh
@@ -1201,6 +1195,16 @@ esac
             include ad
         {% endif %}
 
+        {% if 'slurm-master' in host.props['services'] %}
+            include slurm
+            $check_slurm_master = 'true'
+            include distcc
+        {% elif 'managed' in host.props or 'slurm' in host.props %}
+            include slurm
+            $check_slurm_node = 'true'
+            include distcc
+        {% endif %}
+
         $host = '{{ state.get_canonical_hostname(host) }}'
         $nsca_host = '{{ state.defaults.nagios }}'
         $puppet_random_host = 'urgu.org'
@@ -1208,13 +1212,11 @@ esac
 
         include backup
         include btsync
-        include distcc
         include gdm
         include known_hosts
         include ldap
         include nrpe
         include runc_ca
-        include slurm
         include sp
     {% endif %}
 }
