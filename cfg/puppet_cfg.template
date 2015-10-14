@@ -1,3 +1,12 @@
+class restart-puppet {
+    cron { 'restart-puppet':
+        command => '/etc/init.d/puppet restart >/dev/null',
+        user => root,
+        hour => 6,
+        minute => 0,
+    }
+}
+
 class { 'apt':
     always_apt_update    => false,
     disable_keys         => undef,
@@ -875,6 +884,8 @@ class backup {
 
 {% for host in state.hosts %}
 node '{{ host.name }}' {
+    include restart-puppet
+
     {% if 'hadoop-master' in host.props['services'] %}
         include hadoop_master
         $check_hadoop_master = 'true'
