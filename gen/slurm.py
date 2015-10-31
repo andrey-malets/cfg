@@ -3,7 +3,7 @@ from cmd import add_cmd
 from parse.host import get_sname_dups
 
 def gen_line(fact):
-    spec = filter(lambda (key, _): key != 'ClusterName',
+    spec = filter(lambda (key, _): key not in ['ClusterName', 'Procs', 'Boards'],
                   [(pair.split('=')) for pair in fact.split(' ')])
     return ' '.join(map(lambda pair: '{}={}'.format(*pair), spec))
 
