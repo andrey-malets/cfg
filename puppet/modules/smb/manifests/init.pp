@@ -1,4 +1,6 @@
 class smb inherits place {
+    package { 'samba': ensure => installed }
+
     file { '/etc/smb.pwd':
         ensure => present,
         mode => '400',
@@ -42,7 +44,17 @@ class smb inherits place {
         refreshonly => true,
     }
 
-    service { 'samba':
+    service { 'smbd':
+        ensure => running,
+        enable => true,
+        require => [File['/etc/smb.pwd'],
+                    File['/etc/samba/smb.conf']],
+        subscribe => [File['/etc/smb.pwd'],
+                      File['/etc/samba/smb.conf'],
+                      Exec['join']],
+    }
+
+    service { 'nmbd':
         ensure => running,
         enable => true,
         require => [File['/etc/smb.pwd'],
