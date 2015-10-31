@@ -15,7 +15,14 @@ def get_raw_config(filename):
         return None
 
 def filter_config(raw_config):
-    keys = ['memory', 'disk', 'boot', 'vif', 'cpus', 'vnclisten', 'localtime']
+    keys = ['name',
+            'memory',
+            'disk',
+            'boot',
+            'vif',
+            'cpus',
+            'vnclisten',
+            'localtime']
     rv = {}
     for key in keys:
         rv[key] = raw_config.get(key, None)
