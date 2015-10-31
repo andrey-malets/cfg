@@ -2,8 +2,8 @@
 # Put this file on all nodes of your cluster.
 # See the slurm.conf man page for more information.
 #
-ControlMachine=ts
-ControlAddr=slurm.fb.urgu.org
+ControlMachine=dijkstra
+ControlAddr=dijkstra.urgu.org
 #BackupController=
 #BackupAddr=
 #
@@ -155,7 +155,7 @@ SlurmdLogFile=/var/log/slurm-llnl/slurmd.log
 # COMPUTE NODES
 {%- for host in hosts %}
 {% if host.facts and host.facts['slurm'] -%}
-{{ host.facts['slurm'] }}
+{{ get_line(host.facts['slurm']) }}
 {%- else -%}
 NodeName={{ host.sname }}
 {%- endif %}
