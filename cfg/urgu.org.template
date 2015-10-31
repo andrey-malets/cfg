@@ -40,6 +40,7 @@ pioneer		IN	SPF	"v=spf1 a"
 pioneer		IN	TXT	"v=spf1 a"
 pioneer		IN	AAAA	2a02:17d0:341:5a01::1
 
+uzer-work	IN	A	87.250.248.234
 uzer-work	IN	SPF	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
 uzer-work	IN	TXT	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
 
