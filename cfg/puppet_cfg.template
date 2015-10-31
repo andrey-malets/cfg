@@ -7,6 +7,27 @@ class restart-puppet {
     }
 }
 
+class ndd {
+    if $architecture == 'i386' {
+        $source = "puppet:///files/ndd32"
+    } else {
+        $source = "puppet:///files/ndd"
+    }
+
+    file { '/usr/local/bin/ndd':
+        mode => 755,
+        owner => root,
+        group => root,
+        source => $source,
+    }
+    file { '/usr/local/bin/ndd_slurm.py':
+        mode => 755,
+        owner => root,
+        group => root,
+        source => "puppet:///files/ndd_slurm.py",
+    }
+}
+
 class { 'apt':
     always_apt_update    => false,
     disable_keys         => undef,
@@ -16,9 +37,8 @@ class { 'apt':
     update_timeout       => undef
 }
 
-class slurm {
+class slurm-base {
     package { 'munge':      ensure => installed }
-    package { 'slurm-llnl': ensure => installed }
 
     file { '/etc/munge/munge.key':
         require => Package['munge'],
@@ -35,20 +55,61 @@ class slurm {
         require => File['/etc/munge/munge.key'],
     }
 
+    group { 'slurm':
+        ensure => 'present',
+        system => 'true',
+        gid => 64030,
+    }
+
+    user { 'slurm':
+        ensure => 'present',
+        system => 'true',
+        uid => 64030,
+        gid => 64030,
+    }
+
     file { '/etc/slurm-llnl/slurm.conf':
-        require => Package['slurm-llnl'],
-        notify => Service['slurm-llnl'],
         mode => 644,
         owner => root,
         group => root,
         source => "puppet:///files/slurm.conf",
     }
+}
 
-    service { 'slurm-llnl':
-        require => Service['munge'],
+class slurm-client inherits slurm-base {
+    package { 'slurm-client': ensure => installed }
+}
+
+class slurm-node inherits slurm-base {
+    package { 'slurmd': ensure => installed }
+    service { 'slurmd':
+        require => File['/etc/slurm-llnl/slurm.conf'],
+        subscribe => File['/etc/slurm-llnl/slurm.conf'],
         ensure => 'running',
         enable => 'true',
     }
+}
+
+class slurm-master inherits slurm-base {
+    package { 'slurmctld': ensure => installed }
+    service { 'slurmctld':
+        require => File['/etc/slurm-llnl/slurm.conf'],
+        subscribe => File['/etc/slurm-llnl/slurm.conf'],
+        ensure => 'running',
+        enable => 'true',
+    }
+}
+
+class no-slurm {
+    package { 'munge':        ensure => absent }
+    package { 'slurm-client': ensure => absent }
+    package { 'slurm-llnl':   ensure => absent }
+    package { 'slurm-wlm':    ensure => absent }
+    package { 'slurmd':       ensure => absent }
+    package { 'slurmctld':    ensure => absent }
+
+    file { '/etc/munge/munge.key':       ensure => absent }
+    file { '/etc/slurm-llnl/slurm.conf': ensure => absent }
 }
 
 class ssh {
@@ -569,16 +630,6 @@ class userqwer {
     }
 }
 
-class ldap {
-    file { '/etc/ssl/dc3.cer':
-        ensure => present,
-        mode => '644',
-        owner => root,
-        group => root,
-        source => 'puppet:///files/dc3.cer',
-    }
-}
-
 class gdm {
     exec { 'restart_gdm':
         command => '/etc/init.d/gdm restart',
@@ -795,7 +846,34 @@ class localtime {
     }
 }
 
-class ad inherits ldap {
+class timezone {
+    file {'/etc/timezone':
+        ensure => present,
+        mode => 644,
+        owner => root,
+        group => root,
+        content => 'Asia/Yekaterinburg
+',
+        notify => Exec['reconfigure-tzdata'],
+    }
+
+    exec { 'reconfigure-tzdata':
+        user => root,
+        group => root,
+        command => '/usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata',
+        refreshonly => true,
+    }
+}
+
+class ldap {
+    file { '/etc/ssl/dc3.cer':
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        source => 'puppet:///files/dc3.cer',
+    }
+
     package { 'nslcd': ensure => installed }
 
     service { 'nslcd':
@@ -841,7 +919,28 @@ class ad inherits ldap {
                     "set database[. = 'shadow']/service[2] ldap"],
         notify => Service['nscd'],
     }
+}
 
+class no-ldap {
+    file { '/etc/ssl/dc3.cer':
+        ensure => absent,
+    }
+
+    package { 'nslcd': ensure => absent }
+    package { 'nscd': ensure => absent }
+
+    augeas { 'ldap':
+        context => '/files/etc/nsswitch.conf',
+        changes => ["rm  database[. = 'passwd']/service[2]",
+                    "set database[. = 'passwd']/service[1] files",
+                    "rm  database[. = 'group']/service[2]",
+                    "set database[. = 'group']/service[1] files",
+                    "rm  database[. = 'shadow']/service[2]",
+                    "set database[. = 'shadow']/service[1] files"],
+    }
+}
+
+class ad inherits ldap {
     package { 'krb5-user':
         ensure => installed,
     }
@@ -868,9 +967,30 @@ class essential_soft {
                    'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx',
                    'iperf', 'bridge-utils', 'vlan', 'ifenslave-2.6',
                    'stress', 'hdparm', 'sysbench', 'pv',
+                   'minicom',
                    'p7zip-full', 'gzip', 'lzma', 'zip', 'unzip'] %}
     package { '{{ pkg }}': ensure => installed }
     {% endfor %}
+}
+
+class locale {
+    package { 'locales': ensure => installed }
+    file { '/etc/locale.gen':
+        require => Package['locales'],
+        ensure => present,
+        mode => 644,
+        owner => root,
+        group => root,
+        content => 'en_US.UTF-8 UTF-8
+ru_RU.UTF-8 UTF-8
+',
+        notify => Exec['locale-gen'],
+    }
+
+    exec { 'locale-gen':
+        command => '/usr/sbin/locale-gen',
+        refreshonly => true,
+    }
 }
 
 class backup {
@@ -1099,13 +1219,13 @@ esac
             include localtime
             {% endif %}
 
-            {% if 'hadoop_rack' in host.props %}
-            $hadoop_rack = '{{ host.props['hadoop_rack']}}'
-            {% else %}
-            $hadoop_rack = 'default-rack'
-            {% endif %}
-            include hadoop_slave
-            $check_hadoop_slave = 'true'
+            # {% if 'hadoop_rack' in host.props %}
+            # $hadoop_rack = '{{ host.props['hadoop_rack']}}'
+            # {% else %}
+            # $hadoop_rack = 'default-rack'
+            # {% endif %}
+            # include hadoop_slave
+            # $check_hadoop_slave = 'true'
 
             include smartmon
             $check_smartmon = 'true'
@@ -1204,16 +1324,22 @@ esac
 
         {% if 'ad' in host.services %}
             include ad
+        {% elif 'ldap' in host.services %}
+            include ldap
+        {% else %}
+            include no-ldap
         {% endif %}
 
         {% if 'slurm-master' in host.props['services'] %}
-            include slurm
+            include slurm-master
             $check_slurm_master = 'true'
-            include distcc
-        {% elif 'managed' in host.props or 'slurm' in host.props %}
-            include slurm
+        {% elif 'slurm-node' in host.props['services'] %}
+            include slurm-node
             $check_slurm_node = 'true'
-            include distcc
+        {% elif 'slurm-client' in host.props['services'] %}
+            include slurm-client
+        {% else %}
+            include no-slurm
         {% endif %}
 
         $host = '{{ state.get_canonical_hostname(host) }}'
@@ -1225,10 +1351,12 @@ esac
         include btsync
         include gdm
         include known_hosts
-        include ldap
+        include locale
+        include ndd
         include nrpe
         include runc_ca
         include sp
+        include timezone
     {% endif %}
 }
 {% endfor %}
