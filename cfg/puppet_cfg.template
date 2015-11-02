@@ -77,7 +77,8 @@ class slurm-base {
 }
 
 class slurm-client inherits slurm-base {
-    package { 'slurm-client': ensure => installed }
+    package { 'slurm-client':            ensure => installed }
+    package { 'slurm-wlm-basic-plugins': ensure => installed }
 }
 
 class slurm-node inherits slurm-base {
