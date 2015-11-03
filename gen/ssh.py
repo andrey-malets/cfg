@@ -4,8 +4,10 @@ from parse.host import get_sname_dups
 
 from iptables import get_pub_port
 
-@add_cmd('ssh_known_hosts', False, 2)
-def gen(state, ext_host, ext_addr):
+@add_cmd('ssh_known_hosts', False, 3)
+def gen(state, facts_path, ext_host, ext_addr):
+    state.parse_facts(facts_path)
+
     lines = []
     def get_names(patt, host):
         rv = [patt % host.name, patt % host.sname, patt % host.addr]
@@ -13,8 +15,7 @@ def gen(state, ext_host, ext_addr):
         rv.extend(map(lambda alias: patt % alias, host.saliases))
         return rv
 
-    def matches(host):
-        return 'ssh' in host.services or 'unix' in host.services
+    def matches(host): return 'ssh' in host.services
 
     dups = get_sname_dups(filter(matches, state.hosts))
     assert len(dups) == 0, ("cannot generate SSH config with duplicate "
@@ -33,6 +34,10 @@ def gen(state, ext_host, ext_addr):
             if len(fronts) == 1:
                 names.extend(get_names('%s', fronts[0]))
 
-        if len(names):
-            lines.append('%s %s' % (host.name, ','.join(names)))
+        if names and host.facts:
+            for keytype in ['rsa', 'dsa', 'ecdsa', 'ed25519']:
+                key = host.facts.get('ssh{}key'.format(keytype))
+                if key:
+                    lines.extend(["{} ssh-{} {}".format(name, keytype, key)
+                                  for name in [host.name] + names])
     return '\n'.join(lines)
