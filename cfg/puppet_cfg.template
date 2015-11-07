@@ -965,7 +965,7 @@ class essential_soft {
     {% for pkg in ['ntp', 'arping', 'telnet', 'tcpdump', 'mtr-tiny', 'ethtool',
                    'vim', 'git', 'screen', 'augeas-tools', 'dnsutils',
                    'ca-certificates', 'atop', 'htop', 'iotop', 'lsof', 'jnettop',
-                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx',
+                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx', 'syslinux',
                    'iperf', 'bridge-utils', 'vlan', 'ifenslave-2.6',
                    'stress', 'hdparm', 'sysbench', 'pv',
                    'minicom',
