@@ -149,6 +149,18 @@ groups:
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
 
+- [managed-disk-standard, [hogs], 'image64-test', {
+     disk: [
+       {flags: bios_grub, size: 10},
+       {label: boot, size: 200, format: ext4},
+       {label: cow-image64-conf, size: 10, fs: ext2},
+       {label: cow-image64-sign, size: 1},
+       {label: cow-image64-cow, size: 21500},
+       {label: windows7, fs: ntfs, size: 50000},
+       {label: cow-image64-place, format: ext4}
+     ]
+  }]
+
 hosts:
 - [[621-switch, s6],      9.1,     001ec12d7240]
 - [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer,
