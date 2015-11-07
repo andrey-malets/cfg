@@ -158,7 +158,7 @@ groups:
        {label: cow-image64-local, size: 21500, fs: ext4,
         boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
        {label: cow-image64-cow, size: 10000},
-       {label: windows7, fs: ntfs, size: 50000,
+       {label: windows7, fs: ntfs, size: 50001,
         boot: {type: windows, vhd: /boot/bootmgr.vhd}},
        {label: cow-image64-place, format: ext4}
      ]
