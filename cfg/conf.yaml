@@ -151,12 +151,15 @@ groups:
 
 - [managed-disk-standard, [hogs], 'image64-test', {
      disk: [
-       {flags: bios_grub, size: 10},
+       {flags: [bios_grub], size: 10},
        {label: boot, size: 200, format: ext4},
        {label: cow-image64-conf, size: 10, fs: ext2},
        {label: cow-image64-sign, size: 1},
-       {label: cow-image64-cow, size: 21500},
-       {label: windows7, fs: ntfs, size: 50000},
+       {label: cow-image64-local, size: 21500, fs: ext4,
+        boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
+       {label: cow-image64-cow, size: 10000},
+       {label: windows7, fs: ntfs, size: 50000,
+        boot: {type: windows, vhd: /boot/bootmgr.vhd}},
        {label: cow-image64-place, format: ext4}
      ]
   }]
