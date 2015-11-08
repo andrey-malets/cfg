@@ -58,6 +58,8 @@ def get_boot(config, device):
 def write_grub_config(config, destination):
     with open(destination, 'w') as output:
         output.write("""
+set menu_color_normal=cyan/blue
+set menu_color_highlight=white/blue
 set timeout=5
 """)
         for num, part in enumerate(config):
