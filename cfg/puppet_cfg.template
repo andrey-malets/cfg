@@ -28,6 +28,15 @@ class ndd {
     }
 }
 
+class disk {
+    file { '/usr/local/bin/disk.py':
+        mode => 755,
+        owner => root,
+        group => root,
+        source => "puppet:///files/disk.py",
+    }
+}
+
 class { 'apt':
     always_apt_update    => false,
     disable_keys         => undef,
@@ -1350,7 +1359,7 @@ esac
 
         include backup
         include btsync
-        include gdm
+        include disk
         include known_hosts
         include locale
         include ndd
