@@ -641,14 +641,6 @@ class userqwer {
     }
 }
 
-class gdm {
-    exec { 'restart_gdm':
-        command => '/etc/init.d/gdm restart',
-        onlyif => '/usr/bin/test -f /etc/init.d/gdm',
-        refreshonly => true,
-    }
-}
-
 class nvidia {
     file { '/etc/X11/xorg.conf':
         ensure => present,
@@ -656,14 +648,12 @@ class nvidia {
         owner => root,
         group => root,
         source => 'puppet:///files/nvidia.xorg.conf',
-        notify => Exec['restart_gdm'],
     }
 }
 
 class pam_mount {
     package { 'libpam-mount':
         ensure => installed,
-        notify => Exec['restart_gdm'],
     }
 
     file { '/etc/security/pam_mount.conf.xml':
