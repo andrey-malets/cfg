@@ -956,6 +956,22 @@ class ad inherits ldap {
         group => root,
         source => 'puppet:///files/krb5.conf',
     }
+
+     file { '/usr/share/pam-configs/mkhomedir':
+         mode => 644,
+         owner => root,
+         group => root,
+         notify => Exec['/usr/sbin/pam-auth-update'],
+         content => 'Name: Create home directory during login
+Default: yes
+Priority: 900
+Session-Type: Additional
+Session:
+        required        pam_mkhomedir.so umask=0022 skel=/etc/skel
+'
+     }
+
+     exec { '/usr/sbin/pam-auth-update': refreshonly => true }
 }
 
 class sensors {
