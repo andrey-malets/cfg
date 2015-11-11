@@ -11,7 +11,7 @@ $ssh $host "mkdir puppet/certs"
 $ssh $host "umask 027; mkdir puppet/private_keys"
 
 if ! [ -e /var/lib/puppet/ssl/certs/$host.pem ]; then
-    puppetca generate $host
+    puppet ca generate $host
 fi
 
 $scp /var/lib/puppet/ssl/certs/ca.pem $host:puppet/certs
@@ -20,4 +20,4 @@ $scp /var/lib/puppet/ssl/private_keys/$host.pem $host:puppet/private_keys
 
 $ssh $host "/root/cow/conf.sh cp -r puppet {}; rm -rf puppet"
 
-$ssh $host reboot
+$ssh $host reboot || exit 0
