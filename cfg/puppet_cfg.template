@@ -709,6 +709,9 @@ class teachers {
 }
 
 class exim_default {
+    package { 'bsd-mailx': ensure => installed }
+    package { 'heirloom-mailx': ensure => absent }
+
     package { 'exim4-daemon-light':
         ensure => installed,
     }
