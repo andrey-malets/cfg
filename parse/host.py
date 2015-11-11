@@ -1,7 +1,5 @@
 from util import fromgroup, primitive
 
-def get_sname(name): return name.split('.')[0]
-
 class Host:
     @staticmethod
     def expand_mac(mac):
@@ -9,16 +7,16 @@ class Host:
                                                 mac[6:8], mac[8:10], mac[10:12])
     def __init__(self, data, defaults):
         names = data.pop(0)
-        if type(names) == list:
-            self.name     = defaults.expand_host(names.pop(0))
-            self.aliases  = map(defaults.expand_host, names)
-            self.saliases = map(get_sname, self.aliases)
-        else:
-            self.name    = defaults.expand_host(names)
-            self.aliases = []
-            self.saliases = []
+        names = [names] if type(names) == str else names
+        self.sname, self.name = defaults.expand_host(names[0])
+        assert len(self.name) and len (self.sname)
+        self.saliases = []
+        self.aliases = []
+        for raw_alias in names[1:]:
+            salias, alias = defaults.expand_host(raw_alias)
+            if len(salias): self.saliases.append(salias)
+            if len(alias): self.aliases.append(alias)
 
-        self.sname = get_sname(self.name)
         self.nick  = reduce(lambda cur, x: cur if len(cur) < len(x) else x,
                             [self.sname] + self.saliases)
 

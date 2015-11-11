@@ -39,10 +39,13 @@ class Defaults:
         if '.' in host:
             for patt, subst in self.domains.iteritems():
                 if host.endswith(patt):
-                    return host[0:host.rindex(patt)] + subst
-            return host
+                    sname = host[0:host.rindex(patt)]
+                    name = sname + subst
+                    return sname, name
+            return host.split('.')[0], host
 
-        return '%s.%s' % (host, self.def_domain)
+        return host, ('{}.{}' if len(host) else '{}{}').format(
+            host, self.def_domain)
 
     def get_canonical_hostname(self, hostname):
         if '.' in hostname:

@@ -1,7 +1,6 @@
 import jinja2
 from itertools import chain
 from cmd import add_cmd
-from parse.host import get_sname
 
 def get_rname(host, network):
     parts = host.addr.split('.')
@@ -20,14 +19,14 @@ def gen_fwd(state, zone):
     for host in state.hosts:
         if matches(host.name) and host.addr != None:
             yield (host.sname, 'A', host.addr)
-            for alias in host.saliases:
-                yield (alias, 'CNAME', host.sname)
+            for salias in host.saliases:
+                yield (salias, 'CNAME', host.sname)
         backends = []
         if 'backend_for' in host.props:
             prop = host.props['backend_for']
             backends = [prop] if type(prop) == str else prop
         for backend in filter(matches, backends):
-            yield(get_sname(backend), 'A', state.find(
+            yield(backend.split('.')[0], 'A', state.find(
                 state.get_canonical_hostname(state.defaults.frontend)).addr)
 
 @add_cmd('rdns', True, 2)
