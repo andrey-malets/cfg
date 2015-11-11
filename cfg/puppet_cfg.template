@@ -633,6 +633,7 @@ class xen {
 
 class userqwer {
     user { 'user':
+        groups => ['sudo'],
         ensure => present,
         home => '/home/user',
         shell => '/bin/bash',
