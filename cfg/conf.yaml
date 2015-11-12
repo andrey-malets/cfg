@@ -287,7 +287,8 @@ hosts:
 - [ cuda-pc.runc,         10.237,  001cc009f4ff, {services: [nvidia]}]
 - [[itanium,it,exchange], 10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer}]
 - [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
-- [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru'],
+- [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru',
+                                                                training.hackerdom.ru, '*.training.hackerdom.ru'],
                                                   tcp_fwd: {60000: 60000,
                                                             60001: 60001,
                                                             60002: 60002,
@@ -299,7 +300,7 @@ hosts:
                                                             60008: 60008,
                                                             60009: 60009,
                                                             60010: 60010},
-                                                  admin: muzafarov}]
+                                                  admin: andgein}]
 #   free
 #   free
 - [ mysql,                10.243,  0018512e4ea0, {admin: znick, services: [mysql]}]
