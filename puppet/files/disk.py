@@ -57,10 +57,14 @@ def get_boot(config, device):
 
 def write_grub_config(config, destination):
     with open(destination, 'w') as output:
-        output.write("""
-set menu_color_normal=cyan/blue
+        output.write(
+"""set menu_color_normal=cyan/blue
 set menu_color_highlight=white/blue
 set timeout=5
+
+menuentry 'Network boot' {
+    linux16 /ipxe.lkrn
+}
 """)
         for num, part in enumerate(config):
             if 'boot' in part:
@@ -100,6 +104,7 @@ def configure(config, device):
         subprocess.check_call(['grub-install', device,
                                '--boot-directory', temp_dir])
         shutil.copy2('/usr/lib/syslinux/memdisk', temp_dir)
+        shutil.copy2('/var/lib/cfg/ipxe.lkrn', temp_dir)
         write_grub_config(config, '{}/grub/grub.cfg'.format(temp_dir))
     finally:
         if temp_dir:
