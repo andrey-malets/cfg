@@ -7,6 +7,23 @@ class restart-puppet {
     }
 }
 
+class keyboard {
+    file { '/etc/default/keyboard':
+        ensure => present,
+        mode => 644,
+        owner => root,
+        group => root,
+        content => '
+XKBMODEL="pc105"
+XKBLAYOUT="us,ru"
+XKBVARIANT=""
+XKBOPTIONS="terminate:ctrl_alt_bksp,grp:alt_shift_toggle"
+
+BACKSPACE="guess"
+'
+    }
+}
+
 class ndd {
     if $architecture == 'i386' {
         $source = "puppet:///files/ndd32"
@@ -1364,12 +1381,13 @@ esac
         include backup
         include btsync
         include disk
-        include known_hosts
+        include keyboard
         include locale
         include ndd
         include nrpe
         include runc_ca
         include sp
+        include ssh_known_hosts
         include timezone
     {% endif %}
 }
