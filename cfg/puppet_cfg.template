@@ -281,18 +281,12 @@ class runc_ca {
     }
 }
 
-class known_hosts {
-    file { 'known_hosts.sh':
-        path => '/usr/local/bin/known_hosts.sh',
-        mode => 500,
+class ssh_known_hosts {
+    file { '/etc/ssh/ssh_known_hosts':
+        mode => 644,
         owner => root,
         group => root,
-        source => 'puppet:///files/known_hosts.sh'
-    }
-
-    exec { '/usr/local/bin/known_hosts.sh -y':
-        subscribe => File['known_hosts.sh'],
-        refreshonly => true,
+        source => 'puppet:///files/ssh_known_hosts',
     }
 }
 

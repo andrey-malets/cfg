@@ -163,8 +163,7 @@ gen_ext_nagios() {
 }
 
 gen_ssh_known_hosts() {
-    $MAIN ssh_known_hosts $FACTS $ROUTER_HOST $ROUTER_IP \
-        > /var/www/urgu.org/https/known_hosts
+    $MAIN ssh_known_hosts $FACTS $DATA > /etc/puppet/files/ssh_known_hosts
 }
 
 gen_ssh_known_hosts_updater() {
@@ -209,7 +208,13 @@ declare -a script
 
 END
 
-    $MAIN ssh_known_hosts $FACTS $ROUTER_HOST $ROUTER_IP | while read name type key; do
+    declare -Al types
+    types[ssh-rsa]=ssh-rsa
+    types[ssh-dsa]=ssh-dss
+    types[ssh-ecdsa]=ecdsa-sha2-nistp256
+    types[ssh-ed25519]=ssh-ed25519
+
+    $MAIN ssh_known_hosts $FACTS $DATA | while read name type key; do
 cat <<END
 
 # echo working with $name
@@ -226,11 +231,11 @@ script[\${#script[@]}]=\$(
             if [ \$changed -ne 0 ]; then
                 echo >&2 "warning: some $type key(s) for $name changed, replacing";
                 echo "ssh-keygen -R $name -f \$temp_file 2>/dev/null; rm \${temp_file}.old; \
-                    echo $name $type $key >> \$temp_file; "
+                    echo $name ${types[$type]} $key >> \$temp_file; "
             fi
         else
             echo >&2 "info: adding new $type key for $name"
-            echo "echo $name $type $key >> \$temp_file; "
+            echo "echo $name ${types[$type]} $key >> \$temp_file; "
         fi
     )
 )

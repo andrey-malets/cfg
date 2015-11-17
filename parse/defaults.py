@@ -11,7 +11,7 @@ class Defaults:
 
         self.mon      = check(data, 'mon', 'monitoring mail list')
         self.nagios   = check(data, 'nagios', 'default nagios host')
-        self.frontend = check(data, 'frontend', 'frontend for web backends')
+        self.frontend = check(data, 'frontend', 'frontend for web backends and SSH')
         self.slurm    = check(data, 'slurm', 'default slurm partition')
 
         self.network_prefix = check(data, 'network_prefix', 'default network prefix')
