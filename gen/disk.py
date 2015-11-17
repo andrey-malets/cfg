@@ -8,4 +8,3 @@ def gen_disk(state):
         if 'disk' in host.props:
             rv[host.name] = host.props['disk']
     return json.dumps(rv, sort_keys=True, indent=4)
-
