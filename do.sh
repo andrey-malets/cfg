@@ -370,6 +370,36 @@ gen_iptables_access() {
     $MAIN ipt_access access $FACTS | sh -s
 }
 
+all_exist() {
+    for file in "$@"; do if ! [[ -f "$file" ]]; then return 1; fi; done
+}
+
+gen_keys_images() {
+    local IMAGES="$DATA/keys_images"
+    local MP="$IMAGES/mp"
+    local SIZE=128K
+    local UUID=5c4b0ee9-e5b6-44ce-9247-43103b07a95a
+
+    umask 077
+
+    mkdir -p "$MP"
+    for host in $($MAIN puppet_managed); do
+        local DEST="$IMAGES/$host"
+        local CERTS=(/var/lib/puppet/ssl/certs/{ca,"$host"}.pem)
+        local KEYS=("/var/lib/puppet/ssl/private_keys/$host.pem")
+        if ! [[ -f "$DEST" ]] && all_exist "${CERTS[@]}" "${KEYS[@]}"; then
+            dd if=/dev/zero "of=$DEST" "bs=$SIZE" count=1
+            mkfs.ext2 "$DEST"
+            tune2fs -U "$UUID" "$DEST"
+            mount -o loop "$DEST" "$MP"
+            mkdir "$MP"/{certs,private_keys}
+            cp -a "${CERTS[@]}" "$MP/certs"
+            cp -a "${KEYS[@]}" "$MP/private_keys"
+            umount "$MP"
+        fi
+    done
+}
+
 mkdir -p $DATA
 
 export ROUTER_DEV=$($ROUTER_ATTRS dev)
@@ -383,6 +413,7 @@ all() {
     gen_puppet_cfg
     gen_puppet_fileserver
     gen_puppet_ssh
+    gen_keys_images
 
     gen_ssh_known_hosts
     gen_ssh_known_hosts_updater
