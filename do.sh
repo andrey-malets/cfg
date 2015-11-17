@@ -377,7 +377,7 @@ all_exist() {
 gen_keys_images() {
     local IMAGES="$DATA/keys_images"
     local MP="$IMAGES/mp"
-    local SIZE=128K
+    local SIZE=256K
     local UUID=5c4b0ee9-e5b6-44ce-9247-43103b07a95a
 
     umask 077
@@ -392,9 +392,9 @@ gen_keys_images() {
             mkfs.ext2 "$DEST"
             tune2fs -U "$UUID" "$DEST"
             mount -o loop "$DEST" "$MP"
-            mkdir "$MP"/{certs,private_keys}
-            cp -a "${CERTS[@]}" "$MP/certs"
-            cp -a "${KEYS[@]}" "$MP/private_keys"
+            mkdir -p "$MP"/puppet/{certs,private_keys}
+            cp -a "${CERTS[@]}" "$MP/puppet/certs"
+            cp -a "${KEYS[@]}" "$MP/puppet/private_keys"
             umount "$MP"
         fi
     done
