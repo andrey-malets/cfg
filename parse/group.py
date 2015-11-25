@@ -1,5 +1,5 @@
 import re
-from util import ValueFromGroup, ValidationError, fromgroup, primitive, get_type
+import util
 
 class Group:
     def __init__(self, data):
@@ -36,7 +36,7 @@ def merge(src, dst):
     def check(name, prop, dst):
         valid = name not in dst
         if not valid:
-            stype, dtype = get_type(prop), get_type(dst[name])
+            stype, dtype = util.get_type(prop), util.get_type(dst[name])
             if stype == None: valid = True
             else: valid = (stype == dtype)
         if not valid:
@@ -48,19 +48,19 @@ def merge(src, dst):
         for name, prop in sprops.iteritems():
             if not check(name, prop, dprops):
                 return
-            if primitive(prop) or fromgroup(prop):
-                value = prop if primitive(prop) else prop.value
-                depth = 1 if primitive(prop) else prop.depth + 1
+            if util.primitive(prop) or util.fromgroup(prop):
+                value = prop if util.primitive(prop) else prop.value
+                depth = 1 if util.primitive(prop) else prop.depth + 1
                 if name not in dprops:
-                    dprops[name] = ValueFromGroup(value, src, depth)
-                elif type(dprops[name]) == ValueFromGroup:
+                    dprops[name] = util.ValueFromGroup(value, src, depth)
+                elif type(dprops[name]) == util.ValueFromGroup:
                     if dprops[name].depth == depth:
                         errors.append(MergeError(
                             ('value for "%s" is absent in "%s" but ' +
                              'came from two diffrent groups: "%s" and "%s", can\'t merge') %
                             (name, dst, src, dprops[name].source)))
                     elif dprops[name].depth > depth:
-                        dprops[name] = ValueFromGroup(value, src, depth)
+                        dprops[name] = util.ValueFromGroup(value, src, depth)
             elif type(prop) == list:
                 dprops[name] = (list(set(dprops[name] + prop))
                     if name in dprops else prop)
@@ -81,7 +81,7 @@ def expand_groups(groups, hosts):
         for group in groups:
             name = group.name
             if name in rv:
-                errors.append(ValidationError('duplicate group name "%s"' % name))
+                errors.append(util.ValidationError('duplicate group name "%s"' % name))
             else:
                 rv[name] = group
         return rv
@@ -91,13 +91,13 @@ def expand_groups(groups, hosts):
             bad_childs = []
             for child_name in group.childs:
                 if child_name not in group_names:
-                    errors.append(ValidationError('no such group "%s" in childs of "%s"' %
+                    errors.append(util.ValidationError('no such group "%s" in childs of "%s"' %
                         (child_name, group.name)))
                     bad_childs.append(child_name)
                 else:
                     child = group_names[child_name]
                     if child in stack:
-                        errors.append(ValidationError('group dependency cycle: %s' % (stack)))
+                        errors.append(util.ValidationError('group dependency cycle: %s' % (stack)))
                     else:
                         step(child, stack + [child])
             group.remove_childs(bad_childs)

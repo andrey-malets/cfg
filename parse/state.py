@@ -1,12 +1,12 @@
 import backup
-from defaults import Defaults
-from host     import Host, check_hosts
-from group    import Group, expand_groups
-from network  import Network, belongs_to
-from user     import User
-
+import defaults
+import group
+import host
+import json
 import network
-import yaml, json
+import os.path
+import user
+import yaml
 
 def init_yaml_ruby_parsers():
     def construct_ruby_object(loader, suffix, node):
@@ -18,20 +18,77 @@ def init_yaml_ruby_parsers():
     yaml.add_multi_constructor(u"!ruby/object:", construct_ruby_object)
     yaml.add_constructor(u"!ruby/sym", construct_ruby_sym)
 
+
 class BackupItem:
     def __init__(self, bhost, bprops, hour=None, minute=None):
         self.bhost, self.bprops = bhost, bprops
         self.hour, self.minute = hour, minute
 
-class State:
-    def __init__(self, config, router_attrs):
-        self.errors = []
-        self.defaults = Defaults(config['defaults'], self.errors)
 
-        self.hosts    = map(lambda item: Host(item, self.defaults),
-                                     config['hosts'])
-        self.groups   = map(Group,   config['groups'])
-        self.networks = map(lambda item: Network(item, router_attrs),
+class Overrides:
+    HOSTS_KEY = 'hosts'
+    GROUPS_KEY = 'groups'
+
+    def __init__(self, hosts, groups):
+        self.hosts = hosts
+        self.groups = groups
+
+    @staticmethod
+    def load(filename):
+        rv = Overrides({}, {})
+        if os.path.exists(filename):
+            with open(filename) as db:
+                state = json.load(db)
+                rv.hosts = state.get(Overrides.HOSTS_KEY, {})
+                rv.groups = state.get(Overrides.GROUPS_KEY, {})
+        return rv
+
+    def save(self, filename):
+        with open(filename, 'w') as db:
+            json.dump({Overrides.HOSTS_KEY: self.hosts,
+                       Overrides.GROUPS_KEY: self.groups}, db, indent=2)
+            print >> db
+
+    def get(self, entity):
+        collection = self.hosts if type(entity) is host.Host else self.groups
+        if entity.name not in collection:
+            collection[entity.name] = {}
+        return collection[entity.name]
+
+    @staticmethod
+    def apply_props(src, dst):
+        assert type(src) is dict and type(dst) is dict
+        for key, value in src.iteritems():
+            assert not key in dst or type(src[key]) == type(dst[key])
+            if type(src[key]) is dict:
+                dst[key] = apply_props(src[key], dst[key])
+            else:
+                dst[key] = src[key]
+        return dst
+
+    @staticmethod
+    def do_apply(items, finder):
+        for item, props in items.iteritems():
+            entity = finder(item)
+            if entity is not None:
+                Overrides.apply_props(props, entity.props)
+
+    def apply(self, state):
+        Overrides.do_apply(self.hosts, state.find)
+        Overrides.do_apply(self.groups, state.find_group)
+
+
+class State:
+    def __init__(self, config, router_attrs=None, overrides=None):
+        self.errors = []
+        self.defaults = defaults.Defaults(config['defaults'], self.errors)
+
+        self.hosts    = map(lambda item: host.Host(item, self.defaults),
+                            config['hosts'])
+        self.groups   = map(group.Group, config['groups'])
+        self.group_by_name = dict(map(lambda group: (group.name, group),
+                                      self.groups))
+        self.networks = map(lambda item: network.Network(item, router_attrs),
                                          config['networks'])
         self.backup_schedule = None
 
@@ -40,13 +97,16 @@ class State:
 
         people = config['people']
         self.users = dict((user.nickname, user) for user in
-            map(User, filter(is_user, people)))
+            map(user.User, filter(is_user, people)))
         self.user_groups = dict(filter(is_group, people))
 
-        self.errors.extend(check_hosts(self.hosts))
-        self.errors.extend(expand_groups(self.groups, self.hosts))
+        if overrides is not None:
+            overrides.apply(self)
 
-        map(Host.clean, self.hosts)
+        self.errors.extend(host.check_hosts(self.hosts))
+        self.errors.extend(group.expand_groups(self.groups, self.hosts))
+
+        map(host.Host.clean, self.hosts)
 
     def choose_net(self, net_name):
         return network.choose_net(self.networks, net_name)
@@ -63,12 +123,19 @@ class State:
         return self.defaults.expand_ip(rv)
 
     def belongs_to(self, host):
-        return belongs_to(self.networks, host)
+        return network.belongs_to(self.networks, host)
 
     def find(self, hostname):
         candidates = filter(lambda host: (hostname in [host.name, host.sname]
             + host.aliases + host.saliases), self.hosts)
         return candidates[0] if len(candidates) == 1 else None
+
+    def find_group(self, groupname):
+        return self.group_by_name.get(groupname)
+
+    def find_entity(self, name):
+        maybe_host, maybe_group = self.find(name), self.find_group(name)
+        return maybe_host if maybe_host else maybe_group
 
     def is_gray(self, host):
         return host.addr != None and host.addr.startswith(self.defaults.network_prefix)

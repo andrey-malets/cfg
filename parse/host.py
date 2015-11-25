@@ -1,6 +1,6 @@
 from util import fromgroup, primitive
 
-class Host:
+class Host(object):
     @staticmethod
     def expand_mac(mac):
         return '{0}:{1}:{2}:{3}:{4}:{5}'.format(mac[0:2], mac[2:4],  mac[4:6],
@@ -16,6 +16,8 @@ class Host:
             salias, alias = defaults.expand_host(raw_alias)
             if len(salias): self.saliases.append(salias)
             if len(alias): self.aliases.append(alias)
+
+        self.snames = [self.sname] + self.saliases
 
         self.nick  = reduce(lambda cur, x: cur if len(cur) < len(x) else x,
                             [self.sname] + self.saliases)
@@ -39,10 +41,6 @@ class Host:
 
         self.groups = []
         self.vm_host = None
-
-    @property
-    def snames(self):
-        return [self.sname] + self.saliases
 
     @property
     def services(self):

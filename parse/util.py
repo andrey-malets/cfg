@@ -7,8 +7,9 @@ class ValueFromGroup(object):
 def fromgroup(value):
     return type(value) == ValueFromGroup
 
+PRIMITIVES = {str: True, float: True, int: True, unicode: True}
 def primitive(value):
-    return type(value) in [str, float, int]
+    return type(value) in PRIMITIVES
 
 def get_type(value):
     return type(value.value) if type(value) == ValueFromGroup else type(value)

@@ -15,7 +15,7 @@ if __name__ == '__main__':
         with open(os.environ['CFG'], 'r') as cfgfile:
             state = State(yaml.load(cfgfile), router_attrs)
     else:
-        state = State(yaml.load(sys.stdin), router_attrs)
+        state = State(yaml.load(sys.stdin, Loader=yaml.CLoader), router_attrs)
 
     if len(state.errors):
         for error in state.errors: print >> sys.stderr, 'Error: %s' % error
