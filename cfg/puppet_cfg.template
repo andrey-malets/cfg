@@ -786,7 +786,7 @@ class exchange {
         atboot => true,
         device => '//exchange/exchange',
         fstype => 'cifs',
-        options => 'guest,file_mode=0666,dir_mode=0777',
+        options => 'guest,exec,file_mode=0766,dir_mode=0777',
     }
 }
 
