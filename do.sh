@@ -19,6 +19,15 @@ cmp_files() {
     return $rv
 }
 
+gen_amtredird() {
+    local IMAGES="$DATA/keys_images"
+    local OUTPUT="/root/amtredird/amtredird.ini"
+    touch "$OUTPUT"
+    chmod 600 "$OUTPUT"
+    $MAIN amtredird $CFGDIR/amtredird.template $CFGDIR/amtpwd "$IMAGES" \
+        > "$OUTPUT"
+}
+
 gen_dhcp() {
     local CUR=/etc/dhcp/dhcpd.conf
     local NEW=$DATA/dhcpd.conf
@@ -406,6 +415,8 @@ export ROUTER_DEV=$($ROUTER_ATTRS dev)
 export ROUTER_SRC=$($ROUTER_ATTRS src)
 
 all() {
+    gen_amtredird
+
     gen_dhcp
     gen_dns
     gen_iptables_ports

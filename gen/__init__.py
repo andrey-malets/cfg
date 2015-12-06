@@ -1,1 +1,12 @@
-import dhcp, dns, disk, http, iptables, mrtg, nagios, puppet, ssh, slurm, util
+import amtredird
+import dhcp
+import disk
+import dns
+import http
+import iptables
+import mrtg
+import nagios
+import puppet
+import slurm
+import ssh
+import util

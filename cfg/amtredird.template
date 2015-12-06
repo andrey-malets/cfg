@@ -1,0 +1,11 @@
+[amtredird]
+amt_ini_filename=amt.ini
+default_user={{ default_user }}
+default_passwd={{ default_passwd }}
+socket=/var/run/amtredird.sock
+
+{% for amthost, realhost in hosts.iteritems() %}
+[{{ amthost }}]
+host={{ amthost }}
+filename={{ images_path }}/{{ realhost }}
+{% endfor %}
