@@ -1,7 +1,7 @@
 import re
 import util
 
-class Group:
+class Group(object):
     def __init__(self, data):
         self.name    = data.pop(0)
         self.childs  = set(data.pop(0) if type(data[0]) == list else [])
@@ -24,7 +24,7 @@ class Group:
             self.pattern.match(name), host.snames)), hosts) if self.pattern else []
 
 class MergeError(Exception):
-    def __init__(self, message):
+    def __init__(self, message=None):
         self.message = message
     def __str__(self):
         return self.message

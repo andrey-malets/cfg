@@ -2,16 +2,31 @@ import config
 
 from flask import abort, Flask, request, Response
 from functools import wraps
+from werkzeug.contrib.cache import SimpleCache
 import handlers
 import json
 import os
 import sys
 import socket
+import time
 import yaml
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
+from parse.group import Group
 from parse.state import Overrides, State
-from parse.host import Host
+from parse.util import ValueFromGroup
+
+
+class Encoder(json.JSONEncoder):
+
+    def __init__(self, *args, **kwargs):
+        super(Encoder, self).__init__(*args, **kwargs)
+
+    def default(self, obj):
+        if type(obj) is ValueFromGroup:
+            return obj.value
+        else:
+            return super(Encoder, self).default(obj)
 
 
 def quote_if_needed(value):
@@ -20,6 +35,7 @@ def quote_if_needed(value):
 
 application = Flask('override')
 application.debug = True
+cache = SimpleCache()
 
 
 class authorized(object):
@@ -36,17 +52,27 @@ class authorized(object):
         return wrapper
 
 
-def load_state(filename, overrides):
-    with open(filename) as configfile:
+def load_state(state_fn, overrides_fn):
+    with open(state_fn) as configfile:
+        overrides = Overrides.load(overrides_fn)
         return State(yaml.load(configfile, Loader=yaml.CLoader),
-                     overrides=overrides)
+                     overrides=overrides), overrides
+
+
+def get_state(state_fn, overrides_fn):
+    key = '{}{}'.format(time.ctime(os.path.getmtime(state_fn)),
+                        time.ctime(os.path.getmtime(overrides_fn)))
+    rv = cache.get(key)
+    if rv is None:
+        rv = load_state(state_fn, overrides_fn)
+        cache.set(key, rv)
+    return rv
 
 
 def with_entity(f):
     @wraps(f)
     def wrapper(name):
-        overrides = Overrides.load(config.DB)
-        state = load_state(config.CFG, overrides)
+        state, overrides = get_state(config.CFG, config.DB)
         entity = state.find_entity(name)
         if entity is not None:
             return Response(f(state, overrides, entity), mimetype='text/plain')
@@ -55,7 +81,7 @@ def with_entity(f):
 
 
 def run_handlers():
-    state = load_state(config.CFG, Overrides.load(config.DB))
+    state, _ = get_state(config.CFG, config.DB)
     for handler in handlers.HANDLERS:
         handler(state)
 
@@ -63,15 +89,22 @@ def run_handlers():
 run_handlers()
 
 
+def format_to_json(result):
+    return '{}\n'.format(json.dumps(result, cls=Encoder, indent=2))
+
+
 @application.route('{}/<name>'.format(config.WEB_PATH), methods=["GET"])
 @with_entity
 def get(state, overrides, entity):
     if len(request.args) > 0:
-        values = ['{}\n'.format(json.dumps(entity.props.get(prop), indent=2))
+        values = [format_to_json(entity.props.get(prop))
                   for prop in request.args]
         return ''.join(values)
     else:
-        return '{}\n'.format(json.dumps(entity.props, indent=2))
+        result = {'props': entity.props, 'name': entity.name}
+        if type(entity) is Group:
+            result['hosts'] = map(lambda host: host.name, entity.hosts)
+        return format_to_json(result)
 
 
 @application.route('{}/<name>'.format(config.WEB_PATH), methods=["POST"])
