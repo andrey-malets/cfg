@@ -9,8 +9,6 @@ import sys
 import socket
 import yaml
 
-import cProfile
-
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
 from parse.state import Overrides, State
 from parse.host import Host
