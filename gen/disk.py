@@ -5,6 +5,6 @@ import json
 def gen_disk(state):
     rv = {}
     for host in state.hosts:
-        if 'disk' in host.props:
-            rv[host.name] = host.props['disk']
+        if 'disk_layout' in host.props:
+            rv[host.name] = host.props['disk_layout']
     return json.dumps(rv, sort_keys=True, indent=4)
