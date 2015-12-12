@@ -8,7 +8,7 @@ import json
 import os
 import sys
 import socket
-import time
+import subprocess
 import yaml
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
@@ -60,8 +60,10 @@ def load_state(state_fn, overrides_fn):
 
 
 def get_state(state_fn, overrides_fn):
-    key = '{}{}'.format(time.ctime(os.path.getmtime(state_fn)),
-                        time.ctime(os.path.getmtime(overrides_fn)))
+    def md5(filename):
+        return subprocess.check_output(
+            ['md5sum', filename]).strip().split(' ', 1)[0]
+    key = '{}{}'.format(md5(state_fn), md5(overrides_fn))
     rv = cache.get(key)
     if rv is None:
         rv = load_state(state_fn, overrides_fn)
