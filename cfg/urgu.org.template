@@ -45,6 +45,7 @@ uzer-work	IN	SPF	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
 uzer-work	IN	TXT	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
 
 tigra		IN	CNAME	stor.math.usu.ru.
+exchange	IN	CNAME	stor.math.usu.ru.
 
 mirrors		IN	CNAME	mirror.yandex.ru.
 mirror		IN	CNAME	mirror.yandex.ru.
