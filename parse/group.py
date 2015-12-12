@@ -31,6 +31,12 @@ class MergeError(Exception):
     def __repr__(self):
         return self.__str__()
 
+def merge_lists(src, dst):
+    for prop in src:
+        if not prop in dst:
+            dst.append(prop)
+    return dst
+
 def merge(src, dst):
     errors = []
     def check(name, prop, dst):
@@ -62,7 +68,7 @@ def merge(src, dst):
                     elif dprops[name].depth > depth:
                         dprops[name] = util.ValueFromGroup(value, src, depth)
             elif type(prop) == list:
-                dprops[name] = (list(set(dprops[name] + prop))
+                dprops[name] = (merge_lists(dprops[name], prop)
                     if name in dprops else prop)
             elif type(prop) == dict:
                 dprops[name] = (step(prop, dprops[name])
