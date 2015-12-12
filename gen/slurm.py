@@ -2,9 +2,15 @@ import jinja2
 from cmd import add_cmd
 from parse.host import get_sname_dups
 
+def clamp(spec):
+    for index, (key, value) in enumerate(spec):
+        if key in ['RealMemory', 'TmpDisk']:
+            spec[index] = (key, int(int(value) * 0.5))
+
 def gen_line(fact):
     spec = filter(lambda (key, _): key not in ['ClusterName', 'Procs', 'Boards'],
                   [(pair.split('=')) for pair in fact.split(' ')])
+    clamp(spec)
     return ' '.join(map(lambda pair: '{}={}'.format(*pair), spec))
 
 @add_cmd('slurm', True, 1)
