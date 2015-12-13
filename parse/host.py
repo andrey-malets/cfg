@@ -1,4 +1,4 @@
-from util import fromgroup, primitive
+import util
 
 class Host(object):
     @staticmethod
@@ -48,10 +48,8 @@ class Host(object):
 
     def clean(self):
         def step(attr):
-            if primitive(attr):
-                return attr
-            elif fromgroup(attr):
-                return attr.value
+            if util.is_primitive(attr) or util.is_from_group(attr):
+                return util.get_value(attr)
             elif type(attr) == list:
                 return map(step, attr)
             elif type(attr) == dict:

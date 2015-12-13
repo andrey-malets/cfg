@@ -2,7 +2,7 @@
 
 import os, sys, yaml
 
-from parse.state import State
+from parse.state import Overrides, State
 from gen.cmd     import Cmd
 
 if __name__ == '__main__':
@@ -12,8 +12,12 @@ if __name__ == '__main__':
         router_attrs[key] = dict(map(lambda token: token.split(':'),
                                      os.environ.get(envname, '').split()))
     if 'CFG' in os.environ:
+        overrides = None
+        if 'OVERRIDES' in os.environ:
+            overrides = Overrides.load(os.environ['OVERRIDES'])
         with open(os.environ['CFG'], 'r') as cfgfile:
-            state = State(yaml.load(cfgfile), router_attrs)
+            state = State(yaml.load(cfgfile),
+                          overrides=overrides, router_attrs=router_attrs)
     else:
         state = State(yaml.load(sys.stdin, Loader=yaml.CLoader), router_attrs)
 

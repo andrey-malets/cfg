@@ -40,32 +40,32 @@ def merge_lists(src, dst):
 def merge(src, dst):
     errors = []
     def check(name, prop, dst):
+        stype, dtype = util.get_type(prop), util.get_type(dst.get(name))
         valid = name not in dst
         if not valid:
-            stype, dtype = util.get_type(prop), util.get_type(dst[name])
             if stype == None: valid = True
-            else: valid = (stype == dtype)
+            else: valid = util.matches(stype, dtype)
         if not valid:
             errors.append(MergeError('property "%s" type mismatch: %s and %s' %
-                (name, type(prop), type(dst[name]))))
+                (name, stype, dtype)))
         return valid
 
     def step(sprops, dprops):
         for name, prop in sprops.iteritems():
             if not check(name, prop, dprops):
                 return
-            if util.primitive(prop) or util.fromgroup(prop):
-                value = prop if util.primitive(prop) else prop.value
-                depth = 1 if util.primitive(prop) else prop.depth + 1
+            if util.is_primitive(prop) or util.is_from_group(prop):
+                value, depth = util.get_value(prop), util.get_depth(prop) + 1
                 if name not in dprops:
                     dprops[name] = util.ValueFromGroup(value, src, depth)
-                elif type(dprops[name]) == util.ValueFromGroup:
-                    if dprops[name].depth == depth:
+                elif util.is_from_group(dprops[name]):
+                    if util.get_depth(dprops[name]) == depth:
                         errors.append(MergeError(
                             ('value for "%s" is absent in "%s" but ' +
-                             'came from two diffrent groups: "%s" and "%s", can\'t merge') %
+                             'came from two diffrent groups: "%s" and "%s", ' +
+                             'can\'t merge') %
                             (name, dst, src, dprops[name].source)))
-                    elif dprops[name].depth > depth:
+                    elif util.get_depth(dprops[name]) > depth:
                         dprops[name] = util.ValueFromGroup(value, src, depth)
             elif type(prop) == list:
                 dprops[name] = (merge_lists(prop, dprops[name])
@@ -74,8 +74,8 @@ def merge(src, dst):
                 dprops[name] = (step(prop, dprops[name])
                     if name in dprops else prop)
             else:
-                errors.append(MergeError("unknown type of prop %s (%s), can't merge" %
-                    (name, type(prop))))
+                errors.append(MergeError('unknown type of prop %s (%s), ' +
+                                         'can\'t merge' % (name, type(prop))))
         return dprops
 
     step(src.props, dst.props)
