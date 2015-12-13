@@ -93,6 +93,8 @@ def get(state, overrides, entity):
         result = {'props': entity.props, 'name': entity.name}
         if type(entity) is Group:
             result['hosts'] = map(lambda host: host.name, entity.hosts)
+        else:
+            result['sname'] = entity.sname
         return format_to_json(result)
 
 

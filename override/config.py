@@ -7,7 +7,7 @@ WEB_PATH = '/config'
 
 DB = '/var/lib/cfg/overrides.json'
 
-ACL = ['d', 'pioneer']
+ACL = ['d', 'h']
 
 BOOT = '/var/www/urgu.org/boot'
 BOOT_DEFAULT = 'local'
