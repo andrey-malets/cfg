@@ -13,20 +13,7 @@ import yaml
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
 from parse.group import Group
-from parse.state import Overrides, State
-from parse.util import ValueFromGroup
-
-
-class Encoder(json.JSONEncoder):
-
-    def __init__(self, *args, **kwargs):
-        super(Encoder, self).__init__(*args, **kwargs)
-
-    def default(self, obj):
-        if type(obj) is ValueFromGroup:
-            return obj.value
-        else:
-            return super(Encoder, self).default(obj)
+from parse.state import Encoder, Overrides, State
 
 
 def quote_if_needed(value):

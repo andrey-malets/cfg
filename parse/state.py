@@ -6,6 +6,7 @@ import json
 import network
 import os.path
 import user
+import util
 import yaml
 
 def init_yaml_ruby_parsers():
@@ -23,6 +24,18 @@ class BackupItem:
     def __init__(self, bhost, bprops, hour=None, minute=None):
         self.bhost, self.bprops = bhost, bprops
         self.hour, self.minute = hour, minute
+
+
+class Encoder(json.JSONEncoder):
+
+    def __init__(self, *args, **kwargs):
+        super(Encoder, self).__init__(*args, **kwargs)
+
+    def default(self, obj):
+        if type(obj) is util.ValueFromGroup:
+            return obj.value
+        else:
+            return super(Encoder, self).default(obj)
 
 
 class Overrides:

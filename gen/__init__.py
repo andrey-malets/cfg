@@ -7,6 +7,7 @@ import iptables
 import mrtg
 import nagios
 import puppet
+import show
 import slurm
 import ssh
 import util

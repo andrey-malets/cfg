@@ -68,7 +68,7 @@ def merge(src, dst):
                     elif dprops[name].depth > depth:
                         dprops[name] = util.ValueFromGroup(value, src, depth)
             elif type(prop) == list:
-                dprops[name] = (merge_lists(dprops[name], prop)
+                dprops[name] = (merge_lists(prop, dprops[name])
                     if name in dprops else prop)
             elif type(prop) == dict:
                 dprops[name] = (step(prop, dprops[name])
