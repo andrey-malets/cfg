@@ -34,6 +34,8 @@ class Encoder(json.JSONEncoder):
     def default(self, obj):
         if type(obj) is util.ValueFromGroup:
             return obj.value
+        elif type(obj) is group.Group:
+            return obj.name
         else:
             return super(Encoder, self).default(obj)
 

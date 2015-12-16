@@ -95,6 +95,7 @@ def get(state, overrides, entity):
             result['hosts'] = map(lambda host: host.name, entity.hosts)
         else:
             result['sname'] = entity.sname
+            result['groups'] = entity.groups
         return format_to_json(result)
 
 

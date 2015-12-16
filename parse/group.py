@@ -32,10 +32,11 @@ class MergeError(Exception):
         return self.__str__()
 
 def merge_lists(src, dst):
+    rv = list(dst)
     for prop in src:
         if not prop in dst:
-            dst.append(prop)
-    return dst
+            rv.append(prop)
+    return rv
 
 def merge(src, dst):
     errors = []
