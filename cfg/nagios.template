@@ -203,7 +203,7 @@ define host {
     failure_prediction_enabled 0
     {% endif %}
     {%- if host.groups %}
-    hostgroups {{ host.groups|join(',') }}
+    hostgroups {{ host.groups|map('first')|join(',') }}
     {%- endif %}
     {%- if host.addr %}
     address    {{ host.addr }}
