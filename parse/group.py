@@ -38,7 +38,7 @@ def merge_lists(src, dst):
             rv.append(prop)
     return rv
 
-def merge(src, dst):
+def merge(src, dst, depth):
     errors = []
     def check(name, prop, dst):
         stype, dtype = util.get_type(prop), util.get_type(dst.get(name))
@@ -56,7 +56,7 @@ def merge(src, dst):
             if not check(name, prop, dprops):
                 return
             if util.is_primitive(prop) or util.is_from_group(prop):
-                value, depth = util.get_value(prop), util.get_depth(prop) + 1
+                value = util.get_value(prop)
                 if name not in dprops:
                     dprops[name] = util.ValueFromGroup(value, src, depth)
                 elif util.is_from_group(dprops[name]):
@@ -130,22 +130,23 @@ def expand_groups(groups, hosts):
         group = queue[0]
         for child_name in group.childs:
             child = group_names[child_name]
-            child.ancestors.add(group)
-            child.ancestors.update(group.ancestors)
+            child.ancestors.add((group, 1))
+            for ancestor, depth in group.ancestors:
+                child.ancestors.add((ancestor, depth+1))
             child.parents.remove(group)
             if no_parents(child): queue.append(child)
         queue = queue[1:]
 
     for group in groups:
-        for ancestor in group.ancestors:
-            errors.extend(merge(ancestor, group))
+        for ancestor, depth in group.ancestors:
+            errors.extend(merge(ancestor, group, depth))
         for host in group.get_matching(hosts):
-            errors.extend(merge(group, host))
+            errors.extend(merge(group, host, 0))
             host.groups += group.ancestors
-            host.groups.append(group)
+            host.groups.append((group, 0))
 
     for host in hosts:
-        for group in host.groups:
-            group.hosts.append(host)
+        for group, depth in host.groups:
+            group.hosts.append((host, depth))
 
     return errors
