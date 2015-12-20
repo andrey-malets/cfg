@@ -47,6 +47,9 @@ def load_state(state_fn, overrides_fn):
 
 
 def get_state(state_fn, overrides_fn):
+    if not os.path.exists(overrides_fn):
+        return load_state(state_fn, overrides_fn)
+
     def md5(filename):
         return subprocess.check_output(
             ['md5sum', filename]).strip().split(' ', 1)[0]
@@ -92,7 +95,7 @@ def get(state, overrides, entity):
     else:
         result = {'props': entity.props, 'name': entity.name}
         if type(entity) is Group:
-            result['hosts'] = map(lambda host: host.name, entity.hosts)
+            result['hosts'] = map(lambda (host, _): host.name, entity.hosts)
         else:
             result['sname'] = entity.sname
             result['groups'] = sorted(entity.groups)

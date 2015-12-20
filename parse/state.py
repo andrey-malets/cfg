@@ -58,10 +58,16 @@ class Overrides:
                 rv.groups = state.get(Overrides.GROUPS_KEY, {})
         return rv
 
+    @staticmethod
+    def not_empty(entities):
+        return dict(filter(lambda (name, props): props != {},
+                           entities.iteritems()))
+
     def save(self, filename):
         with open(filename, 'w') as db:
-            json.dump({Overrides.HOSTS_KEY: self.hosts,
-                       Overrides.GROUPS_KEY: self.groups}, db, indent=2)
+            json.dump({Overrides.HOSTS_KEY: Overrides.not_empty(self.hosts),
+                       Overrides.GROUPS_KEY: Overrides.not_empty(self.groups)},
+                      db, indent=2)
             print >> db
 
     def get(self, entity):
