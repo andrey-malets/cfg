@@ -1,6 +1,5 @@
 import amtredird
 import dhcp
-import disk
 import dns
 import http
 import iptables
