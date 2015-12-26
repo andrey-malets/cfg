@@ -26,3 +26,4 @@ fi
 
 do_ssh "$host" "disk.py"
 cat "$image" | do_ssh "$host" "dd of=$partition"
+do_ssh "$host" "reboot"
