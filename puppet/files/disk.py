@@ -10,25 +10,47 @@ import shutil
 import tempfile
 import urllib2
 
-def get_config():
-    CONFIG_URL = 'https://urgu.org/disk.json'
+def get_property(config_url, prop):
     hostname = subprocess.check_output(['hostname', '-f']).strip()
-    return json.load(urllib2.urlopen(CONFIG_URL))[hostname]
+    url = '{}/{}?{}'.format(config_url, hostname, prop)
+    return json.load(urllib2.urlopen(url))
 
-def create(config, device):
+def get_pattern(config_url): return get_property(config_url, 'disk')
+def get_layout(config_url): return get_property(config_url, 'disk_layout')
+
+def find_disk(pattern):
+    path = '/dev/disk/by-id/{}'.format(pattern)
+    ndisks = int(subprocess.check_output(
+        ['/bin/bash', '-c',
+         'shopt -s nullglob; disks=({}); echo ${{#disks[@]}}'.format(path)]))
+    if ndisks != 1:
+        print >> sys.stderr, ('there must be exactly one disk with pattern {}, '
+                              ' got {}, exiting.'.format(ndisks))
+        sys.exit(1)
+    return subprocess.check_output(
+        ['/bin/bash', '-c', 'readlink -f {}'.format(path)]).strip()
+
+def maybe_free_disk():
+    proc = subprocess.Popen(['/bin/mountpoint', '/place'],
+                            stdout=subprocess.PIPE)
+    rv, _ = proc.communicate()
+    if rv == 0:
+        subprocess.check_call(['/bin/umount', '/place'])
+
+def create(device, layout):
     def mb(pos): return '{}MB'.format(pos)
 
     parted_cmds = [['mklabel', 'gpt']]
     mkfs_cmds = []
     pos = 0
-    for num, part in enumerate(config):
+    for num, part in enumerate(layout):
         start = '0%' if not num else mb(pos)
         cmd = ['mkpart', 'primary']
         if 'size' in part:
             pos += int(part['size'])
             end = mb(pos)
         else:
-            assert num == len(config) - 1, \
+            assert num == len(layout) - 1, \
                 'only the last partition is allowed not to have size'
             end = '100%'
         if 'format' in part:
@@ -50,12 +72,12 @@ def create(config, device):
         subprocess.check_call(
             ['mkfs.{}'.format(fs), '-F', '{}{}'.format(device, num+1)])
 
-def get_boot(config, device):
-    for num, part in enumerate(config):
+def get_boot(device, layout):
+    for num, part in enumerate(layout):
         if part.get('label') == 'boot':
             return '{}{}'.format(device, num+1)
 
-def write_grub_config(config, destination):
+def write_grub_config(destination, layout):
     with open(destination, 'w') as output:
         output.write(
 """set menu_color_normal=cyan/blue
@@ -66,7 +88,7 @@ menuentry 'Network boot' {
     linux16 /ipxe.lkrn
 }
 """)
-        for num, part in enumerate(config):
+        for num, part in enumerate(layout):
             if 'boot' in part:
                 boot = part['boot']
                 boot_type = boot['type']
@@ -95,8 +117,8 @@ menuentry 'Windows' {{
 """
                     output.write(template.format(num=num+1, vhd=boot['vhd']))
 
-def configure(config, device):
-    boot = get_boot(config, device)
+def configure(device, layout):
+    boot = get_boot(device, layout)
     temp_dir = None
     try:
         temp_dir = tempfile.mkdtemp()
@@ -105,26 +127,23 @@ def configure(config, device):
                                '--boot-directory', temp_dir])
         shutil.copy2('/usr/lib/syslinux/memdisk', temp_dir)
         shutil.copy2('/var/lib/cfg/ipxe.lkrn', temp_dir)
-        write_grub_config(config, '{}/grub/grub.cfg'.format(temp_dir))
+        write_grub_config('{}/grub/grub.cfg'.format(temp_dir), layout)
     finally:
         if temp_dir:
             subprocess.call(['umount', temp_dir])
             os.rmdir(temp_dir)
 
-def verify(config, device):
-    raise NotImplementedError()
-
 def main(raw_args):
-    cmds = {'create': create, 'configure': configure, 'verify': verify}
-    parser = argparse.ArgumentParser(
-        description='Configure and verify disk state')
-    parser.add_argument('COMMAND', help='command', choices = cmds.keys())
-    parser.add_argument('DEVICE', help='device to operate on')
-
+    parser = argparse.ArgumentParser(description='Configure local disk')
+    parser.add_argument(
+        '-c', help='config API url', default='https://urgu.org/config')
     args = parser.parse_args(raw_args)
-    cmd = cmds[args.COMMAND]
 
-    return cmd(get_config(), args.DEVICE)
+    disk, layout = find_disk(get_pattern(args.c)), get_layout(args.c)
+
+    maybe_free_disk()
+    create(disk, layout)
+    configure(disk, layout)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

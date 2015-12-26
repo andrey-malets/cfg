@@ -286,10 +286,6 @@ gen_slurm() {
     cp -f $DATA/slurm.conf /etc/puppet/files
 }
 
-gen_disk() {
-    $MAIN disk > $DATA/disk.json
-}
-
 gen_ext_http() {
     local CUR=$DATA/ext_http
     local NEW=$DATA/ext_http.new
@@ -433,8 +429,6 @@ all() {
     gen_ext_nagios
 
     gen_slurm
-
-    gen_disk
 
     gen_ext_http
     gen_http_back
