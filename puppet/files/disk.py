@@ -33,8 +33,8 @@ def find_disk(pattern):
 def maybe_free_disk():
     proc = subprocess.Popen(['/bin/mountpoint', '/place'],
                             stdout=subprocess.PIPE)
-    rv, _ = proc.communicate()
-    if rv == 0:
+    proc.communicate()
+    if proc.returncode == 0:
         subprocess.check_call(['/bin/umount', '/place'])
 
 def create(device, layout):
