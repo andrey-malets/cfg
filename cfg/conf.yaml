@@ -75,51 +75,42 @@ networks:
 - [194.226.255.33/32,  194.226.255.33, {noicmp: 1}]
 
 groups:
-- [unix,       '^(.*-back|d|h|mysql|m|mm|n|p|r|shannon|t|ts|it|it2)$',
-                                                               {services: [unix]}]
-- [windows,    [633-pcs], '(lick|dc3|ld-xp)',                  {services: [windows, rrdp]}]
-- [xen,        '^(h|m|r|t)$',                                  {services: [xen]}]
-- [megaraid,   '^(h|m|n|r|t)$',                                {services: [megaraid]}]
-- [http,       '^(anytask|school|hackerdom|kvkt|ructf)-back$', {services: [http]}]
-- [https,      'redmine-back',                                 {services: [https]}]
-- [uzers_unix, '^(h|m|mm|n|p|r|t|ts|it|it2)$',                 {services: [exim_default, autoupdate]}]
-- [auto_vms,   '^((irc|school|ructf|kvkt)-back|shannon)$',     {services: [exim_default, autoupdate]}]
+- [unix,       '^(.*-back|d|h|mysql|m|mm|n|p|shannon|ts|it|it2)$', {services: [unix, ssh]}]
+- [windows,    [633-pcs], '(lick|dc3)',                            {services: [windows, rrdp]}]
+- [xen,        '^(h|m|n)$',                                        {services: [xen]}]
+- [megaraid,   '^(h|m|n|r|t)$',                                    {services: [megaraid]}]
+- [http,       '^(anytask|school|hackerdom|kvkt|ructf)-back$',     {services: [http]}]
+- [https,      '^redmine-back$',                                   {services: [https]}]
+- [uzers_unix, '^(h|m|mm|n|p|ts|it|it2)$',                         {services: [exim_default, autoupdate]}]
+- [auto_vms,   '^((irc|school|ructf|kvkt)-back|shannon)$',         {services: [exim_default, autoupdate]}]
 
-- [S5000PAL,   '^(m|h)$',                   {modules: [coretemp, i5k_amb],
-                                             sensors: ['coretemp:temp*:8,10,45,50',
-                                                       'i5k_amb:temp*:8,10,55,60']}]
 - [S5520UR,    '^(r|t)$',                   {modules: [coretemp],
                                              sensors: ['coretemp:temp*:8,10,45,50']}]
 
 - [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
+- [embedded,   [aps, switches, paper, ups], {services: [http], admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
 - [mplan,      '.+-mplan',                  {services: [mplan], admin: uzer}]
-- [switches,   '.+-switch',                 {admin: uzer}]
 - [paper,      '.+-(printer|scanner)']
+- [switches,   '.+-switch',                 {admin: uzer}]
 - [ups,        '.+-ups',                    {services: [ups], admin: uzer}]
-- [embedded,   [aps, switches, paper, ups], {services: [http], admin: uzer}]
 
 #- [621-pcs,   '621-\d\d',                   {admin: victor.samun}]
-- [633-pcs,    '(stream|cuda)-pc',          {services: [rrdp],
-                                             admin: kost,
-                                             dhcp: {ipxe.scriptlet: local},
-                                             hadoop_rack: runc}]
-- [hs,         'h\d\d',                     {services: [amt],
-                                             admin: uzer,
-                                             nagios: {check_interval: 1}}]
+
+- [633-pcs,    '(stream|cuda)-pc',          {services: [rrdp], admin: kost, boot: local, hadoop_rack: runc}]
+
 - [bhs,        'h(0\d|1[0-7])']
 - [shs,        'h(1(8|9)|2\d)']
+- [hhs,        [shs, bhs],                  {services: [amt], admin: uzer, nagios: {check_interval: 1}}]
 
-- [hogs,       'hog\d\d',                   {services: [userqwer],
-                                             sensors: ['coretemp:temp2:10,15,60,65',
-                                                       'coretemp:temp3:10,15,60,65'],
-                                             localtime: 1}]
 - [bhogs,      'hog(0\d|1[0-7])',           {hadoop_rack: big_hog}]
 - [shogs,      'hog(1(8|9)|2\d)',           {hadoop_rack: small_hog}]
+- [hogs,       [bhogs, shogs],              {services: [userqwer], sensors: ['coretemp:temp2:10,15,60,65',
+                                                                             'coretemp:temp3:10,15,60,65'],
+                                             localtime: 1,
+                                             disk: 'ata-Hitachi_HDS721616PLA380_??????????????'}]
 
-- [cl,         [clh, clv],                  {hadoop_rack: runc}]
-- [clh,        'clh\d+',                    {dhcp: {ipxe.scriptlet: cow32},
-                                             modules: [lm85],
+- [clh,        'clh\d+',                    {boot: cow32, modules: [lm85],
                                              sensors: ['lm85c:temp1:10,15,50,55',
                                                        'lm85c:temp2:10,15,50,55',
                                                        'lm85c:fan1:1000,1500,5000,5500']}]
@@ -127,63 +118,113 @@ groups:
                                              sensors: ['w83627thf:temp1:10,15,50,55',
                                                        'w83627thf:temp2:10,15,50,55',
                                                        'w83627thf:fan2:500,800,3000,4000']}]
+- [cl,         [clh, clv],                  {hadoop_rack: runc}]
+
 - [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
-                                             sensors: ['coretemp:temp*:10,16,55,60']}]
+                                             sensors: ['coretemp:temp*:10,16,55,60'],
+                                             disk: 'ata-WDC_WD7500BPVT-80HXZT3_WD-????????????'}]
 
-- [docker,     [volatile, 633-pcs], '^((uzer|znick)-pc|image64(|-test)|ts)$',
-                                            {services: [docker]}]
+- [docker,     [volatile, 633-pcs], '^((uzer|znick)-pc|image64(|-test)|ts)$', {services: [docker]}]
 
-- [managed,    [managed-test, cl, volatile, 633-pcs], '(uzer|znick|)-pc',
-                                            {services: [unix],
-                                             admin: uzer,
-                                             dhcp: {ipxe.scriptlet: cow},
-                                             nagios:         {check_period: managed_up},
-                                             nagios_service: {check_period: managed_up},
-                                             managed: 1}]
 - [managed-test,   '^image(32|64)-test$']
-- [managed-master, '^image(32|64)$',        {admin: uzer,
-                                             services: [smb, ad, managed-apt,
-                                                        autoupdate, unix,
-                                                        exim_default]}]
+- [managed-master, '^image(32|64)$',        {admin: uzer, services: [smb, ad, managed-apt,
+                                                                     autoupdate, unix, ssh,
+                                                                     exim_default]}]
+- [managed,    [managed-test, cl, volatile, 633-pcs], '(6t|(uzer|znick|)-pc)',
+                                            {managed: 1,
+                                             admin: uzer,
+                                             boot: cow,
+                                             services: [unix, ssh, ad, slurm-node],
+                                             nagios:         {check_period: managed_up},
+                                             nagios_service: {check_period: managed_up}}]
 
 - [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
 - [volatile,   [hogs, notebooks], {volatile: 1}]
 
-- [managed-disk-standard, [hogs], 'image64-test', {
-     disk: [
+- [managed-disk-small, 'hewlett|znick-pc', {
+     disk_layout: [
        {flags: [bios_grub], size: 10},
        {label: boot, size: 200, format: ext4},
-       {label: cow-image64-conf, size: 10, fs: ext2},
+       {label: cow-image64-keyimage, size: 1, fs: ext2},
+       {label: cow-image64-conf, size: 10, format: ext2},
+       {label: cow-image64-sign, size: 1},
+       {label: cow-image64-cow, size: 10000},
+       {label: windows7, fs: ntfs, size: 65000,
+        boot: {type: windows, vhd: /boot/bootmgr.vhd}},
+       {label: cow-image64-place, fs: ext4}
+     ]
+  }]
+
+- [managed-disk-standard, 'image64-test|uzer-pc|canion', {
+     disk_layout: [
+       {flags: [bios_grub], size: 10},
+       {label: boot, size: 200, format: ext4},
+       {label: cow-image64-keyimage, size: 1, fs: ext2},
+       {label: cow-image64-conf, size: 10, format: ext2},
        {label: cow-image64-sign, size: 1},
        {label: cow-image64-local, size: 21500, fs: ext4,
         boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
        {label: cow-image64-cow, size: 10000},
-       {label: windows7, fs: ntfs, size: 50001,
+       {label: windows7, fs: ntfs, size: 65000,
         boot: {type: windows, vhd: /boot/bootmgr.vhd}},
-       {label: cow-image64-place, format: ext4}
+       {label: cow-image64-place, fs: ext4}
+     ]
+  }]
+
+- [managed-disk-amt, [hogs], {
+     disk_layout: [
+       {flags: [bios_grub], size: 10},
+       {label: boot, size: 200, format: ext4},
+       {label: cow-image64-conf, size: 10, format: ext2},
+       {label: cow-image64-sign, size: 1},
+       {label: cow-image64-local, size: 21500, fs: ext4,
+        boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
+       {label: cow-image64-cow, size: 10000},
+       {label: windows7, fs: ntfs, size: 65000,
+        boot: {type: windows, vhd: /boot/bootmgr.vhd}},
+       {label: cow-image64-place, fs: ext4}
+     ]
+  }]
+
+- [managed-disk-large, [asus], {
+     disk_layout: [
+       {flags: [bios_grub], size: 10},
+       {label: boot, size: 200, format: ext4},
+       {label: cow-image64-keyimage, size: 1, fs: ext2},
+       {label: cow-image64-conf, size: 10, format: ext2},
+       {label: cow-image64-sign, size: 1},
+       {label: cow-image64-local, size: 21500, fs: ext4,
+        boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
+       {label: cow-image64-cow, size: 15000},
+       {label: windows7, fs: ntfs, size: 250000,
+        boot: {type: windows, vhd: /boot/bootmgr.vhd}},
+       {label: cow-image64-place, fs: ext4}
      ]
   }]
 
 hosts:
-- [[621-switch, s6],      9.1,     001ec12d7240]
-- [[postel, p],           9.2,    [000bdba8f473, 000bdba8f474], {admin: uzer,
-                                                                 services: [adaptecraid],
-                                                                 ups: bfu}]
+- [[621-switch, s6],           9.1,     001ec12d7240]
+- [[postel, p],                9.2,    [000bdba8f473, 000bdba8f474],
+                                        {admin: uzer, services: [adaptecraid], ups: bfu}]
 - [[markov, m],                9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
                                         backend_for: m.fb.urgu.org,
-                                        services: [http],
+                                        services: [http, slurm-client],
                                         ups: hlu,
-                                        admin: uzer}]
+                                        admin: uzer,
+                                        sensors: ['coretemp:temp*:8,10,45,50',
+                                                  'i5k_amb:temp*:8,10,55,60']}]
 - [[mmarkov, mm],              9.4,     000c29dfeeff, {admin: uzer, services: [openvz]}]
 - [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {
                                         tcp_fwd: {3261: 3261},
                                         fb: [10.228],
                                         backend_for: h.fb.urgu.org,
-                                        services: [http],
+                                        services: [http, slurm-client],
                                         ups: bfu,
                                         admin: uzer,
+                                        sensors: ['coretemp:temp*:8,10,50,55',
+                                                  'i5k_amb:temp*:8,10,60,65'],
                                         backups: [/place/backup, {dijkstra:   [sys, user],
                                                                   image32:    [sys],
                                                                   image64:    [sys],
@@ -212,7 +253,7 @@ hosts:
 - [[markov-ipmi, m-i],         9.18,    0015176b9b3e, {switch: hs}]
 - [[hamming-ipmi, h-i],        9.19,    000423d68970, {switch: hs}]
 - [ ap1,                      '9.20',  '001225557506']
-- [[tesla, t],                 9.21,    001e670fafcc, {ups: hlu, admin: uzer}]
+- [[tesla, t],                 9.21,    001e670fafcc, {admin: uzer}]
 - [[tesla-ipmi, t-i],          9.22,    001e670fafce, {switch: hs}]
 - [[631-near-low-ups, bfu],    9.23,    00c0b731da0e, {services: [ext_temp]}]
 - [[airlab-switch, as],        9.24,    001b11c34547]
@@ -228,40 +269,42 @@ hosts:
 #- [catalyst-2950,              9.34,    000d28d0a8c0]
 #   dijkstra              9.254
 
-#- [ clv1,                '10.181', 0004e21c716a ]
-#- [ clv2,                '10.182', 0004e21c735b ]
-#- [ clv3,                '10.183', 0004e21c71a4 ]
-#- [ clv4,                '10.184', 0004e2263d38 ]
+#- [ clv1,                '10.181', ]
+#- [ clv2,                '10.182', ]
+#- [ clv3,                '10.183', ]
+#- [ clv4,                '10.184', ]
 #- [ clv5,                '10.185', 0004e21c72d6 ]
 #- [ clv6,                '10.186', 0004e21c72da ]
 #- [ clv7,                '10.187', 0004e21c71da ]
 #- [ clv8,                '10.188', 0004e21c6ede ]
-#- [ clv9,                '10.189', 0004e2263a48 ]
-#- [ clv10,               '10.190', 0004e21c718a ]
+#- [ clv9,                '10.189', ]
+#- [ clv10,               '10.190', ]
 #
-#- [ clh1,                '10.201', 0007e9dd94a9 ]
-#- [ clh2,                '10.202', 0007e9dd7fda ]
-#- [ clh3,                '10.203', 0007e9dd7d4e ]
-#- [ clh4,                '10.204', 0007e9dd83b8 ]
-#- [ clh5,                '10.205', 0007e9dd9488 ]
-#- [ clh6,                '10.206', 0007e9dd7eb3 ]
-#- [ clh7,                '10.207', 0007e9dd8fc1 ]
-#- [ clh8,                '10.208', 0007e9e4808b ]
-#- [ clh9,                '10.209', 0007e9dd8fb8 ]
-#- [ clh10,               '10.210', 0007e9dd7aa6 ]
+- [ clh1,                '10.201', 0007e9dd94a9 ]
+- [ clh2,                '10.202', 0007e9dd7fda ]
+- [ clh3,                '10.203', 0007e9dd7d4e ]
+- [ clh4,                '10.204', 0007e9dd83b8 ]
+- [ clh5,                '10.205', 0007e9dd9488 ]
+- [ clh6,                '10.206', 0007e9dd7eb3 ]
+- [ clh7,                '10.207', 0007e9dd8fc1 ]
+- [ clh8,                '10.208', 0007e9e4808b ]
+- [ clh9,                '10.209', 0007e9dd8fb8 ]
+- [ clh10,               '10.210', 0007e9dd7aa6 ]
+- [ clh11,               '10.211', 0007e9dd942e ]
 
-- [ re14,                 10.212,  000c7bcf7768, {admin: ld, services: [ssh]}]
-- [ image32-test,         10.213,  000c29bcbcf8, {dhcp: {ipxe.scriptlet: cow32}}]
-- [ image32,              10.214,  000c29bcbcf7]
+- [[windows7, w7],        10.212,  000c29bcbcf9, {services: [rrdp], admin: uzer}]
+- [ image32-test,         10.213,  000c29bcbcf8, {services: [slurm-node], boot: cow32}]
+- [ image32,              10.214,  000c29bcbcf7, {services: [slurm-client, ad]}]
 - [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
-#   free
-#   free
-- [ ld-xp,                10.218,  00163a34f04d, {admin: ld}]
-#   free
+- [ clh12,                10.216,  0007e9e480a5 ]
+- [[621-test, 6t],        10.217,  001cc044c757, {boot: cow32}]
+- [ xp,                   10.218,  000c29bcbcfa, {services: [rrdp], admin: uzer}]
+- [[621-test2, 6t2],      10.219,  001cc044c68c, {boot: cow32}]
 - [ asus1,               '10.220', 14dae9c9a638, {services: [nvidia]}]
 - [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211},
                                                   tcp_fwd: {60211: 60211},
-                                                  hadoop_rack: runc}]
+                                                  hadoop_rack: runc,
+                                                  disk: 'ata-ST380815AS_????????'}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
                                                   backend_for: irclog.hackerdom.ru, admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
@@ -271,21 +314,23 @@ hosts:
 - [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #   hamming-fastbone      10.228
 #   markov-fastbone       10.229
-- [ ts.runc,             '10.230', 000c38ad9962, {tcp_fwd: {22: 22, 3389: 3389, 6817: 6817},
+- [ ts.runc,             '10.230', 001e670fafcc, {tcp_fwd: {22: 22, 3389: 3389},
                                                   admin: uzer, services: [hadoop-master,
-                                                                          slurm-master,
+                                                                          slurm-client, ad,
                                                                           managed-apt]}]
 #- [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
 - [ hewlett,              10.232 , b499ba5732e9]
 - [ packard,              10.233 , b499ba5684d1]
-- [ uzer-pc.runc,         10.234,  0019d17f04ba, {hadoop_rack: small_hog}]
+- [ uzer-pc.runc,         10.234,  0019d17f04ba, {hadoop_rack: small_hog,
+                                                  disk: 'ata-Hitachi_HDS721616PLA380_??????????????'}]
+
 - [ redmine-back,         10.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
                                                                 git.redmine.hackerdom.ru],
                                                   services: [autoupdate],
                                                   admin: znick}]
 - [ stream-pc.runc,       10.236,  001cc009f4af]
 - [ cuda-pc.runc,         10.237,  001cc009f4ff, {services: [nvidia]}]
-- [[itanium,it,exchange], 10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer}]
+- [[itanium,it],          10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer, tcp_fwd: {548: 548}}]
 - [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
 - [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru',
                                                                 training.hackerdom.ru, '*.training.hackerdom.ru'],
@@ -325,8 +370,8 @@ hosts:
                                                                 ructf.net, www.ructf.net,
                                                                 ructfe.ru, www.ructfe.ru,
                                                                 ructfe.org, www.ructfe.org]}]
-- [ image64-test,         10.251, [000c29ad7768, 000c29ad7769], {dhcp: {ipxe.scriptlet: cow}}]
-- [ image64,              10.252,  000c29ad7767]
+- [ image64-test,         10.251, [000c29ad7768, 000c29ad7769], {services: [slurm-node]}]
+- [ image64,              10.252,  000c29ad7767, {services: [slurm-client, ad]}]
 #   main-switch           10.253
 #   dijkstra              10.254
 
@@ -334,7 +379,7 @@ hosts:
                                                   services: [autoupdate,
                                                              exim_default,
                                                              ext_http,
-                                                             unix]}]
+                                                             unix, ssh]}]
 
 #- [ dcimap-vm,           '50.100', 000c29ad8762, {admin: andgein}]
 #- [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
@@ -355,10 +400,11 @@ hosts:
 - [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: znick}]
 #   free                  194.226.244.124
 #   free                  194.226.244.125
-- [[dijkstra, anytask, urgu.org, d, puppet, ssl, status, tracker, v, wiki, hdfs, mapred],
+- [[dijkstra, anytask, '', d, puppet, ssl, status, tracker, v, wiki, hdfs, mapred],
     194.226.244.126, 0002a54f11c2, {admin: uzer,
                                     ssh_port: 1022,
-                                    services: [nagios, autoupdate, dns],
+                                    services: [nagios, autoupdate, slurm-master,
+                                               ldap, dns],
                                     ups: hlu,
                                     sensors: ['max1617:temp*:10,15,30,35'],
                                     fb: [10.254, 11.254, 12.254, 50.254]}]
@@ -372,11 +418,19 @@ hosts:
 
 - [ mx1.eunnet.net,  194.226.255.33,   {services: [dns]}]
 - [ usu-math.usu.ru, 194.226.235.254]
-- [ codd.runc,       194.226.235.240,  00163a34e94d, {admin: uzer,
-                                                      services: [http]}]
+#- [ codd.runc,       194.226.235.240,  00163a34e94d, {admin: uzer,
+#                                                      services: [http]}]
 - [ ns.usu.ru,       194.226.235.22,   {services: [dns]}]
 
 - [ splinex.dyndns.org, {admin: ns}]
+
+- [ contest.qctf.ru,           {admin: andgein}]
+- [ online.qctf.ru,            {admin: andgein}]
+- [ dbproxy.contest.qctf.ru,   {admin: andgein}]
+- [ dbhack.contest.qctf.ru,    {admin: andgein}]
+- [ signal.contest.qctf.ru,    {admin: andgein}]
+- [ brainfuck.contest.qctf.ru, {admin: andgein}]
+- [ redbtn.contest.qctf.ru,    {admin: andgein}]
 
 #- [ 621-01,  11.1,   001cc044c5fc]
 #- [ 621-02,  11.2,   001cc044c7fc]
@@ -393,34 +447,34 @@ hosts:
 #- [ 621-13,  11.13,  001cc044c911]
 #- [ 621-14,  11.14,  001cc044c67d]
 
-- [[hog01.runc, hog1.runc], 12.1, 0019d17e9dd4, {amt: h01}]
-- [[hog02.runc, hog2.runc], 12.2, 0019d17ebb9f, {amt: h02}]
-- [[hog03.runc, hog3.runc], 12.3, 0019d17e9e1f, {amt: h03}]
-- [[hog04.runc, hog4.runc], 12.4, 0019d17e94de, {amt: h04}]
+- [[hog01.runc, hog1.runc], 12.1,   0019d17e9dd4, {amt: h01}]
+- [[hog02.runc, hog2.runc], 12.2,   0019d17ebb9f, {amt: h02}]
+- [[hog03.runc, hog3.runc], 12.3,   0019d17e9e1f, {amt: h03}]
+- [[hog04.runc, hog4.runc], 12.4,   0019d17e94de, {amt: h04}]
 # there is no spoon
-- [[hog06.runc, hog6.runc], 12.6, 0019d17e934c, {amt: h06}]
-- [[hog07.runc, hog7.runc], 12.7, 0019d17eb926, {amt: h07}]
-- [[hog08.runc, hog8.runc], 12.8, 0019d17ebb2e, {amt: h08}]
-- [[hog09.runc, hog9.runc], 12.9, 0019d17e85a5, {amt: h09}]
-- [ hog10.runc,  '12.10',  0019d17ebcce, {amt: h10}]
-- [ hog11.runc,   12.11,   0019d17ebcd5, {amt: h11}]
-- [ hog12.runc,   12.12,   0019d17e9dbe, {amt: h12}]
-- [ hog13.runc,   12.13,   0019d17f04d9, {amt: h13}]
-- [ hog14.runc,   12.14,   0019d17e97e4, {amt: h14}]
-- [ hog15.runc,   12.15,   0019d17ebb63, {amt: h15}]
-- [ hog16.runc,   12.16,   0019d17e9de4, {amt: h16}]
-- [ hog17.runc,   12.17,   0019d17f049e, {amt: h17}]
-- [ hog18.runc,   12.18,   0019d17ebc09, {amt: h18}]
-- [ hog19.runc,   12.19,   0004e21c735b]
-- [ hog20.runc,  '12.20',  0004e2263a48]
-- [ hog21.runc,   12.21,   0004e21c716a]
-- [ hog22.runc,   12.22,   0004e21c718a]
-#- [ hog23.runc,   12.23,   ]
-#- [ hog24.runc,   12.24, 0004e21c71a4]
-#- [ hog25.runc,   12.25,   ]
-#- [ hog26.runc,   12.26,   ]
-#- [ hog27.runc,   12.27,   ]
-#- [ hog28.runc,   12.28,   ]
+- [[hog06.runc, hog6.runc], 12.6,   0019d17e934c, {amt: h06}]
+- [[hog07.runc, hog7.runc], 12.7,   0019d17eb926, {amt: h07}]
+- [[hog08.runc, hog8.runc], 12.8,   0019d17ebb2e, {amt: h08}]
+- [[hog09.runc, hog9.runc], 12.9,   0019d17e85a5, {amt: h09}]
+- [ hog10.runc,            '12.10', 0019d17ebcce, {amt: h10}]
+- [ hog11.runc,             12.11,  0019d17ebcd5, {amt: h11}]
+- [ hog12.runc,             12.12,  0019d17e9dbe, {amt: h12}]
+- [ hog13.runc,             12.13,  0019d17f04d9, {amt: h13}]
+- [ hog14.runc,             12.14,  0019d17e97e4, {amt: h14}]
+- [ hog15.runc,             12.15,  0019d17ebb63, {amt: h15}]
+- [ hog16.runc,             12.16,  0019d17e9de4, {amt: h16}]
+- [ hog17.runc,             12.17,  0019d17f049e, {amt: h17}]
+- [ hog18.runc,             12.18,  0019d17ebc09, {amt: h18}]
+- [ hog19.runc,             12.19,  0004e21c735b, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
+- [ hog20.runc,            '12.20', 0004e2263a48, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
+- [ hog21.runc,             12.21,  0004e21c716a, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
+- [ hog22.runc,             12.22,  0004e21c718a, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
+#- [ hog23.runc,            12.23 ]
+#- [ hog24.runc,            12.24, 0004e21c71a4]
+#- [ hog25.runc,            12.25 ]
+#- [ hog26.runc,            12.26 ]
+#- [ hog27.runc,            12.27 ]
+#- [ hog28.runc,            12.28 ]
 
 - [ h01,  20.1,   0019d17e9dd5, {nagios: { 2d_coords: '680,440', statusmap_image: 'base/cmp+180.png' } } ]
 - [ h02,  20.2,   0019d17ebba0, {nagios: { 2d_coords: '680,520', statusmap_image: 'base/cmp+180.png' } } ]
