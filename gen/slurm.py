@@ -8,8 +8,9 @@ def clamp(spec):
             spec[index] = (key, int(int(value) * 0.5))
 
 def gen_line(fact):
-    spec = filter(lambda (key, _): key not in ['ClusterName', 'Procs', 'Boards'],
-                  [(pair.split('=')) for pair in fact.split(' ')])
+    spec = filter(
+        lambda (key, _): key not in ['ClusterName', 'Procs', 'Boards'],
+        [(pair.split('=')) for pair in fact.split(' ')])
     clamp(spec)
     return ' '.join(map(lambda pair: '{}={}'.format(*pair), spec))
 
@@ -18,7 +19,8 @@ def gen_slurm(state, template, facts_path):
     state.parse_facts(facts_path)
 
     default = state.defaults.slurm
-    def get_matching(hosts): return filter(lambda host: default in host.props, hosts)
+    def get_matching(hosts):
+        return filter(lambda host: default in host.props, hosts)
 
     hosts = get_matching(state.hosts)
 
@@ -27,8 +29,10 @@ def gen_slurm(state, template, facts_path):
         + "short names for hosts %s" % ", ".join(dups))
 
     groups = {}
-    for group in filter(lambda group: len(get_matching(group.hosts)) > 0, state.groups):
-        groups[group.name] = map(lambda host: host.sname, get_matching(group.hosts))
+    for group in state.groups:
+        group_hosts = get_matching(host for host, _ in group.hosts)
+        if len(group_hosts) > 0:
+            groups[group.name] = map(lambda host: host.sname, group_hosts)
 
     return jinja2.Template(template).render(hosts=hosts,
                                             groups=groups,
