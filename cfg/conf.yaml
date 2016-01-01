@@ -121,6 +121,7 @@ groups:
 - [cl,         [clh, clv],                  {hadoop_rack: runc}]
 
 - [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
+                                             localtime: 1,
                                              sensors: ['coretemp:temp*:10,16,55,60'],
                                              disk: 'ata-WDC_WD7500BPVT-80HXZT3_WD-????????????'}]
 
@@ -322,6 +323,7 @@ hosts:
 - [ hewlett,              10.232 , b499ba5732e9]
 - [ packard,              10.233 , b499ba5684d1]
 - [ uzer-pc.runc,         10.234,  0019d17f04ba, {hadoop_rack: small_hog,
+                                                  localtime: 1,
                                                   disk: 'ata-Hitachi_HDS721616PLA380_??????????????'}]
 
 - [ redmine-back,         10.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
