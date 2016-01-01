@@ -1,5 +1,6 @@
 import config
 
+import fcntl
 from flask import abort, Flask, request, Response
 from functools import wraps
 from werkzeug.contrib.cache import SimpleCache
@@ -37,6 +38,35 @@ class authorized(object):
             else:
                 abort(403)
         return wrapper
+
+
+class locker(object):
+    def __init__(self, fd, op):
+        (self.fd, self.op) = (fd, op)
+
+    def __enter__(self):
+        fcntl.flock(self.fd, self.op)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        fcntl.flock(self.fd, fcntl.LOCK_UN)
+
+
+class locked(object):
+    def __init__(self, lockfile, write=False):
+        self.lockfile = lockfile
+        self.write = write
+
+    def __call__(self, f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            with open(self.lockfile, 'w' if self.write else 'r') as lockfile:
+                with locker(lockfile, fcntl.LOCK_EX if self.write
+                                      else fcntl.LOCK_SH) as lock:
+                    return f(*args, **kwargs)
+
+        return wrapper
+
 
 
 def load_state(state_fn, overrides_fn):
@@ -86,6 +116,7 @@ def format_to_json(result):
 
 
 @application.route('{}/<name>'.format(config.WEB_PATH), methods=["GET"])
+@locked(config.LOCK)
 @with_entity
 def get(state, overrides, entity):
     if len(request.args) > 0:
@@ -104,6 +135,7 @@ def get(state, overrides, entity):
 
 @application.route('{}/<name>'.format(config.WEB_PATH), methods=["POST"])
 @authorized(config.ACL)
+@locked(config.LOCK, write=True)
 @with_entity
 def post(state, overrides, entity):
     props = overrides.get(entity)

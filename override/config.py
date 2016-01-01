@@ -1,13 +1,12 @@
 import os.path
 
+WEB_PATH = '/config'
+ACL = ['d', 'h']
+
 CFG = os.path.join(os.path.dirname(__file__), os.path.pardir,
                    'cfg', 'conf.yaml')
-
-WEB_PATH = '/config'
-
 DB = '/var/lib/cfg/overrides.json'
-
-ACL = ['d', 'h']
+LOCK = '/var/lib/cfg/overrides.lock'
 
 BOOT = '/var/www/urgu.org/boot'
 BOOT_DEFAULT = 'local'
