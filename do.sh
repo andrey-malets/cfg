@@ -160,6 +160,7 @@ gen_nagios() {
 
     if ! cmp_files $CUR $NEW; then
         mv $NEW $CUR
+        chown nagios: $CUR
         /etc/init.d/nagios3 restart
     else
         rm $NEW
