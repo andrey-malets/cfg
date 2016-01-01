@@ -311,7 +311,8 @@ hosts:
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
 #   ritchie-fastbone      10.225
-- [ canion,               10.226,  001eec2cf0f2, {services: [nvidia], sudoers: [kost]}]
+- [ canion,               10.226,  001eec2cf0f2, {services: [nvidia], sudoers: [kost],
+                                                  disk: 'ata-FUJITSU_MHY2250BH_????????????'}]
 - [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
 #   hamming-fastbone      10.228
 #   markov-fastbone       10.229
