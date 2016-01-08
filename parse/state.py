@@ -80,7 +80,8 @@ class Overrides:
     def apply_props(src, dst):
         assert type(src) is dict and type(dst) is dict
         for key, value in src.iteritems():
-            assert not key in dst or type(src[key]) == type(dst[key])
+            assert (not key in dst or
+                    util.matches(type(src[key]), type(dst[key])))
             if type(src[key]) is dict:
                 dst[key] = apply_props(src[key], dst[key])
             else:
