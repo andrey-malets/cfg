@@ -69,8 +69,9 @@ def create(device, layout):
     subprocess.check_call(['partprobe', device])
     subprocess.check_call(['udevadm', 'settle'])
     for num, fs in mkfs_cmds:
-        subprocess.check_call(
-            ['mkfs.{}'.format(fs), '-F', '{}{}'.format(device, num+1)])
+        opts = ['-f' if fs == 'ntfs' else '-F']
+        cmd = ['mkfs.{}'.format(fs)] + opts + ['{}{}'.format(device, num+1)]
+        subprocess.check_call(cmd)
 
 def get_boot(device, layout):
     for num, part in enumerate(layout):
