@@ -37,6 +37,15 @@ def maybe_free_disk():
     if proc.returncode == 0:
         subprocess.check_call(['/bin/umount', '/place'])
 
+def label_fs(device, fs, label):
+    if fs == 'ntfs':
+        cmd = ['ntfslabel', device, label]
+    elif fs == 'ext2' or fs == 'ext3' or fs == 'ext4':
+        cmd = ['tune2fs', '-L', label, device]
+    else:
+        raise ValueError('do not know how to label fs "{}"'.format(fs))
+    subprocess.check_call(cmd)
+
 def create(device, layout):
     def mb(pos): return '{}MB'.format(pos)
 
@@ -55,8 +64,9 @@ def create(device, layout):
             end = '100%'
         if 'format' in part:
             fs = part['format']
+            fs_label = part.get('fslabel')
             cmd.append(fs)
-            mkfs_cmds.append((num, fs))
+            mkfs_cmds.append((num, fs, fs_label))
         elif 'fs' in part:
             cmd.append(part['fs'])
         parted_cmds.append(cmd + [start, end])
@@ -68,10 +78,12 @@ def create(device, layout):
         subprocess.check_call(['parted', '-s', device] + cmd)
     subprocess.check_call(['partprobe', device])
     subprocess.check_call(['udevadm', 'settle'])
-    for num, fs in mkfs_cmds:
+    for num, fs, label in mkfs_cmds:
         opts = ['-f' if fs == 'ntfs' else '-F']
-        cmd = ['mkfs.{}'.format(fs)] + opts + ['{}{}'.format(device, num+1)]
-        subprocess.check_call(cmd)
+        fs_device = '{}{}'.format(device, num+1)
+        subprocess.check_call(['mkfs.{}'.format(fs)] + opts + [fs_device])
+        if label is not None:
+            label_fs(fs_device, fs, label)
 
 def get_boot(device, layout):
     for num, part in enumerate(layout):
