@@ -11,7 +11,7 @@ import tempfile
 import urllib2
 
 def get_property(config_url, prop):
-    hostname = subprocess.check_output(['hostname', '-f']).strip()
+    hostname = subprocess.check_output(['hostname', '-f']).strip().lower()
     url = '{}/{}?{}'.format(config_url, hostname, prop)
     return json.load(urllib2.urlopen(url))
 
