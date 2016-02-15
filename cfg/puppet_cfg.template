@@ -1266,13 +1266,11 @@ esac
             # include hadoop_slave
             # $check_hadoop_slave = 'true'
 
-            include smartmon
             $check_smartmon = 'true'
 
             include exchange
             include managed-apt
             include managed-ssh
-            include managed-update
             include pam_mount
             include smb
             include teachers
@@ -1386,6 +1384,7 @@ esac
         $puppet_random_host = 'urgu.org'
         include random
 
+        include smartmon
         include backup
         include btsync
         include disk
