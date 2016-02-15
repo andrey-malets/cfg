@@ -999,12 +999,13 @@ class sensors {
 class essential_soft {
     {% for pkg in ['ntp', 'arping', 'telnet', 'tcpdump', 'mtr-tiny', 'ethtool',
                    'curl',
-                   'vim', 'git', 'screen', 'augeas-tools', 'dnsutils',
+                   'vim', 'git', 'screen', 'augeas-tools', 'dnsutils', 'mc',
                    'ca-certificates', 'atop', 'lsof', 'strace',
                    'jnettop', 'htop', 'iotop',
-                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx',
+                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx', 'ldmtool',
                    'iperf', 'bridge-utils', 'vlan', 'ifenslave-2.6',
-                   'stress', 'hdparm', 'sysbench', 'pv',
+                   'wireless-tools',
+                   'stress', 'hdparm', 'sysbench', 'pv', 'lshw',
                    'minicom',
                    'p7zip-full', 'gzip', 'lzma', 'zip', 'unzip'] %}
     package { '{{ pkg }}': ensure => installed }
