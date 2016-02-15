@@ -840,6 +840,15 @@ class smartmon {
         ensure => installed,
     }
 
+    file { '/etc/default/smartmontools':
+        ensure => present,
+        mode => '644',
+        owner => root,
+        group => root,
+        content => 'start_smartd=yes
+'
+    }
+
     file { '/usr/lib/nagios/plugins/check_smartmon':
         mode => 755,
         owner => root,
