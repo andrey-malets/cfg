@@ -261,27 +261,6 @@ class managed-ssh inherits ssh {
     }
 }
 
-class managed-update {
-    file { '/root/empty.sh':
-        mode => 700,
-        owner => root,
-        group => root,
-        content => "#!/bin/bash
-            [[ $(w -h | grep -v '^user$' | wc -l) -eq 0 ]] && \
-            [[ $(pgrep tmux | wc -l) -eq 0 ]] && \
-            [[ $(find /var/run/screen -type p | wc -l) -eq 0 ]]
-        ",
-    }
-
-    cron { 'managed-update':
-        command => '/root/empty.sh && /sbin/init 6',
-        user => root,
-        hour => 7,
-        minute => 10,
-        require => File['/root/empty.sh'],
-    }
-}
-
 class managed-apt {
     package { 'sudo':
         ensure => installed,
