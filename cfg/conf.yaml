@@ -255,7 +255,7 @@ hosts:
 - [[markov-ipmi, m-i],         9.18,    0015176b9b3e, {switch: hs}]
 - [[hamming-ipmi, h-i],        9.19,    000423d68970, {switch: hs}]
 - [ ap1,                      '9.20',  '001225557506']
-- [[tesla, t],                 9.21,    001e670fafcc, {admin: uzer}]
+- [[cubie, c],                 9.21,    c0b045a458c5, {admin: uzer}]
 - [[tesla-ipmi, t-i],          9.22,    001e670fafce, {switch: hs}]
 - [[631-near-low-ups, bfu],    9.23,    00c0b731da0e, {services: [ext_temp]}]
 - [[airlab-switch, as],        9.24,    001b11c34547]
