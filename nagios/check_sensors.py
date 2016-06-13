@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import glob, os, re, sys
+import collections, glob, itertools, os, re, sys
 
 def get_devices():
     PREFIX='/sys/class/hwmon'
-    rv = {}
+    rv = collections.defaultdict(list)
     for comp in os.listdir(PREFIX):
-        devpath = '%s/%s/device' % (PREFIX, comp)
-        namepath = '%s/name' % devpath
-        if os.path.isfile(namepath):
-            with open(namepath) as namefile:
-                name = open(namepath).read().strip()
-                rv[devpath] = name
+        basepath = '%s/%s' % (PREFIX, comp)
+        for devpath in (basepath, '%s/device' % basepath):
+            namepath = '%s/name' % devpath
+            if os.path.isfile(namepath):
+                with open(namepath) as namefile:
+                    name = open(namepath).read().strip()
+                    rv[name].append(devpath)
     return rv
 
 def normalize_value(name, raw_value):
@@ -35,11 +36,11 @@ def format_value(name, value):
             return fmt % value
     assert(False)
 
-def check_sensor(devpath, devname, patt, values):
-    senspatt = '%s/%s_input' % (devpath, patt)
+def check_sensor(devname, devpaths, patt, values):
+    senspatts = ['%s/%s_input' % (devpath, patt) for devpath in devpaths]
     (cmin, wmin, wmax, cmax) = map(int, values.split(','))
 
-    sensors = glob.glob(senspatt)
+    sensors = sum([glob.glob(senspatt) or [] for senspatt in senspatts], [])
     if len(sensors) == 0:
         return [(2, 'no sensors found matching %s:%s!' % (devname, patt))]
     results = []
@@ -53,7 +54,7 @@ def check_sensor(devpath, devname, patt, values):
                 results.append((2, 'cant normalize value "%s"' % raw_value))
                 continue
         assert(value)
-        name = re.match('%s/(.+)_input' % devpath, senspath).group(1)
+        name = re.match('(.+)_input', os.path.basename(senspath)).group(1)
         formatted_value = '%s:%s: %s' % (devname, name, format_value(patt, value))
         status = 0
         if value < cmin or value > cmax:
@@ -83,10 +84,10 @@ if __name__ == '__main__':
     results = [[], [], []]
     all_status = 0
 
-    for devpath, name in get_devices().iteritems():
+    for name, devpaths in get_devices().iteritems():
         if name in matching:
             for patt, values in matching[name]:
-                for status, message in check_sensor(devpath, name, patt, values):
+                for status, message in check_sensor(name, devpaths, patt, values):
                     results[status].append(message)
                     all_status = max(all_status, status)
 
