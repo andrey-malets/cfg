@@ -81,7 +81,7 @@ groups:
 - [xen,        '^(h|m|n)$',                                        {services: [xen]}]
 - [megaraid,   '^(h|m|n|r|t)$',                                    {services: [megaraid]}]
 - [http,       '^(anytask|school|hackerdom|kvkt|ructf)-back$',     {services: [http]}]
-- [https,      '^(redmine|ructf)-back$                             {services: [https]}]
+- [https,      '^(redmine|ructf)-back$',                           {services: [https]}]
 - [uzers_unix, '^(h|m|mm|n|p|ts|it|it2)$',                         {services: [exim_default, autoupdate]}]
 - [auto_vms,   '^((irc|school|ructf|kvkt)-back|shannon)$',         {services: [exim_default, autoupdate]}]
 
