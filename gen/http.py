@@ -1,4 +1,5 @@
 import jinja2
+from letscrypt import filter_state
 from cmd import add_cmd
 
 @add_cmd('ext_http', True, 1)
@@ -7,6 +8,7 @@ def gen_ext_http(state, template, keypath):
 
 @add_cmd('http_back', True, 1)
 def gen_http_back(state, template, keypath):
+    state = filter_state(state)
     return jinja2.Template(template).render(state=state, keypath=keypath)
 
 @add_cmd('https', False, 0)
