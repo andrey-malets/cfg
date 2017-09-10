@@ -1,50 +1,88 @@
 #!/usr/bin/env python
 
 import argparse
+import glob
 import json
+import logging
 import os
-import socket
+import shutil
 import subprocess
 import sys
-import shutil
 import tempfile
 import urllib2
+
 
 def get_property(config_url, prop):
     hostname = subprocess.check_output(['hostname', '-f']).strip().lower()
     url = '{}/{}?{}'.format(config_url, hostname, prop)
     return json.load(urllib2.urlopen(url))
 
-def get_pattern(config_url): return get_property(config_url, 'disk')
-def get_layout(config_url): return get_property(config_url, 'disk_layout')
+
+def get_pattern(config_url):
+    return get_property(config_url, 'disk')
+
+
+def get_layout(config_url):
+    return get_property(config_url, 'disk_layout')
+
+
+def read_links(path):
+    while os.path.islink(path):
+        old_path = path
+        full_path = os.path.join(os.path.dirname(path), os.readlink(path))
+        path = os.path.normpath(full_path)
+        logging.debug('Resolved %s to %s', old_path, path)
+    return path
+
 
 def find_disk(pattern):
-    path = '/dev/disk/by-id/{}'.format(pattern)
-    ndisks = int(subprocess.check_output(
-        ['/bin/bash', '-c',
-         'shopt -s nullglob; disks=({}); echo ${{#disks[@]}}'.format(path)]))
-    if ndisks != 1:
-        print >> sys.stderr, ('there must be exactly one disk with pattern {}, '
-                              ' got {}, exiting.'.format(ndisks))
+    full_pattern = '/dev/disk/by-id/{}'.format(pattern)
+    logging.debug('Trying to find disk by pattern: %s', full_pattern)
+    paths = glob.glob(full_pattern)
+    if len(paths) != 1:
+        logging.error('there must be exactly one disk with pattern %s, '
+                      ' got %s, exiting.'.format(full_pattern, len(paths)))
         sys.exit(1)
-    return subprocess.check_output(
-        ['/bin/bash', '-c', 'readlink -f {}'.format(path)]).strip()
+    return paths[0]
 
-def maybe_free_disk():
+
+def maybe_free_place():
+    logging.debug('Checking if /place needs to be unmounted')
     proc = subprocess.Popen(['/bin/mountpoint', '/place'],
                             stdout=subprocess.PIPE)
     proc.communicate()
     if proc.returncode == 0:
+        logging.info('Unmounting /place')
         subprocess.check_call(['/bin/umount', '/place'])
+
 
 def label_fs(device, fs, label):
     if fs == 'ntfs':
         cmd = ['ntfslabel', device, label]
     elif fs == 'ext2' or fs == 'ext3' or fs == 'ext4':
         cmd = ['tune2fs', '-L', label, device]
+    elif fs == 'fat32':
+        pass  # skip since this is not useful anyway
     else:
         raise ValueError('do not know how to label fs "{}"'.format(fs))
+    logging.info('Running label fs cmd: %s', cmd)
     subprocess.check_call(cmd)
+
+
+def get_mkfs_cmd(fs):
+    if fs == 'fat32':
+        return ['mkfs.fat', '-F', '32']
+    elif fs == 'ntfs':
+        return ['mkfs.ntfs', '-f']
+    elif fs == 'hfs':
+        return ['mkfs.hfs']
+    else:
+        return ['mkfs.{}'.format(fs), '-F']
+
+
+def partition_device(disk_device, number):
+    return '{}{}'.format(disk_device, number + 1)
+
 
 def create(device, layout):
     def mb(pos): return '{}MB'.format(pos)
@@ -73,26 +111,33 @@ def create(device, layout):
         for flag in part.get('flags', []):
             parted_cmds.append(['set', str(num+1), flag, 'on'])
         if 'label' in part:
-            parted_cmds.append(['name', str(num+1), part['label']])
+            parted_cmds.append(['name', str(num+1),
+                                "'{}'".format(part['label'])])
     for cmd in parted_cmds:
+        logging.info('Running parted cmd: %s', cmd)
         subprocess.check_call(['parted', '-s', device] + cmd)
+    logging.info('Refreshing partition map with partprobe')
     subprocess.check_call(['partprobe', device])
+    logging.info('Waiting for partitions to appear with "udevadm settle"')
     subprocess.check_call(['udevadm', 'settle'])
     for num, fs, label in mkfs_cmds:
-        opts = ['-f' if fs == 'ntfs' else '-F']
-        fs_device = '{}{}'.format(device, num+1)
-        subprocess.check_call(['mkfs.{}'.format(fs)] + opts + [fs_device])
+        fs_device = partition_device(device, num)
+        cmd = get_mkfs_cmd(fs) + [fs_device]
+        logging.info('Running mkfs cmd: %s', cmd)
+        subprocess.check_call(cmd)
         if label is not None:
             label_fs(fs_device, fs, label)
+
 
 def get_boot(device, layout):
     for num, part in enumerate(layout):
         if part.get('label') == 'boot':
-            return '{}{}'.format(device, num+1)
+            return partition_device(device, num)
+
 
 def write_grub_config(destination, layout):
     with open(destination, 'w') as output:
-        output.write(
+        output.write(  # noqa
 """set menu_color_normal=cyan/blue
 set menu_color_highlight=white/blue
 set timeout=5
@@ -113,9 +158,10 @@ menuentry 'Debian GNU/Linux ({description})' {{
     initrd (hd0,gpt{num}){initrd}
 }}
 """
-                    for cow_type in [('', 'use current disk state, if possible'),
-                                     ('clear', 'reset disk state'),
-                                     ('mem', 'force memory session')]:
+                    for cow_type in [
+                            ('', 'use current disk state, if possible'),
+                            ('clear', 'reset disk state'),
+                            ('mem', 'force memory session')]:
                         output.write(template.format(kernel=boot['kernel'],
                                                      initrd=boot['initrd'],
                                                      num=num+1,
@@ -129,11 +175,22 @@ menuentry 'Windows' {{
 }}
 """
                     output.write(template.format(num=num+1, vhd=boot['vhd']))
+                elif boot_type == 'macos':
+                    template = """
+menuentry '' {{
+    chainloader (hd0,gpt{num}){bootsector}
+}}
+"""
+                    output.write(template.format(
+                        num=num+1, bootsector=boot['bootsector']))
+
 
 def configure(device, layout):
     boot = get_boot(device, layout)
+    logging.info('Boot partition is %s', boot)
     temp_dir = None
     try:
+        logging.info('Installing and configuring GRUB')
         temp_dir = tempfile.mkdtemp()
         subprocess.check_call(['mount', boot, temp_dir])
         subprocess.check_call(['grub-install', device,
@@ -146,17 +203,38 @@ def configure(device, layout):
             subprocess.call(['umount', temp_dir])
             os.rmdir(temp_dir)
 
+
 def main(raw_args):
     parser = argparse.ArgumentParser(description='Configure local disk')
-    parser.add_argument(
-        '-c', help='config API url', default='https://urgu.org/config')
+    parser.add_argument('-c', metavar='URL', help='config API url',
+                        default='https://urgu.org/config')
+    parser.add_argument('-d', metavar='DEV', help='Specify disk explicitly')
+    parser.add_argument('-s', action='store_true',
+                        help='Skip bootloader configuration')
+    parser.add_argument('-v', action='store_true', help='Be verbose')
     args = parser.parse_args(raw_args)
 
-    disk, layout = find_disk(get_pattern(args.c)), get_layout(args.c)
+    logging.basicConfig(level=logging.WARNING if args.v else logging.DEBUG)
 
-    maybe_free_disk()
+    if args.d:
+        disk_path = args.d
+        logging.info('Using explicit disk path: %s', disk_path)
+    else:
+        pattern = get_pattern(args.c)
+        logging.info('Disk pattern: %s', pattern)
+        disk_path = find_disk(pattern)
+        logging.info('Found disk path: %s', disk_path)
+
+    disk = read_links(disk_path)
+
+    layout = get_layout(args.c)
+    logging.info('Disk layout: %s', json.dumps(layout, indent=2))
+
+    maybe_free_place()
     create(disk, layout)
-    configure(disk, layout)
+    if not args.s:
+        configure(disk, layout)
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])
