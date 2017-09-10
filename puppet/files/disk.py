@@ -5,6 +5,7 @@ import glob
 import json
 import logging
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -44,6 +45,32 @@ def find_disk(pattern):
                       ' got %s, exiting.'.format(full_pattern, len(paths)))
         sys.exit(1)
     return paths[0]
+
+
+def dmsetup_used_devices():
+    device_num_re = re.compile(r'.*\((\d+):(\d+)\).*')
+    dmsetup_ls_cmd = ['dmsetup', 'ls', '--tree', '-o', 'ascii']
+    for line in subprocess.check_output(dmsetup_ls_cmd).splitlines():
+        match = device_num_re.match(line)
+        assert match, ('Did not parse device number from dmsetup '
+                       'output line: {}'.format(line))
+        yield int(match.group(1)), int(match.group(2))
+
+
+def check_unused_by_dmsetup(disk):
+    partitions = glob.glob('{}*'.format(disk))
+    if not partitions:
+        logging.info('Disk %s has no partitions', disk)
+        return
+
+    used = list(dmsetup_used_devices())
+    logging.info('Devices used by dmsetup: %s', used)
+    for partition in partitions:
+        part_stat = os.stat(partition)
+        major, minor = os.major(part_stat.st_rdev), os.minor(part_stat.st_rdev)
+        if (major, minor) in used:
+            logging.error('%s is used by dmsetup, cannot continue!', partition)
+            sys.exit(1)
 
 
 def maybe_free_place():
@@ -114,8 +141,9 @@ def create(device, layout):
             parted_cmds.append(['name', str(num+1),
                                 "'{}'".format(part['label'])])
     for cmd in parted_cmds:
-        logging.info('Running parted cmd: %s', cmd)
-        subprocess.check_call(['parted', '-s', device] + cmd)
+        full_cmd = ['parted', '-s', device] + cmd
+        logging.info('Running parted cmd: %s', full_cmd)
+        subprocess.check_call(full_cmd)
     logging.info('Refreshing partition map with partprobe')
     subprocess.check_call(['partprobe', device])
     logging.info('Waiting for partitions to appear with "udevadm settle"')
@@ -214,7 +242,7 @@ def main(raw_args):
     parser.add_argument('-v', action='store_true', help='Be verbose')
     args = parser.parse_args(raw_args)
 
-    logging.basicConfig(level=logging.WARNING if args.v else logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG if args.v else logging.WARNING)
 
     if args.d:
         disk_path = args.d
@@ -231,6 +259,8 @@ def main(raw_args):
     logging.info('Disk layout: %s', json.dumps(layout, indent=2))
 
     maybe_free_place()
+    check_unused_by_dmsetup(disk)
+
     create(disk, layout)
     if not args.s:
         configure(disk, layout)
