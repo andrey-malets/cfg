@@ -3,7 +3,7 @@ class random {
 
     file { 'puppet.random.sh':
         path => '/usr/local/bin/puppet.random.sh',
-        mode => 755,
+        mode => '755',
         owner => root,
         group => root,
         content => template('random/puppet.random.sh.erb')

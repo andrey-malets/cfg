@@ -1,10 +1,10 @@
 ## apcupsd.conf v1.1 ##
 
-UPSNAME <%= upsname %>
+UPSNAME <%= @upsname %>
 UPSCABLE smart
 
 UPSTYPE snmp
-DEVICE <%= upsip %>:161:APC:public
+DEVICE <%= @upsip %>:161:APC:public
 
 POLLTIME 10
 

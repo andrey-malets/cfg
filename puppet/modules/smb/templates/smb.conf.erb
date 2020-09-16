@@ -2,13 +2,15 @@
     security     = ads
     realm        = RUNC.URGU.ORG
     workgroup    = RUNC
-    netbios name = <%= hostname %>
-;    encrypt passwords = true
-;    log level    = 3
+    netbios name = <%= @hostname %>
     log file     = /var/log/samba/thelog
     max log size = 0
+
+;     vfs objects = acl_xattr
+;     map acl inherit = yes
+;     store dos attributes = yes
 ;
-;    template shell = /bin/bash
+;     template shell = /bin/bash
 ;
     load printers         = no
     printing              = bsd
@@ -18,5 +20,5 @@
 
 [place]
     path           = /place
-    nt acl support = yes
+    ; nt acl support = yes
     read only      = no
