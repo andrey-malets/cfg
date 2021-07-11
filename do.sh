@@ -14,6 +14,11 @@ export CFG=$CFGDIR/conf.yaml
 ROUTER_HOST=dijkstra.urgu.org
 ROUTER_IP=194.226.244.126
 
+CERTBOT_DIR="/opt/certbot"
+CERTBOT=$CERTBOT_DIR/certbot-auto
+CERTBOT_URL="https://dl.eff.org/certbot-auto"
+CERTBOT_DEFAULT_PARAMS=" certonly --webroot --non-interactive --agree-tos --email znick@znick.ru -w /var/www "
+
 cmp_files() {
     set +e; cmp -s $1 $2; local rv=$?; set -e
     return $rv
@@ -404,6 +409,22 @@ gen_keys_images() {
             umount "$MP"
         fi
     done
+}
+
+download_certbot() {
+    mkdir -p "$CERTBOT_DIR"
+    [ -x "$CERTBOT" ] || wget -O "$CERTBOT" "$CERTBOT_URL"
+    chmod +x "$CERTBOT"
+}
+
+gen_letscrypt_certs() {
+    local domains=$($MAIN generate_cert_domains)
+
+    download_certbot
+    for domain in $domains; do
+        $CERTBOT $CERTBOT_DEFAULT_PARAMS -d $domain
+    done
+    service nginx reload
 }
 
 mkdir -p $DATA

@@ -81,7 +81,7 @@ groups:
 - [xen,        '^(h|m|n)$',                                        {services: [xen]}]
 - [megaraid,   '^(h|m|n|r|t)$',                                    {services: [megaraid]}]
 - [http,       '^(anytask|school|hackerdom|kvkt|ructf)-back$',     {services: [http]}]
-- [https,      '^redmine-back$',                                   {services: [https]}]
+- [https,      '^(redmine|ructf)-back$',                           {services: [https]}]
 - [uzers_unix, '^(h|m|mm|n|p|ts|it|it2)$',                         {services: [exim_default, autoupdate]}]
 - [auto_vms,   '^((irc|school|ructf|kvkt)-back|shannon)$',         {services: [exim_default, autoupdate]}]
 
@@ -211,7 +211,7 @@ hosts:
 - [[markov, m],                9.3,    [0015176b9b3c, 0015176b9b3d], {
                                         tcp_fwd: {3260: 3260},
                                         fb: [10.229, '11.240', '12.250', '194.226.244.126'],
-                                        backend_for: m.fb.urgu.org,
+                                        backend_for: [m.fb.urgu.org],
                                         services: [http, slurm-client],
                                         ups: hlu,
                                         admin: uzer,
@@ -221,7 +221,7 @@ hosts:
 - [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {
                                         tcp_fwd: {3261: 3261},
                                         fb: [10.228],
-                                        backend_for: h.fb.urgu.org,
+                                        backend_for: [h.fb.urgu.org],
                                         services: [http, slurm-client],
                                         ups: bfu,
                                         admin: uzer,
@@ -309,7 +309,7 @@ hosts:
                                                   hadoop_rack: runc,
                                                   disk: 'ata-ST380815AS_????????'}]
 - [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
-                                                  backend_for: irclog.hackerdom.ru, admin: and}]
+                                                  backend_for: [irclog.hackerdom.ru], admin: and}]
 - [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
 - [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
 #   ritchie-fastbone      10.225
@@ -374,7 +374,8 @@ hosts:
                                                                 ructf.info, www.ructf.info,
                                                                 ructf.net, www.ructf.net,
                                                                 ructfe.ru, www.ructfe.ru,
-                                                                ructfe.org, www.ructfe.org]}]
+                                                                ructfe.org, www.ructfe.org],
+                                                  generate_cert: 1}]
 - [ image64-test,         10.251, [000c29ad7768, 000c29ad7769], {services: [slurm-node]}]
 - [ image64,              10.252,  000c29ad7767, {services: [slurm-client, ad]}]
 #   main-switch           10.253
