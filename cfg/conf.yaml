@@ -1,180 +1,130 @@
 people:
-- [a799853,        "Artem Deykov",         hx0day@hackerdom.ru]
-- [alexog,         "Alexander Bocharov",   alexog@hackerdom.ru]
-- [alklepin,       "Alexander Klepinin",   alex@k8n.ru]
-- [and,            "Andrey Khozov",        avkhozov@gmail.com]
-- [andgein,        "Andrey Gein",          andgein@yandex.ru]
-- [als,            "Alexander Sibiryakov", als@dt.ru]
-- [bay,            "Alexander Bersenev",   bay@hackerdom.ru]
-- [bosonojka5,     "Polina Zonova",        bosonojka5@yandex.ru]
-- [crassirostris,  "Mikhail Vyatskov",     crassirostris@yandex.com]
-- [vdashenko,      "Vladimir Dashenko",    vdashenko@ussc.ru]
-- [dimmo,          "Dmitry Simonov",       dimmoborgir@gmail.com]
-- [dscheg,         "Dmitry Titarenko",     mail.dmitriy@gmail.com]
-- [dqkrait,        "Victor Dvoretsky",     dqkrait@gmail.com]
-- [eburgforever,   "Egor Kolmogortsev",    eburgforever@gmail.com]
-- [exodus,         "Dmitry Dementyev",     exodus@hackerdom.ru]
-- [ilya,           "Ilya Zelenchuk",       ilya@hackerdom.ru]
-- [kiskachi.maria, "Maria Kiskachi",       kiskachi.maria@yandex.ru]
-- [kopeicev,       "Vyacheslav Kopeivev",  kopeicev@kasperskyclub.com]
-- [kost,           "Konstantin Plotnikov", kost@hackerdom.ru]
-- [last,           "Sergey Azovskov",      last_g@hackerdom.ru]
-- [ld,             "Bogdan Melnik",        ld@hackerdom.ru,
-                                           {CNs: ['ld', 'ld2']}]
-- [mawile,         "Kirill Shilimanov",    mawile@hackerdom.ru]
-- [muzafarov,      "Maxim Muzafarov",      m.muzafarov@gmail.com]
-- [ns,             "Nickolai Shturkin",    ns@splinex.com]
-- [pahaz,          "Pavel Blinov",         pahaz.blinov@gmail.com]
-- [serg2443537,    "Sergey Patrushev",     serg2443537@rambler.ru]
-- [uzer,           "Andrey Malets",        andrey.malets@gmail.com,
-                                           {CNs: ['uzer', 'uzer-cubie',
-                                                  'uzer-work', 'uzer-hp']}]
-- [victor.samun,   "Victor Samun",         victor.samun@gmail.com]
-- [yariksuperman,  "Yaroslav Borcheninov", yariksuperman@gmail.com]
-- [yury.pliner,    "Yury Pliner",          yury.pliner@gmail.com]
-- [znick,          "Nickolai Zhuravlev",   znick@znick.ru,
-                                           {CNs: ['znick', 'znick2',
-                                                  'znick-ideco', 'znick-eeepc',
-                                                  'znick-yandex']}]
+- [a799853,         "Artem Deykov",         hx0day@hackerdom.ru]
+- [alexog,          "Alexander Bocharov",   alexog@hackerdom.ru]
+- [alklepin,        "Alexander Klepinin",   alex@k8n.ru]
+- [and,             "Andrey Khozov",        avkhozov@gmail.com]
+- [andgein,         "Andrey Gein",          andgein@yandex.ru]
+- [als,             "Alexander Sibiryakov", als@dt.ru]
+- [bay,             "Alexander Bersenev",   bay@hackerdom.ru]
+- [bosonojka5,      "Polina Zonova",        bosonojka5@yandex.ru]
+- [crassirostris,   "Mikhail Vyatskov",     crassirostris@yandex.com]
+- [vdashenko,       "Vladimir Dashenko",    vdashenko@ussc.ru]
+- [dimmo,           "Dmitry Simonov",       dimmoborgir@gmail.com]
+- [dscheg,          "Dmitry Titarenko",     mail.dmitriy@gmail.com]
+- [dqkrait,         "Victor Dvoretsky",     dqkrait@gmail.com]
+- [eburgforever,    "Egor Kolmogortsev",    eburgforever@gmail.com]
+- [exodus,          "Dmitry Dementyev",     exodus@hackerdom.ru]
+- [ilya,            "Ilya Zelenchuk",       ilya@hackerdom.ru]
+- [kiskachi.maria,  "Maria Kiskachi",       kiskachi.maria@yandex.ru]
+- [kopeicev,        "Vyacheslav Kopeivev",  kopeicev@kasperskyclub.com]
+- [kost,            "Konstantin Plotnikov", kost@hackerdom.ru]
+- [last,            "Sergey Azovskov",      last_g@hackerdom.ru]
+- [ld,              "Bogdan Melnik",        ld@hackerdom.ru,
+                                            {CNs: ['ld', 'ld2']}]
+- [mawile,          "Kirill Shilimanov",    mawile@hackerdom.ru]
+- [muzafarov,       "Maxim Muzafarov",      m.muzafarov@gmail.com]
+- [ns,              "Nickolai Shturkin",    ns@splinex.com]
+- [pahaz,           "Pavel Blinov",         pahaz.blinov@gmail.com]
+- [serg2443537,     "Sergey Patrushev",     serg2443537@rambler.ru]
+- [uzer,            "Andrey Malets",        andrey.malets@gmail.com,
+                                            {CNs: ['uzer', 'uzer-cubie',
+                                                   'uzer-work', 'uzer-hp']}]
+- [victor.samun,    "Victor Samun",         victor.samun@gmail.com]
+- [vik,             "Vincent Kotwizkiy",    vincent@kotwizkiy.ru]
+- [xelez0,          "Alexander Ankudinov",  xelez0@gmail.com]
+- [yariksuperman,   "Yaroslav Borcheninov", yariksuperman@gmail.com]
+- [yury.pliner,     "Yury Pliner",          yury.pliner@gmail.com]
+- [zaynullin-bulat, "Bylat Zaynullin",      zaynullin-bulat@ya.ru]
+- [znick,           "Nickolai Zhuravlev",   znick@znick.ru,
+                                            {CNs: ['znick', 'znick2',
+                                                   'znick-ideco', 'znick-eeepc',
+                                                   'znick-yandex']}]
 
 defaults:
   mon: monitoring@urgu.org
   slurm: managed
-  nagios: 194.226.244.126
+  nagios: 212.193.68.254
   frontend: dijkstra
-  network_prefix: '172.16'
+  network_prefixes: ['10.']
   domains:
     default: 'urgu.org'
     '.runc': '.runc.urgu.org'
     '.usu' : '.usu.edu.ru'
 
 networks:
-- [172.16.9/24,        172.16.9.254,    {rdns: 1, private: 1, vlan: 1,
-    descr: 'Closed internal network for UPS/network equipment/physical machines'}]
-- [172.16.10/24,       172.16.10.253,   {dhcp: '1-128', rdns: 1, fb: 1, vlan: 3,
-    descr: 'Network for public servers'}]
-- [172.16.11/24,       172.16.11.253,   {dhcp: '40-252', rdns: 1, fb: 1, vlan: 4,
-    descr: 'Network for 621 computer classroom'}]
-- [172.16.12/24,       172.16.12.253,   {dhcp: '101-252', rdns: 1, fb: 1, vlan: 8,
+- [10.96.16/26,        10.96.16.60,     {dhcp: '31-59', vlan: 8,
     descr: 'Network for 150/151 computer classrooms'}]
-- [172.16.16/24,       172.16.16.254,   {rdns: 1, private: 1, vlan: 5,
-    descr: 'Private network for developers'}]
-- [172.16.18/24,       172.16.18.1,     {rdns: 1, private: 1}]
-- [172.16.19/24,       172.16.19.1,     {rdns: 1, private: 1},
-    descr: 'Network for OpenVPN']
-- [172.16.20/24,       172.16.20.254,   {rdns: 1, private: 1, vlan: 10,
-    descr: 'Network for AMT interfaces'}]
-- [172.16.21/24,       172.16.21.254,   {rdns: 1, private: 1}]
-- [172.16.50/24,       172.16.50.254,   {dhcp: '1-240', rdns: 1, fb: 1, vlan: 6,
-    descr: 'Network for DCIMAP lab'}]
-- [194.226.235.128/25, 194.226.235.254, {vlan: 7, noicmp: 1,
-    descr: 'USUNet network for Math faculty'}]
-- [194.226.244.112/28, 194.226.244.126, {fb: 1, vlan: 2,
-    descr: 'RUNC external network'}]
+- [10.96.16.192/26,    10.96.16.252,    {vlan: 3,
+    descr: 'Network for public servers'}]
 
-- [194.226.235.22/32,  194.226.235.22, {noicmp: 1}]
-- [194.226.255.33/32,  194.226.255.33, {noicmp: 1}]
+- [10.96.18/26,        10.96.18.62,     {private: 1, vlan: 1, next-server: 10.96.18.62,
+    descr: 'Closed internal network for UPS/network equipment/physical machines'}]
+
+- [10.96.19.0/25,      10.96.19.126,    {private: 1, dhcp: '1-120', vlan: 10, lease: 900,
+    descr: 'Network for public Wi-Fi'}]
+
+- [212.193.68.224/27, 212.193.68.225,   {vlan: 2, descr: 'RUNC external network'}]
 
 groups:
-- [unix,       '^(.*-back|d|h|mysql|m|mm|n|p|shannon|ts|it|it2)$', {services: [unix, ssh]}]
-- [windows,    [633-pcs], '(lick|dc3)',                            {services: [windows, rrdp]}]
-- [xen,        '^(h|m|n)$',                                        {services: [xen]}]
-- [megaraid,   '^(h|m|n|r|t)$',                                    {services: [megaraid]}]
-- [http,       '^(anytask|school|hackerdom|kvkt|ructf)-back$',     {services: [http]}]
-- [https,      '^redmine-back$',                                   {services: [https]}]
-- [uzers_unix, '^(h|m|mm|n|p|ts|it|it2)$',                         {services: [exim_default, autoupdate]}]
-- [auto_vms,   '^((irc|school|ructf|kvkt)-back|shannon)$',         {services: [exim_default, autoupdate]}]
+- [unix,       '^(.*-back|dijkstra|hamming|mysql|markov|postel|ritchie|tesla)$', {services: [unix, ssh]}]
+- [megaraid,   '^(hamming|markov|ritchie|tesla)$',                               {services: [megaraid]}]
+- [http,       '^(anytask|school|ructf)-back$',                                  {services: [http]}]
+- [https,      '^redmine-back$',                                                 {services: [https]}]
+- [uzers_unix, '^(hamming|markov|postel|ritchie|tesla)$',                        {services: [exim_default, autoupdate]}]
 
-- [S5520UR,    '^(r|t)$',                   {modules: [coretemp],
+- [S5520UR,    '^(ritchie|tesla)$',         {modules: [coretemp],
                                              sensors: ['coretemp:temp*:8,10,45,50']}]
 
-- [aps,        '(.+-ap|ap\d)',              {admin: uzer}]
-- [embedded,   [aps, switches, paper, ups], {services: [http], admin: uzer}]
+- [embedded,   [switches, paper, ups],      {services: [http], admin: uzer}]
 - [ipmi,       '.+-ipmi',                   {services: [ipmi], admin: uzer}]
-- [mplan,      '.+-mplan',                  {services: [mplan], admin: uzer}]
 - [paper,      '.+-(printer|scanner)']
 - [switches,   '.+-switch',                 {admin: uzer}]
 - [ups,        '.+-ups',                    {services: [ups], admin: uzer}]
-
-#- [621-pcs,   '621-\d\d',                   {admin: victor.samun}]
-
-- [633-pcs,    '(stream|cuda)-pc',          {services: [rrdp], admin: kost, boot: local, hadoop_rack: runc}]
 
 - [bhs,        'h(0\d|1[0-7])']
 - [shs,        'h(1(8|9)|2\d)']
 - [hhs,        [shs, bhs],                  {services: [amt], admin: uzer, nagios: {check_interval: 1}}]
 
-- [bhogs,      'hog(0\d|1[0-7])',           {hadoop_rack: big_hog}]
-- [shogs,      'hog(1(8|9)|2\d)',           {hadoop_rack: small_hog}]
-- [hogs,       [bhogs, shogs],              {services: [userqwer], sensors: ['coretemp:temp2:10,15,60,65',
-                                                                             'coretemp:temp3:10,15,60,65'],
-                                             localtime: 1,
-                                             disk: 'ata-Hitachi_HDS721616PLA380_??????????????'}]
-
-- [clh,        'clh\d+',                    {boot: cow32, modules: [lm85],
-                                             sensors: ['lm85c:temp1:10,15,50,55',
-                                                       'lm85c:temp2:10,15,50,55',
-                                                       'lm85c:fan1:1000,1500,5000,5500']}]
-- [clv,        'clv\d+',                    {modules: [w83627hf],
-                                             sensors: ['w83627thf:temp1:10,15,50,55',
-                                                       'w83627thf:temp2:10,15,50,55',
-                                                       'w83627thf:fan2:500,800,3000,4000']}]
-- [cl,         [clh, clv],                  {hadoop_rack: runc}]
-
-- [asus,       '^asus(1|2|3)$',             {modules: [coretemp],
-                                             localtime: 1,
-                                             sensors: ['coretemp:temp*:10,16,55,60'],
-                                             disk: 'ata-WDC_WD7500BPVT-80HXZT3_WD-????????????'}]
-
-- [docker,     [volatile, 633-pcs], '^((uzer|znick)-pc|image64(|-test)|ts)$', {services: [docker]}]
+- [bhogs,      'hog(0\d|1[0-7])']
+- [shogs,      'hog(1(8|9)|2\d)']
+- [hogs,       [bhogs, shogs],              {services: [userqwer, vnc, routing],
+                                             hardware: CSM-Q87M-E43,
+                                             sensors: ['coretemp:temp2:10,15,60,65',
+                                                       'coretemp:temp3:10,15,60,65'],
+                                             switch: 2-hs,
+                                             localtime: 1}]
 
 - [managed-test,   '^image(32|64)-test$']
 - [managed-master, '^image(32|64)$',        {admin: uzer, services: [smb, ad, managed-apt,
                                                                      autoupdate, unix, ssh,
                                                                      exim_default]}]
-- [managed,    [managed-test, cl, volatile, 633-pcs], '(6t|(uzer|znick|)-pc)',
+- [managed,    [managed-test, hogs], '^uzer-pc$',
                                             {managed: 1,
                                              admin: uzer,
                                              boot: cow,
-                                             services: [unix, ssh, ad, slurm-node],
+                                             services: [unix, ssh, rrdp, ad, slurm-node],
                                              nagios:         {check_period: managed_up},
                                              nagios_service: {check_period: managed_up}}]
 
-- [notebooks,  [asus], '^(canion|hewlett|packard)$', {hadoop_rack: runc}]
-- [volatile,   [hogs, notebooks], {volatile: 1}]
+- [volatile,   [hogs], {volatile: 1}]
 
-- [managed-disk-small, 'hewlett|znick-pc', {
+- [managed-disk-test, 'image32-test', {
      disk_layout: [
        {flags: [bios_grub], size: 10},
        {label: boot, size: 200, format: ext4},
-       {label: cow-image64-keyimage, size: 1, fs: ext2},
-       {label: cow-image64-conf, size: 10, format: ext2},
-       {label: cow-image64-sign, size: 1},
-       {label: cow-image64-cow, size: 10000},
-       {label: windows7, fs: ntfs, size: 65000,
-        boot: {type: windows, vhd: /boot/bootmgr.vhd}},
-       {label: cow-image64-place, fs: ext4}
+       {label: cow-image32-keyimage, size: 1, fs: ext2},
+       {label: cow-image32-conf, size: 10, format: ext2},
+       {label: cow-image32-sign, size: 1},
+       {label: cow-image32-cow, size: 10000},
+       {label: cow-image32-place, fs: ext4}
      ]
   }]
 
-- [managed-disk-standard, 'image64-test|uzer-pc|canion', {
+- [managed-disk-stdm, [hogs], '^uzer-pc$', {
+     disk: 'ata-TOSHIBA_DT01ACA050_?????????',
      disk_layout: [
-       {flags: [bios_grub], size: 10},
-       {label: boot, size: 200, format: ext4},
-       {label: cow-image64-keyimage, size: 1, fs: ext2},
-       {label: cow-image64-conf, size: 10, format: ext2},
-       {label: cow-image64-sign, size: 1},
-       {label: cow-image64-local, size: 21500, fs: ext4,
-        boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
-       {label: cow-image64-cow, size: 10000},
-       {label: windows7, fs: ntfs, size: 65000,
-        boot: {type: windows, vhd: /boot/bootmgr.vhd}},
-       {label: cow-image64-place, fs: ext4}
-     ]
-  }]
-
-- [managed-disk-amt, [hogs], {
-     disk_layout: [
+       {flags: [boot, esp], size: 250, fs: fat32, label: 'EFI',
+        boot: {type: macos, bootsector: /bs}},
        {flags: [bios_grub], size: 10},
        {label: boot, size: 200, format: ext4},
        {label: cow-image64-conf, size: 10, format: ext2},
@@ -182,162 +132,70 @@ groups:
        {label: cow-image64-local, size: 21500, fs: ext4,
         boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
        {label: cow-image64-cow, size: 10000},
-       {label: windows7, fs: ntfs, size: 65000,
+       {label: windows7, fs: ntfs, size: 70000,
         boot: {type: windows, vhd: /boot/bootmgr.vhd}},
+       {label: macos, fs: 'hfs+', size: 50000},
+       {label: windows-data, fslabel: windows-data,
+        format: ntfs, size: 50000},
        {label: cow-image64-place, fs: ext4}
      ]
   }]
 
-- [managed-disk-large, [asus], {
-     disk_layout: [
-       {flags: [bios_grub], size: 10},
-       {label: boot, size: 200, format: ext4},
-       {label: cow-image64-keyimage, size: 1, fs: ext2},
-       {label: cow-image64-conf, size: 10, format: ext2},
-       {label: cow-image64-sign, size: 1},
-       {label: cow-image64-local, size: 21500, fs: ext4,
-        boot: {type: cow, kernel: /vmlinuz, initrd: /initrd.img}},
-       {label: cow-image64-cow, size: 15000},
-       {label: windows7, fs: ntfs, size: 250000,
-        boot: {type: windows, vhd: /boot/bootmgr.vhd}},
-       {label: cow-image64-place, fs: ext4}
-     ]
-  }]
 
 hosts:
-- [[621-switch, s6],           9.1,     001ec12d7240]
-- [[postel, p],                9.2,    [000bdba8f473, 000bdba8f474],
-                                        {admin: uzer, services: [adaptecraid], ups: bfu}]
-- [[markov, m],                9.3,    [0015176b9b3c, 0015176b9b3d], {
-                                        tcp_fwd: {3260: 3260},
-                                        fb: [10.229, '11.240', '12.250', '194.226.244.126'],
-                                        backend_for: m.fb.urgu.org,
-                                        services: [http, slurm-client],
-                                        ups: hlu,
-                                        admin: uzer,
-                                        sensors: ['coretemp:temp*:8,10,45,50',
-                                                  'i5k_amb:temp*:8,10,55,60']}]
-- [[mmarkov, mm],              9.4,     000c29dfeeff, {admin: uzer, services: [openvz]}]
-- [[hamming, h],               9.5,    [000423d6896e, 000423d6896f], {
-                                        tcp_fwd: {3261: 3261},
-                                        fb: [10.228],
-                                        backend_for: h.fb.urgu.org,
-                                        services: [http, slurm-client],
-                                        ups: bfu,
-                                        admin: uzer,
-                                        sensors: ['coretemp:temp*:8,10,50,55',
-                                                  'i5k_amb:temp*:8,10,60,65'],
-                                        backups: [/place/backup, {dijkstra:   [sys, user],
-                                                                  image32:    [sys],
-                                                                  image64:    [sys],
-                                                                  mysql:      [sys, user],
-                                                                  neumann:    [sys],
-                                                                  ructf-back: [sys, user]}]}]
-- [[630-switch, bs],           9.6,     001b11c344e6]
-- [[hp-switch, hps],           9.7,     001ec1831c01]
-- [[hog-switch, hs],           9.8,     001ac1d1a981]
-- [[hog-ap, hap],              9.9,     00259c3171aa, {admin: dimmo}]
-- [ l,                        '9.10',   001a4bec0cec, {ups: [hpu, hpu2], admin: znick}]
-- [[hog-low-ups, hlu],         9.11,    00c0b7598b9d]
-- [[neumann, n],               9.12,   [90e2ba3f0fc2, 90e2ba3f0fc3, 000e0c6a2691], {
-                                        ups: hlu,
-                                        admin: uzer,
-                                        backups: [/place/backup, {dijkstra: [sys, user],
-                                                                  image32:  [sys],
-                                                                  image64:  [sys],
-                                                                  mysql:    [sys, user],
-                                                                  hamming:  [sys]}]}]
-- [[storage-mplan, s-m],       9.13,    001a4bec0cee]
-- [[it2-mplan,it2-m],          9.14,    001b789f92a6]
-- [[it-mplan,it-m],            9.15,    002b789fa22f]
-- [[postel-mplan,p-m],         9.16,    00065bff8f1b]
-- [ ap0,                       9.17,    001225556be2]
-- [[markov-ipmi, m-i],         9.18,    0015176b9b3e, {switch: hs}]
-- [[hamming-ipmi, h-i],        9.19,    000423d68970, {switch: hs}]
-- [ ap1,                      '9.20',  '001225557506']
-- [[cubie, c],                 9.21,    c0b045a458c5, {admin: uzer}]
-- [[tesla-ipmi, t-i],          9.22,    001e670fafce, {switch: hs}]
-- [[631-near-low-ups, bfu],    9.23,    00c0b731da0e, {services: [ext_temp]}]
-- [[airlab-switch, as],        9.24,    001b11c34547]
-- [[ritchie-ipmi, r-i],        9.25,    001e670fac42, {switch: hs}]
-- [[ritchie, r],               9.26,   [001e670fac40, 001e670fac41],
-                                       {fb: [10.225], ups: hlu, admin: uzer}]
-- [[631-far-low-ups, hpu],     9.27,    00c0b798608d, {services: [ext_temp]}]
-- [[631-far-high-ups, hpu2],   9.28,    00c0b72f2677]
-#- [[hog-high-ups, hhu],        9.29,    00c0b79860d9]
-#- [[631-near-high-ups, bfu2], '9.30',   00c0b72ea27c]
+# - [[621-switch, s6],    10.96.18.1,     001ec12d7240]
+- [[ritchie, r],        10.96.18.2,    [001e670fac40, 001e670fac41], {ups: hlu, admin: uzer}]
+- [ m,                  10.96.18.3,    [0015176b9b3c, 0015176b9b3d], {admin: uzer}]
+# free
+- [ h,                  10.96.18.5,    [000423d6896e, 000423d6896f], {admin: uzer}]
+# free
+- [[hp-switch, hps],    10.96.18.7,     001ec1831c01]
+- [[hog-switch, hs],    10.96.18.8,     001ac1d1a981]
+# free
+# - [[licklider, l],     '10.96.18.10',   001a4bec0cec, {ups: [hpu, hpu2]}]
+- [[hog-low-ups, hlu],  10.96.18.11,    00c0b7598b9d]
+# - [[neumann, n],        10.96.18.12,   [000e0c6a2691]]
+# - [[storage-mplan, s-m],10.96.18.13,    001a4bec0cee]
+# - [[it2-mplan,it2-m],   10.96.18.14,    001b789f92a6]
+# - [[it-mplan,it-m],     10.96.18.15,    002b789fa22f]
+- [[postel-mplan, p-m],  10.96.18.16,    00065bff8f1b]
+# - [[ritchie-ipmi, r-i], 10.96.18.17,    001e670fac42, {switch: hs}]
+- [[markov-ipmi, m-i],  10.96.18.18,    0015176b9b3e, {switch: hs}]
+- [[hamming-ipmi, h-i], 10.96.18.19,    000423d68970, {switch: hs}]
+- [[tesla-ipmi, t-i],   10.96.18.20,    001e670fafce, {switch: hs}]
+- [[tesla, t],          10.96.18.21,   [001e670fafcc, 001e670fafcd], {admin: uzer}]
+# - [[dijkstra-ipmi, d-i],    10.96.18.22, 00034732a925]
+- [[631-near-low-ups, bfu], 10.96.18.23, 00c0b731da0e, {services: [ext_temp]}]
+- [[631-far-low-ups, hpu],  10.96.18.24, 00c0b798608d, {services: [ext_temp]}]
+- [[631-far-high-ups, hpu2],10.96.18.25, 00c0b72f2677]
+- [p,                   10.96.18.26,    [000bdba8f473, 000bdba8f474], {admin: uzer, ups: bfu}]
+- [[hog-ap, hap],       10.96.18.27,   44d9e760d4c9, {admin: uzer}]
+- [[canion-amt],        10.96.18.28,   001eec2cf0f3, {admin: uzer}]
+#- [[hog-high-ups, hhu],      10.96.18.29,    00c0b79860d9]
+- [[631-near-high-ups, bfu2], 10.96.18.30,   00c0b72ea27c]
+# - [[631-near-mid-ups, bfu3],  10.96.18.31,   00c0b79860d7]
 #- [smc-8624t,                  9.32,    0004e279d328]
 #- [dgs-3100-24,                9.33,    001e58047d32]
-#- [catalyst-2950,              9.34,    000d28d0a8c0]
-- [[tesla, t],                  9.35,  [001e670fafcc, 001e670fafcd], {admin: uzer}]
+- [c,                   10.96.18.34,   001eec2cf0f2]
 #   dijkstra                   9.254,   00034732a913
 
-#- [ clv1,                '10.181', ]
-#- [ clv2,                '10.182', ]
-#- [ clv3,                '10.183', ]
-#- [ clv4,                '10.184', ]
-#- [ clv5,                '10.185', 0004e21c72d6 ]
-#- [ clv6,                '10.186', 0004e21c72da ]
-#- [ clv7,                '10.187', 0004e21c71da ]
-#- [ clv8,                '10.188', 0004e21c6ede ]
-#- [ clv9,                '10.189', ]
-#- [ clv10,               '10.190', ]
-#
-- [ clh1,                '10.201', 0007e9dd94a9 ]
-- [ clh2,                '10.202', 0007e9dd7fda ]
-- [ clh3,                '10.203', 0007e9dd7d4e ]
-- [ clh4,                '10.204', 0007e9dd83b8 ]
-- [ clh5,                '10.205', 0007e9dd9488 ]
-- [ clh6,                '10.206', 0007e9dd7eb3 ]
-- [ clh7,                '10.207', 0007e9dd8fc1 ]
-- [ clh8,                '10.208', 0007e9e4808b ]
-- [ clh9,                '10.209', 0007e9dd8fb8 ]
-- [ clh10,               '10.210', 0007e9dd7aa6 ]
-- [ clh11,               '10.211', 0007e9dd942e ]
-
-- [[windows7, w7],        10.212,  000c29bcbcf9, {services: [rrdp], admin: uzer}]
-- [ image32-test,         10.213,  000c29bcbcf8, {services: [slurm-node], boot: cow32}]
-- [ image32,              10.214,  000c29bcbcf7, {services: [slurm-client, ad]}]
-- [ anytask-back,         10.215,  001851ad5d74, {admin: znick}]
-- [ clh12,                10.216,  0007e9e480a5 ]
-- [[621-test, 6t],        10.217,  001cc044c757, {boot: cow32}]
-- [ xp,                   10.218,  000c29bcbcfa, {services: [rrdp], admin: uzer}]
-- [[621-test2, 6t2],      10.219,  001cc044c68c, {boot: cow32}]
-- [ asus1,               '10.220', 14dae9c9a638, {services: [nvidia]}]
-- [ znick-pc.runc,        10.221,  001cc0641451, {udp_fwd: {60211: 60211},
-                                                  tcp_fwd: {60211: 60211},
-                                                  hadoop_rack: runc,
-                                                  disk: 'ata-ST380815AS_????????'}]
-- [ irc-back,             10.222,  001851bcb7a7, {tcp_fwd: {6665: 6665, 6666: 6666, 6667: 6667, 6668: 6668, 6669: 6669},
-                                                  backend_for: irclog.hackerdom.ru, admin: and}]
-- [ dc3.runc,             10.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
-- [ asus2,                10.224,  14dae9c9a629, {services: [nvidia]}]
-#   ritchie-fastbone      10.225
-- [ canion,               10.226,  001eec2cf0f2, {services: [nvidia], sudoers: [kost],
-                                                  disk: 'ata-FUJITSU_MHY2250BH_????????????'}]
-- [ asus3,                10.227,  14dae9c9a63b, {services: [nvidia]}]
-#   hamming-fastbone      10.228
-#   markov-fastbone       10.229
-- [ ts.runc,             '10.230', 001e670fafcc, {tcp_fwd: {22: 22, 3389: 3389},
-                                                  admin: uzer, services: [hadoop-master,
-                                                                          slurm-client, ad,
-                                                                          managed-apt]}]
-#- [ jobs.runc,            10.231 , 0016cbaeb229, {admin: uzer, services: [ssh]}]
-- [ hewlett,              10.232 , b499ba5732e9]
-- [ packard,              10.233 , b499ba5684d1]
-- [ uzer-pc.runc,         10.234,  0019d17f04ba, {hadoop_rack: small_hog,
-                                                  localtime: 1,
-                                                  disk: 'ata-Hitachi_HDS721616PLA380_??????????????'}]
-
-- [ redmine-back,         10.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
-                                                                git.redmine.hackerdom.ru],
+- [[windows7, w7],        10.96.16.212,  000c29bcbcf9, {services: [rrdp, ssh], admin: uzer}]
+- [ image32-test,         10.96.16.213,  000c29bcbcf8, {services: [slurm-node], boot: cow32}]
+- [ image32,              10.96.16.214,  000c29bcbcf7, {services: [slurm-client, ad]}]
+# free
+- [ dc3.runc,             10.96.16.223,  00163a34f84d, {tcp_fwd: {636: 636, 88: 88}, admin: uzer}]
+# free
+- [ runc-ap,              10.96.16.234,  20e52a69d8ae, {admin: uzer}]
+- [ redmine-back,         10.96.16.235,  001851224547, {backend_for: [redmine.hackerdom.ru,
+                                                                      git.redmine.hackerdom.ru],
                                                   services: [autoupdate],
                                                   admin: znick}]
-- [ stream-pc.runc,       10.236,  001cc009f4af]
-- [ cuda-pc.runc,         10.237,  001cc009f4ff, {services: [nvidia]}]
-- [[itanium,it],          10.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer, tcp_fwd: {548: 548}}]
-- [[itanium2,it2],        10.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
-- [ school-back,         '10.240', 001851d78a56, {backend_for: [school.uralctf.ru, qctf.ru, '*.qctf.ru',
+# - [[itanium,it],          10.96.16.238, [001b789f0090, 001b789f0091], {ups: [hpu, hpu2], admin: uzer, tcp_fwd: {548: 548}}]
+# - [[itanium2,it2],        10.96.16.239, [0017a4abf41f, 0017a4abf41e], {ups: [hpu, hpu2], admin: uzer}]
+- [ school-back,         '10.96.16.240', 001851d78a56, {backend_for: [qctf.ru, '*.qctf.ru', school.uralctf.ru,
+                                                                2016.hackerdom.ru, '*.2016.hackerdom.ru',
+                                                                2017.hackerdom.ru, '*.2017.hackerdom.ru',
+                                                                2018.hackerdom.ru, '*.2018.hackerdom.ru',
                                                                 training.hackerdom.ru, '*.training.hackerdom.ru'],
                                                   tcp_fwd: {60000: 60000,
                                                             60001: 60001,
@@ -349,25 +207,29 @@ hosts:
                                                             60007: 60007,
                                                             60008: 60008,
                                                             60009: 60009,
-                                                            60010: 60010},
+                                                            60010: 60010,
+                                                            60011: 60011,
+                                                            60012: 60012,
+                                                            60013: 60013,
+                                                            60014: 60014,
+                                                            60015: 60015,
+                                                            60016: 60016,
+                                                            60017: 60017,
+                                                            60018: 60018,
+                                                            60019: 60019,
+                                                            60020: 60020},
                                                   admin: andgein}]
-#   free
-#   free
-- [ mysql,                10.243,  0018512e4ea0, {admin: znick, services: [mysql]}]
-- [ 633-scanner,          10.244,  00c0ee25d6b1, {admin: uzer}]
-- [ hackerdom-back,       10.245,  0018513ca307, {backend_for: [hackerdom.ru,
-                                                                seminar.hackerdom.ru,
-                                                                www.hackerdom.ru],
-                                                  admin: znick}]
-- [ 633-printer,          10.246,  00c0ee1c9a28, {admin: uzer}]
-- [ kvkt-back,            10.247,  000c29010247, {admin: pahaz,
-                                                  backend_for: [kvkt.imkn.urfu.ru,
-                                                             '*.kvkt.imkn.urfu.ru',
-                                                                urfuclub.ru,
-                                                             '*.urfuclub.ru']}]
-- [ lick.runc,            10.248,  001a4bec0cea, {admin: znick}]
-#   free
-- [ ructf-back,          '10.250', 000c2963e5d0, {admin: uzer, services: [postgresql],
+- [ anytask-back,         10.96.16.241,  001851ad5d75, {admin: znick, services: [ssh, autoupdate]}]
+- [ image64,              10.96.16.242,  000c29ad7767, {services: [slurm-client, ad]}]
+- [ mysql,                10.96.16.243,  0018512e4ea0, {admin: znick, services: [mysql]}]
+- [ 633-scanner,          10.96.16.244,  00c0ee25d6b1, {admin: uzer}]
+#   lots of free
+- [ 633-printer,          10.96.16.246,  00c0ee1c9a28, {admin: uzer}]
+#   lots of free
+# - [ lick.runc,            10.96.16.248,  001a4bec0cea, {admin: znick}]
+- [ znick-vm,             10.96.16.249,  0018513cb7a0, {admin: znick, backend_for: [znick.ru],
+                                                  services: [http, ssh]}]
+- [ ructf-back,          '10.96.16.250', 000c2963e5d0, {admin: a799853, services: [postgresql],
                                                   backend_for: [ructf.org, www.ructf.org,
                                                                 ructf.ru, www.ructf.ru,
                                                                 ructf.com, www.ructf.com,
@@ -375,137 +237,113 @@ hosts:
                                                                 ructf.net, www.ructf.net,
                                                                 ructfe.ru, www.ructfe.ru,
                                                                 ructfe.org, www.ructfe.org]}]
-- [ image64-test,         10.251, [000c29ad7768, 000c29ad7769], {services: [slurm-node]}]
-- [ image64,              10.252,  000c29ad7767, {services: [slurm-client, ad]}]
-#   main-switch           10.253
-#   dijkstra              10.254
+- [ image64-test,         10.96.16.251, [000c29ad7768, 000c29ad7769], {services: [slurm-node]}]
+#   main-switch           10.96.16.252
+#   postel                10.96.16.253
+#   dijkstra              10.96.16.254
 
-- [ ructf-test,           16.1,    0018513ca316, {admin: a799853,
-                                                  services: [autoupdate,
-                                                             exim_default,
-                                                             ext_http,
-                                                             unix, ssh]}]
+- [[main-switch, ms],     212.193.68.225, 001cc534d301, {services: [ext_http]}]
+#   lots of free
+- [[hamming, stor1],      212.193.68.251, [000423d6896e, 000423d6896f], {
+                                        services: [http, slurm-client, ldap],
+                                        admin: uzer,
+                                        ups: bfu,
+                                        sensors: ['coretemp:temp*:8,10,50,55',
+                                                  'i5k_amb:temp*:8,10,60,65'],
+                                        backups: [/place/backup, {anytask-back: [sys, user],
+                                                                  dijkstra:     [sys, user],
+                                                                  image32:      [sys],
+                                                                  image64:      [sys],
+                                                                  mysql:        [sys, user],
+                                                                  neumann:      [sys],
+                                                                  ructf-back:   [sys, user]}]}]
+- [[markov, stor2],       212.193.68.252, [0015176b9b3c, 0015176b9b3d], {
+                                        services: [slurm-client],
+                                        admin: uzer,
+                                        ups: bfu,
+                                        sensors: ['coretemp:temp*:8,10,45,50',
+                                                  'i5k_amb:temp*:8,10,55,60']}]
+- [ postel,               212.193.68.253, [90e2ba3f0fc2, 90e2ba3f0fc3, 000bdba8f473, 000bdba8f474]]
+- [[dijkstra, anytask, '', d, puppet, status],
+    212.193.68.254, 0002a54f11c2, {admin: uzer, ups: hlu,
+                                   services: [nagios, autoupdate, slurm-master, dns],
+                                   sensors: ['max1617:temp*:10,15,35,40'],
+                                   fb: [10.254, 11.254, 12.254, 50.254]}]
 
-#- [ dcimap-vm,           '50.100', 000c29ad8762, {admin: andgein}]
-#- [ dcimap-scanner,       50.245,  00c0ee25d6ae, {admin: yariksuperman}]
-- [ dcimap-printer,       50.246,  00c0ee1c78a8, {admin: yariksuperman}]
+- [ acm.timus.ru,     212.193.69.18, {admin: alklepin, services: [http]}]
+- [ acm.usu.ru,       212.193.69.18, {admin: alklepin, services: [http]}]
+- [ acm.urfu.ru,      212.193.69.18, {admin: alklepin, services: [http]}]
 
-- [[pioneer, estatus],    46.48.110.120, {admin: uzer, services: [http]}]
+- [ urfu-dns0,        10.98.240.10,   {services: [dns]}]
+- [ urfu-dns1,        10.98.241.10,   {services: [dns]}]
+- [ urfu-dns2,        10.74.240.10,   {services: [dns]}]
+- [ urfu-dns3,        10.106.240.10,  {services: [dns]}]
+- [ urfu-dns4,        10.72.240.10,   {services: [dns]}]
+- [ urfu-dns5,        10.74.241.10,   {services: [dns]}]
 
-#   free                  194.226.244.113
-- [[main-switch, ms],     194.226.244.114, 001cc534d301, {services: [ext_http]}]
-- [ airlab.math.usu.ru,   194.226.244.115, 000c29ad7662, {admin: yariksuperman}]
-#   free                  194.226.244.116
-#   free                  194.226.244.117
-#   free                  194.226.244.118
-#   free                  194.226.244.119
-#   free                 '194.226.244.120'
-#   free                  194.226.244.121
-#   free                  194.226.244.122
-- [ honeypot,             194.226.244.123, 000c29cbbcf7, {admin: znick}]
-#   free                  194.226.244.124
-#   free                  194.226.244.125
-- [[dijkstra, anytask, '', d, puppet, ssl, status, tracker, v, wiki, hdfs, mapred],
-    194.226.244.126, 0002a54f11c2, {admin: uzer,
-                                    ssh_port: 1022,
-                                    services: [nagios, autoupdate, slurm-master,
-                                               ldap, dns],
-                                    ups: hlu,
-                                    sensors: ['max1617:temp*:10,15,30,35'],
-                                    fb: [10.254, 11.254, 12.254, 50.254]}]
+- [[hog01.runc, hog1.runc], 10.96.16.1,   d8cb8a780dae, {amt: h01}]
+- [[hog02.runc, hog2.runc], 10.96.16.2,   d8cb8a780e87, {amt: h02}]
+- [[hog03.runc, hog3.runc], 10.96.16.3,   d8cb8a780e0c, {amt: h03}]
+- [[hog04.runc, hog4.runc], 10.96.16.4,   d8cb8a780d13, {amt: h04}]
+# free
+- [[hog06.runc, hog6.runc], 10.96.16.6,   d8cb8a780d46, {amt: h06}]
+- [[hog07.runc, hog7.runc], 10.96.16.7,   d8cb8a780dbb, {amt: h07}]
+- [[hog08.runc, hog8.runc], 10.96.16.8,   d8cb8a780cf9, {amt: h08}]
+- [[hog09.runc, hog9.runc], 10.96.16.9,   d8cb8a780d34, {amt: h09}]
+- [ hog10.runc,            '10.96.16.10', d8cb8a780e3a, {amt: h10}]
+- [ hog11.runc,             10.96.16.11,  d8cb8a780dbd, {amt: h11}]
+- [ hog12.runc,             10.96.16.12,  d8cb8a780db4, {amt: h12}]
+- [ hog13.runc,             10.96.16.13,  d8cb8a780db0, {amt: h13}]
+- [ hog14.runc,             10.96.16.14,  d8cb8a780dc8, {amt: h14}]
+- [ hog15.runc,             10.96.16.15,  d8cb8a780df7, {amt: h15}]
+- [ hog16.runc,             10.96.16.16,  d8cb8a780df5, {amt: h16, disk: 'ata-ST3500514NS_????????'}]
+- [ hog17.runc,             10.96.16.17,  d8cb8a780db3, {amt: h17}]
+- [ hog18.runc,             10.96.16.18,  d8cb8a780e5a, {amt: h18}]
+- [ hog19.runc,             10.96.16.19,  d8cb8a780e04, {amt: h19}]
+- [ hog20.runc,            '10.96.16.20', d8cb8a780e59, {amt: h20}]
+- [ hog21.runc,             10.96.16.21,  d8cb8a780e58, {amt: h21}]
+- [ hog22.runc,             10.96.16.22,  d8cb8a780df4, {amt: h22}]
+- [ hog23.runc,             10.96.16.23,  d8cb8a780e7c, {amt: h23}]
+- [ hog24.runc,             10.96.16.24,  d8cb8a780cdd, {amt: h24}]
+- [ hog25.runc,             10.96.16.25,  d8cb8a780d11, {amt: h25}]
+- [ hog26.runc,             10.96.16.26,  d8cb8a780e22, {amt: h26}]
+- [ hog27.runc,             10.96.16.27,  d8cb8a780e89, {amt: h27}]
+- [ hog28.runc,             10.96.16.28,  d8cb8a780d3f, {amt: h28}]
 
-- [ babbage.usu,      194.226.235.251, {admin: znick}]
-- [ shannon.usu,      194.226.235.185, {admin: znick, services: [http]}]
+- [ uzer-pc.runc,          '10.96.16.30', d8cb8a780ccd, {services: [vnc], switch: 2-hs,
+                                                         disk: 'ata-ST3500514NS_????????',
+                                                         localtime: 1, amt: uzer-pc-amt,
+                                                         hardware: CSM-Q87M-E43,
+                                                         sensors: ['coretemp:temp2:10,15,60,65',
+                                                                   'coretemp:temp3:10,15,60,65']}]
 
-- [ acm.timus.ru,     194.226.235.253, {admin: alklepin, services: [http]}]
-- [ acm.usu.ru,       194.226.235.238, {admin: alklepin, services: [http]}]
-- [ acm.urfu.ru,      194.226.235.238, {admin: alklepin, services: [http]}]
-
-- [ mx1.eunnet.net,  194.226.255.33,   {services: [dns]}]
-- [ usu-math.usu.ru, 194.226.235.254]
-#- [ codd.runc,       194.226.235.240,  00163a34e94d, {admin: uzer,
-#                                                      services: [http]}]
-- [ ns.usu.ru,       194.226.235.22,   {services: [dns]}]
-
-- [ splinex.dyndns.org, {admin: ns}]
-
-- [ contest.qctf.ru,           {admin: andgein}]
-- [ online.qctf.ru,            {admin: andgein}]
-- [ dbproxy.contest.qctf.ru,   {admin: andgein}]
-- [ dbhack.contest.qctf.ru,    {admin: andgein}]
-- [ signal.contest.qctf.ru,    {admin: andgein}]
-- [ brainfuck.contest.qctf.ru, {admin: andgein}]
-- [ redbtn.contest.qctf.ru,    {admin: andgein}]
-
-#- [ 621-01,  11.1,   001cc044c5fc]
-#- [ 621-02,  11.2,   001cc044c7fc]
-#- [ 621-03,  11.3,   001cc044c719]
-#- [ 621-04,  11.4,   001cc044c707]
-#- [ 621-05,  11.5,   001cc044c725]
-#- [ 621-06,  11.6,   001cc044c5f6]
-#- [ 621-07,  11.7,   001cc044c76e]
-#- [ 621-08,  11.8,   001cc044c8b2]
-#- [ 621-09,  11.9,   001cc044c622]
-#- [ 621-10, '11.10', 001cc044c7de]
-#- [ 621-11,  11.11,  001cc044c69a]
-#- [ 621-12,  11.12,  001cc044c5e1]
-#- [ 621-13,  11.13,  001cc044c911]
-#- [ 621-14,  11.14,  001cc044c67d]
-
-- [[hog01.runc, hog1.runc], 12.1,   0019d17e9dd4, {amt: h01}]
-- [[hog02.runc, hog2.runc], 12.2,   0019d17ebb9f, {amt: h02}]
-- [[hog03.runc, hog3.runc], 12.3,   0019d17e9e1f, {amt: h03}]
-- [[hog04.runc, hog4.runc], 12.4,   0019d17e94de, {amt: h04}]
+- [ h01,  10.96.18.65,   {nagios: { 2d_coords: '680,440', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h02,  10.96.18.66,   {nagios: { 2d_coords: '680,520', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h03,  10.96.18.67,   {nagios: { 2d_coords: '680,600', statusmap_image: 'cmp/cmp+180n.png' } } ]
+- [ h04,  10.96.18.68,   {nagios: { 2d_coords: '680,680', statusmap_image: 'cmp/cmp+180.png' } } ]
 # there is no spoon
-- [[hog06.runc, hog6.runc], 12.6,   0019d17e934c, {amt: h06}]
-- [[hog07.runc, hog7.runc], 12.7,   0019d17eb926, {amt: h07}]
-- [[hog08.runc, hog8.runc], 12.8,   0019d17ebb2e, {amt: h08}]
-- [[hog09.runc, hog9.runc], 12.9,   0019d17e85a5, {amt: h09}]
-- [ hog10.runc,            '12.10', 0019d17ebcce, {amt: h10}]
-- [ hog11.runc,             12.11,  0019d17ebcd5, {amt: h11}]
-- [ hog12.runc,             12.12,  0019d17e9dbe, {amt: h12}]
-- [ hog13.runc,             12.13,  0019d17f04d9, {amt: h13}]
-- [ hog14.runc,             12.14,  0019d17e97e4, {amt: h14}]
-- [ hog15.runc,             12.15,  0019d17ebb63, {amt: h15}]
-- [ hog16.runc,             12.16,  0019d17e9de4, {amt: h16}]
-- [ hog17.runc,             12.17,  0019d17f049e, {amt: h17}]
-- [ hog18.runc,             12.18,  0019d17ebc09, {amt: h18}]
-- [ hog19.runc,             12.19,  0004e21c735b, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
-- [ hog20.runc,            '12.20', 0004e2263a48, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
-- [ hog21.runc,             12.21,  0004e21c716a, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
-- [ hog22.runc,             12.22,  0004e21c718a, {disk: 'ata-WDC_WD1600JS-00MHB0_WD-????????????'}]
-#- [ hog23.runc,            12.23 ]
-#- [ hog24.runc,            12.24, 0004e21c71a4]
-#- [ hog25.runc,            12.25 ]
-#- [ hog26.runc,            12.26 ]
-#- [ hog27.runc,            12.27 ]
-#- [ hog28.runc,            12.28 ]
+- [ h06, '10.96.18.70', {nagios: { 2d_coords: '680,760', statusmap_image: 'cmp/cmp.png' } } ]
+- [ h07,  10.96.18.71,  {nagios: { 2d_coords: '480,440', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h08,  10.96.18.72,  {nagios: { 2d_coords: '560,440', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h09,  10.96.18.73,  {nagios: { 2d_coords: '480,520', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h10,  10.96.18.74,  {nagios: { 2d_coords: '560,520', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h11,  10.96.18.75,  {nagios: { 2d_coords: '480,600', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h12,  10.96.18.76,  {nagios: { 2d_coords: '560,600', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h13,  10.96.18.77,  {nagios: { 2d_coords: '480,680', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h14,  10.96.18.78,  {nagios: { 2d_coords: '560,680', statusmap_image: 'cmp/cmp+180n.png' } } ]
+- [ h15,  10.96.18.79,  {nagios: { 2d_coords: '360,680', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h16, '10.96.18.80', {nagios: { 2d_coords: '360,600', statusmap_image: 'cmp/cmp+180n.png' } } ]
+- [ h17,  10.96.18.81,  {nagios: { 2d_coords: '360,520', statusmap_image: 'cmp/cmp+180.png' } } ]
+- [ h18,  10.96.18.82,  {nagios: { 2d_coords: '30,140',  statusmap_image: 'cmp/cmp+60.png'  } } ]
+- [ h19,  10.96.18.83,  {nagios: { 2d_coords: '110,100', statusmap_image: 'cmp/cmp-120.png' } } ]
+- [ h20,  10.96.18.84,  {nagios: { 2d_coords: '150,180', statusmap_image: 'cmp/cmp-120n.png' } } ]
+- [ h21,  10.96.18.85,  {nagios: { 2d_coords: '190,260', statusmap_image: 'cmp/cmp-120.png' } } ]
+- [ h22,  10.96.18.86,  {nagios: { 2d_coords: '230,340', statusmap_image: 'cmp/cmp-120.png' } } ]
+- [ h23,  10.96.18.87,  {nagios: { 2d_coords: '190,60',  statusmap_image: 'cmp/cmp-120.png' } } ]
+- [ h24,  10.96.18.88,  {nagios: { 2d_coords: '230,140', statusmap_image: 'cmp/cmp-120n.png' } } ]
+- [ h25,  10.96.18.89,  {nagios: { 2d_coords: '270,220', statusmap_image: 'cmp/cmp-120.png' } } ]
+- [ h26, '10.96.18.90', {nagios: { 2d_coords: '310,300', statusmap_image: 'cmp/cmp-120.png' } } ]
+- [ h27,  10.96.18.91,  {nagios: { 2d_coords: '270,20',  statusmap_image: 'cmp/cmp-120.png' } } ]
+- [ h28,  10.96.18.92,  {nagios: { 2d_coords: '310,100', statusmap_image: 'cmp/cmp-120.png' } } ]
 
-- [ h01,  20.1,   0019d17e9dd5, {nagios: { 2d_coords: '680,440', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h02,  20.2,   0019d17ebba0, {nagios: { 2d_coords: '680,520', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h03,  20.3,   0019d17e9e20, {nagios: { 2d_coords: '680,600', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h04,  20.4,   0019d17e94e0, {nagios: { 2d_coords: '680,680', statusmap_image: 'base/cmp+180.png' } } ]
-# there is no spoon
-- [ h06,  20.6,   0019d17e934d, {nagios: { 2d_coords: '680,760', statusmap_image: 'base/cmp.png' } } ]
-- [ h07,  20.7,   0019d17eb927, {nagios: { 2d_coords: '480,440', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h08,  20.8,   0019d17ebb2f, {nagios: { 2d_coords: '560,440', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h09,  20.9,   0019d17e85a6, {nagios: { 2d_coords: '480,520', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h10, '20.10', 0019d17ebccf, {nagios: { 2d_coords: '560,520', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h11,  20.11,  0019d17ebcd6, {nagios: { 2d_coords: '480,600', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h12,  20.12,  0019d17e9dbf, {nagios: { 2d_coords: '560,600', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h13,  20.13,  0019d17f04da, {nagios: { 2d_coords: '480,680', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h14,  20.14,  0019d17e97e5, {nagios: { 2d_coords: '560,680', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h15,  20.15,  0019d17ebb64, {nagios: { 2d_coords: '360,680', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h16,  20.16,  0019d17e9de6, {nagios: { 2d_coords: '360,600', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h17,  20.17,  0019d17f049f, {nagios: { 2d_coords: '360,520', statusmap_image: 'base/cmp+180.png' } } ]
-- [ h18,  20.18,  0019d17ebc0a, {nagios: { 2d_coords: '0,120', statusmap_image: 'base/cmp+60.png' } } ]
-#- [ h19,  20.19,  , {nagios: { 2d_coords: '80,80', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h20, '20.20', , {nagios: { 2d_coords: '120,160', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h21,  20.21,  , {nagios: { 2d_coords: '160,240', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h22,  20.22,  , {nagios: { 2d_coords: '200,320', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h23,  20.23,  , {nagios: { 2d_coords: '160,40', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h24,  20.24,  , {nagios: { 2d_coords: '200,120', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h25,  20.25,  , {nagios: { 2d_coords: '240,200', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h26,  20.26,  , {nagios: { 2d_coords: '280,280', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h27,  20.27,  , {nagios: { 2d_coords: '240,0', statusmap_image: 'base/cmp-120.png' } } ]
-#- [ h28,  20.28,  , {nagios: { 2d_coords: '280,80', statusmap_image: 'base/cmp-120.png' } } ]
+- [ uzer-pc-amt, '10.96.18.94' ]
