@@ -1,96 +1,29 @@
 define host {
-    name                            generic-host ; The name of this host template
-    notifications_enabled           1            ; Host notifications are enabled
-    event_handler_enabled           1            ; Host event handler is enabled
-    flap_detection_enabled          1            ; Flap detection is enabled
-    failure_prediction_enabled      1            ; Failure prediction is enabled
-    process_perf_data               1            ; Process performance data
-    retain_status_information       1            ; Retain status information across program restarts
-    retain_nonstatus_information    1            ; Retain non-status information across program restarts
-    check_command                   check-host-alive
-    max_check_attempts              10
-    notification_interval           0
-    notification_period             24x7
-    notification_options            d,u,r
-    register                        0
-    contacts                        default
+    name                    cfg-generic-host
+    use                     generic-host
+    max_check_attempts      10
+    notification_interval   0
+    check_command           check-host-alive
+    register                0
 }
 
 define service {
-    name                            generic-service ; The 'name' of this service template
-    active_checks_enabled           1       ; Active service checks are enabled
-    passive_checks_enabled          1       ; Passive service checks are enabled/accepted
-    parallelize_check               1       ; Active service checks should be parallelized (disabling this can lead to major performance problems)
-    obsess_over_service             1       ; We should obsess over this service (if necessary)
-    check_freshness                 0       ; Default is to NOT check service 'freshness'
-    notifications_enabled           1       ; Service notifications are enabled
-    event_handler_enabled           1       ; Service event handler is enabled
-    flap_detection_enabled          1       ; Flap detection is enabled
-    failure_prediction_enabled      1       ; Failure prediction is enabled
-    process_perf_data               1       ; Process performance data
-    retain_status_information       1       ; Retain status information across program restarts
-    retain_nonstatus_information    1       ; Retain non-status information across program restarts
-    notification_interval           0       ; Only send notifications on status change by default.
-    is_volatile                     0
-    check_period                    24x7
-    normal_check_interval           5
-    retry_check_interval            1
-    max_check_attempts              4
-    notification_period             24x7
-    notification_options            w,u,c,r
-    contacts                        default
-    register                        0       ; DONT REGISTER THIS DEFINITION - ITS NOT A REAL SERVICE, JUST A TEMPLATE!
-}
-
-define timeperiod {
-    timeperiod_name 24x7
-    alias           24 Hours A Day, 7 Days A Week
-    sunday          00:00-24:00
-    monday          00:00-24:00
-    tuesday         00:00-24:00
-    wednesday       00:00-24:00
-    thursday        00:00-24:00
-    friday          00:00-24:00
-    saturday        00:00-24:00
-}
-
-define timeperiod {
-    timeperiod_name workhours
-    alias           Standard Work Hours
-    monday          09:00-17:00
-    tuesday         09:00-17:00
-    wednesday       09:00-17:00
-    thursday        09:00-17:00
-    friday          09:00-17:00
-}
-
-define timeperiod {
-    timeperiod_name nonworkhours
-    alias           Non-Work Hours
-    sunday          00:00-24:00
-    monday          00:00-09:00,17:00-24:00
-    tuesday         00:00-09:00,17:00-24:00
-    wednesday       00:00-09:00,17:00-24:00
-    thursday        00:00-09:00,17:00-24:00
-    friday          00:00-09:00,17:00-24:00
-    saturday        00:00-24:00
-}
-
-define timeperiod {
-    timeperiod_name never
-    alias           Never
+    name                    cfg-generic-service
+    use                     generic-service
+    notification_interval   0
+    register                0
 }
 
 define timeperiod {
     timeperiod_name managed_up
     alias           Uptime of managed machines
-    sunday          00:00-06:50,07:30-24:00
-    monday          00:00-06:50,07:30-24:00
-    tuesday         00:00-06:50,07:30-24:00
-    wednesday       00:00-06:50,07:30-24:00
-    thursday        00:00-06:50,07:30-24:00
-    friday          00:00-06:50,07:30-24:00
-    saturday        00:00-06:50,07:30-24:00
+    sunday          00:30-07:30
+    monday          00:30-07:30
+    tuesday         00:30-07:30
+    wednesday       00:30-07:30
+    thursday        00:30-07:30
+    friday          00:30-07:30
+    saturday        00:30-07:30
 }
 
 define contact {
@@ -136,8 +69,8 @@ define command {
 }
 
 define command {
-	command_name	check_self_dns
-	command_line	/usr/lib/nagios/plugins/check_dns -H '$ARG1$' -s '$ARG1$'
+    command_name    check_self_dns
+    command_line    /usr/lib/nagios/plugins/check_dns -H '$ARG1$' -s '$ARG1$'
 }
 
 {% for user in state.users.itervalues() %}
@@ -161,16 +94,13 @@ define hostgroup {
 }
 {% endfor %}
 
-define servicegroup {
-    servicegroup_name hadoop
-    alias             Hadoop
-}
-
 {% for host in state.hosts %}
 
 define service {
-    use                 generic-service
+    use                 cfg-generic-service
     name                service-on-{{ state.get_canonical_hostname(host) }}
+    register            0
+
     {% if not external %}
     host_name           {{ state.get_canonical_hostname(host) }}
     {% endif %}
@@ -178,7 +108,6 @@ define service {
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
     flap_detection_enabled     0
-    failure_prediction_enabled 0
     {% endif %}
     {%- if 'nagios_service' in host.props -%}
     {%- for name, value in host.props['nagios_service'].iteritems() %}
@@ -189,7 +118,7 @@ define service {
 
 {% if not external or not state.is_gray(host) %}
 define host {
-    use        generic-host
+    use        cfg-generic-host
     host_name  {{ state.get_canonical_hostname(host) }}
     alias      {{ state.get_canonical_hostname(host) }}
     {%- if 'nagios' in host.props -%}
@@ -200,7 +129,6 @@ define host {
     {%- if 'volatile' in host.props %}
     notifications_enabled      0
     flap_detection_enabled     0
-    failure_prediction_enabled 0
     {% endif %}
     {%- if host.groups %}
     hostgroups {{ host.groups|map('first')|join(',') }}
@@ -294,51 +222,33 @@ define service {
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description CPU load
-    check_command       check_nrpe_1arg!check_load
+    check_command       check_nrpe!check_load
+}
+define service {
+    use                 service-on-{{ state.get_canonical_hostname(host) }}
+    service_description Free memory
+    check_command       check_nrpe!check_memory
 }
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Disk usage
-    check_command       check_nrpe_1arg!check_disk
+    check_command       check_nrpe!check_disk
 }
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Process count
-    check_command       check_nrpe_1arg!check_total_procs
+    check_command       check_nrpe!check_total_procs
 }
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Zombie processes
-    check_command       check_nrpe_1arg!check_zombie_procs
+    check_command       check_nrpe!check_zombie_procs
 }
 {% if 'sensors' in host.props %}
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description Sensors
-    check_command       check_nrpe_1arg!check_sensors
-}
-{% endif %}
-
-{% if 'hadoop-master' in host.props['services'] %}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description Hadoop NameNode
-    check_command       check_nrpe_1arg!check_namenode
-    servicegroups       hadoop
-}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description Hadoop JobTracker
-    check_command       check_nrpe_1arg!check_jobtracker
-    servicegroups       hadoop
-}
-{% endif %}
-
-{% if 'slurm-master' in host.props['services'] %}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description Slurm master
-    check_command       check_nrpe_1arg!check_slurm_master
+    check_command       check_nrpe!check_sensors
 }
 {% endif %}
 
@@ -346,15 +256,7 @@ define service {
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description RAID status
-    check_command       check_nrpe_1arg!check_megaraid
-}
-{% endif %}
-
-{% if 'docker' in host.props['services'] %}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description Docker
-    check_command       check_nrpe_1arg!check_docker
+    check_command       check_nrpe!check_megaraid
 }
 {% endif %}
 
@@ -362,27 +264,7 @@ define service {
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description PostgreSQL
-    check_command       check_nrpe_1arg!check_postgresql
-}
-{% endif %}
-
-{% if 'managed' in host.props %}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description Hadoop DataNode
-    check_command       check_nrpe_1arg!check_datanode
-    servicegroups       hadoop
-}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description Hadoop TaskTracker
-    check_command       check_nrpe_1arg!check_tasktracker
-    servicegroups       hadoop
-}
-define service {
-    use                 service-on-{{ state.get_canonical_hostname(host) }}
-    service_description Slurm node
-    check_command       check_nrpe_1arg!check_slurm_node
+    check_command       check_nrpe!check_postgresql
 }
 {% endif %}
 
@@ -390,7 +272,7 @@ define service {
 define service {
     use                 service-on-{{ state.get_canonical_hostname(host) }}
     service_description APT package state
-    check_command       check_nrpe_1arg!check_apt
+    check_command       check_nrpe!check_apt
     check_interval      3600
 }
 {% endif %}
