@@ -9,53 +9,45 @@ $TTL 3600
 				)
 	36000	IN	NS	ns
 	36000	IN	NS	ns.usaaa.ru.
-	36000   IN      A	194.226.244.126
+	36000   IN      A	212.193.68.254
 		IN	MX	1  ASPMX.L.GOOGLE.COM.
 		IN	MX	5  ALT1.ASPMX.L.GOOGLE.COM.
 		IN	MX	5  ALT2.ASPMX.L.GOOGLE.COM.
 		IN	MX	10 ASPMX2.GOOGLEMAIL.COM.
 		IN	MX	10 ASPMX3.GOOGLEMAIL.COM.
-		IN      SPF     "v=spf1 a include:_spf.google.com ~all"
-		IN      TXT     "v=spf1 a include:_spf.google.com ~all"
+        3600    IN      SPF     "v=spf1 a include:_spf.google.com ~all"
+        3600    IN      TXT     "v=spf1 a include:_spf.google.com ~all"
 
-ns		36000	IN	A	194.226.244.126
+ns		36000	IN	A	212.193.68.254
 
-fb		36000	IN	NS	ns
+e		36000	IN	NS	dijkstra
 runc		36000	IN	NS	dijkstra
 
 mail		IN	CNAME	ghs.google.com.
 google._domainkey IN	TXT	"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZtTOyBGwX+iDBxZVWx1tMJHsQFGLJHZTncSQec5PbrtnVRHmih0uLFT6gMKJLOktZsCPmlnd7ingGSPRSvRSEqLu92h55npBx68yGhTcXVcqCuaubdxSJDDCGyuiUmANSiv0jDUhiT7B44DCC0dxXipP4qsPy40fAYkMG6BJuTQIDAQAB"
 
-*.e		IN	CNAME	dijkstra
 
-dijkstra	IN	MX 10	dijkstra.urgu.org.
+dijkstra	IN	MX 10	urgu.org.
 
 x._domainkey.dijkstra	IN	TXT	"v=DKIM1; k=rsa; p=MHwwDQYJKoZIhvcNAQEBBQADawAwaAJhANAF7WyY2zwE7fkW4VNzIZwlGwQBuY8i3PKAub56doiCtweVHR29TS7TjWSvPurT7aWeFGUuGKIPPw4AqZ3PL+9aV1tN2C5fGCca0STbHFo4qyWWQHS8H+6tAt8x/xrO8QIDAQAB"
 y._domainkey.dijkstra	IN	TXT	"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC0DhU+L4YD3Om4l6rIu4NTHtO+fjGo+h3wOAqsKB/rqS+x4XNNi6hpCko1x74Z+RIxDHGEM3XRcQVwUJvfA612WkLRCTM4NI7xAY3xTI9dwg9OjLz6uSR0nHeiiYZtIQppMKOPY2m86nsl+DDMG74SOt2UCbtmTRAkUqvQ7zN78QIDAQAB"
 
-dijkstra	IN	SPF	"v=spf1 a"
-dijkstra	IN	TXT	"v=spf1 a"
+ci.anytask	IN	CNAME	anytask
 
-pioneer		IN	SPF	"v=spf1 a"
-pioneer		IN	TXT	"v=spf1 a"
-pioneer		IN	AAAA	2a02:17d0:341:5a01::1
+dijkstra	IN	SPF	"v=spf1 a ~all"
+dijkstra	IN	TXT	"v=spf1 a ~all"
 
-uzer-work	IN	A	87.250.248.234
-uzer-work	IN	SPF	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
-uzer-work	IN	TXT	"v=spf1 ip4:87.250.224.0/19 ip6:2a02:6b8::/32 -all"
+uzer-work	IN	AAAA	2a02:6b8::2807:e23f:49ff:fe7c:3a78
+uzer-work	IN	SPF	"v=spf1 ip6:2a02:6b8::/32 -all"
+uzer-work	IN	TXT	"v=spf1 ip6:2a02:6b8::/32 -all"
 
-tigra		IN	CNAME	stor.math.usu.ru.
-exchange	IN	CNAME	stor.math.usu.ru.
-
-mirrors		IN	CNAME	mirror.yandex.ru.
-mirror		IN	CNAME	mirror.yandex.ru.
-
-113             IN      PTR     ritchie.urgu.org.
-114             IN      PTR     ms.urgu.org.
-115		IN	PTR	airlab.math.usu.ru.
-126		IN	PTR	dijkstra.urgu.org.
+images.hamming	IN	CNAME	hamming
 
 {% for name, type, value in records %}
 {{ "%-16s"|format(name) }} IN {{ "%-6s"|format(type) }}{{ value }}
+{% if type == 'A' %}
+{{ "%-16s"|format(name) }} IN SPF "v=spf1 ip4:212.193.68.254 ~all"
+{{ "%-16s"|format(name) }} IN TXT "v=spf1 ip4:212.193.68.254 ~all"
+{% endif %}
 {%- endfor %}
 ; vim: sw=8 ts=8 ft=none noexpandtab
