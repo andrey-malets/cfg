@@ -1,4 +1,4 @@
-class restart-puppet {
+class restart_puppet {
     cron { 'restart-puppet':
         command => '/etc/init.d/puppet restart >/dev/null',
         user => root,
@@ -10,7 +10,7 @@ class restart-puppet {
 class keyboard {
     file { '/etc/default/keyboard':
         ensure => present,
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         content => '
@@ -32,22 +32,22 @@ class ndd {
     }
 
     file { '/usr/local/bin/ndd':
-        mode => 755,
+        mode => '755',
         owner => root,
         group => root,
         source => $source,
     }
-    file { '/usr/local/bin/ndd_slurm.py':
-        mode => 755,
+    file { '/usr/local/bin/ndd.py':
+        mode => '755',
         owner => root,
         group => root,
-        source => "puppet:///files/ndd_slurm.py",
+        source => "puppet:///files/ndd.py",
     }
 }
 
 class disk {
     file { '/usr/local/bin/disk.py':
-        mode => 755,
+        mode => '755',
         owner => root,
         group => root,
         source => "puppet:///files/disk.py",
@@ -57,14 +57,14 @@ class disk {
         ensure => directory,
         owner => root,
         group => root,
-        mode => 775,
+        mode => '775',
     }
 
     file { '/var/lib/cfg/ipxe.lkrn':
         ensure => present,
         owner => root,
         group => root,
-        mode => 644,
+        mode => '644',
         source => "puppet:///files/ipxe.lkrn",
     }
 
@@ -80,13 +80,13 @@ class { 'apt':
     update_timeout       => undef
 }
 
-class slurm-base {
+class slurm_base {
     package { 'munge':      ensure => installed }
 
     file { '/etc/munge/munge.key':
         require => Package['munge'],
         notify => Service['munge'],
-        mode => 400,
+        mode => '400',
         owner => munge,
         group => munge,
         source => "puppet:///files/munge.key",
@@ -112,19 +112,19 @@ class slurm-base {
     }
 
     file { '/etc/slurm-llnl/slurm.conf':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => "puppet:///files/slurm.conf",
     }
 }
 
-class slurm-client inherits slurm-base {
+class slurm_client inherits slurm_base {
     package { 'slurm-client':            ensure => installed }
     package { 'slurm-wlm-basic-plugins': ensure => installed }
 }
 
-class slurm-node inherits slurm-base {
+class slurm_node inherits slurm_base {
     package { 'slurmd': ensure => installed }
     service { 'slurmd':
         require => File['/etc/slurm-llnl/slurm.conf'],
@@ -134,7 +134,7 @@ class slurm-node inherits slurm-base {
     }
 }
 
-class slurm-master inherits slurm-base {
+class slurm_master inherits slurm_base {
     package { 'slurmctld': ensure => installed }
     service { 'slurmctld':
         require => File['/etc/slurm-llnl/slurm.conf'],
@@ -144,7 +144,7 @@ class slurm-master inherits slurm-base {
     }
 }
 
-class no-slurm {
+class no_slurm {
     package { 'munge':        ensure => absent }
     package { 'slurm-client': ensure => absent }
     package { 'slurm-llnl':   ensure => absent }
@@ -189,11 +189,11 @@ class ssh {
     }
 }
 
-class managed-ssh inherits ssh {
+class managed_ssh inherits ssh {
     file { '/etc/ssh/ssh_host_dsa_key':
         require => Package['openssh-server'],
         notify => Service['ssh'],
-        mode => 600,
+        mode => '600',
         owner => root,
         group => root,
         source => "puppet:///$hostname/ssh_host_dsa_key",
@@ -202,7 +202,7 @@ class managed-ssh inherits ssh {
     file { '/etc/ssh/ssh_host_dsa_key.pub':
         require => Package['openssh-server'],
         notify => Service['ssh'],
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => "puppet:///$hostname/ssh_host_dsa_key.pub",
@@ -211,7 +211,7 @@ class managed-ssh inherits ssh {
     file { '/etc/ssh/ssh_host_rsa_key':
         require => Package['openssh-server'],
         notify => Service['ssh'],
-        mode => 600,
+        mode => '600',
         owner => root,
         group => root,
         source => "puppet:///$hostname/ssh_host_rsa_key",
@@ -220,7 +220,7 @@ class managed-ssh inherits ssh {
     file { '/etc/ssh/ssh_host_rsa_key.pub':
         require => Package['openssh-server'],
         notify => Service['ssh'],
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => "puppet:///$hostname/ssh_host_rsa_key.pub",
@@ -235,14 +235,14 @@ class managed-ssh inherits ssh {
 
     file { '/etc/ssh/keys.tgz':
         require => Package['openssh-server'],
-        mode => 600,
+        mode => '600',
         owner => root,
         group => root,
         source => 'puppet:///files/keys.tgz',
     }
 
     file { '/usr/local/bin/ssh.sh':
-        mode => 700,
+        mode => '700',
         owner => root,
         group => root,
         content => "#!/bin/bash
@@ -261,7 +261,7 @@ class managed-ssh inherits ssh {
     }
 }
 
-class managed-apt {
+class managed_apt {
     package { 'sudo':
         ensure => installed,
     }
@@ -281,14 +281,11 @@ class managed-apt {
 class runc_ca {
     file { 'dijkstra.urgu.org.crt':
         path => '/usr/local/share/ca-certificates/dijkstra.urgu.org.crt',
-        mode => 644,
-        owner => root,
-        group => root,
-        source => 'puppet:///files/ca.crt',
-        require => Package['ca-certificates'],
+        ensure => 'absent'
     }
 
-    exec { '/usr/sbin/update-ca-certificates -f':
+    exec { 'update-dijkstra-cert':
+        command => '/usr/sbin/update-ca-certificates -f',
         subscribe => File['dijkstra.urgu.org.crt'],
         refreshonly => true,
     }
@@ -296,7 +293,7 @@ class runc_ca {
 
 class ssh_known_hosts {
     file { '/etc/ssh/ssh_known_hosts':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/ssh_known_hosts',
@@ -319,28 +316,28 @@ class place {
 
 class hadoop_base inherits place {
     file { '/etc/hadoop/hadoop-env.sh':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/hadoop/hadoop-env.sh',
     }
 
     file { '/etc/hadoop/masters':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/hadoop/masters',
     }
 
     file { '/etc/hadoop/core-site.xml':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/hadoop/core-site.xml',
     }
 
     file { '/etc/hadoop/mapred-site.xml':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/hadoop/mapred-site.xml',
@@ -348,49 +345,49 @@ class hadoop_base inherits place {
 
     file { '/place/hadoop':
         ensure => directory,
-        mode => 770,
+        mode => '770',
         owner => hdfs,
         group => hadoop,
     }
 
     file { '/place/hadoop/tmp':
         ensure => directory,
-        mode => 770,
+        mode => '770',
         owner => hdfs,
         group => hadoop,
     }
 
     file { '/place/hadoop/name':
         ensure => directory,
-        mode => 700,
+        mode => '700',
         owner => hdfs,
         group => hadoop,
     }
 
     file { '/place/hadoop/data':
         ensure => directory,
-        mode => 755,
+        mode => '755',
         owner => hdfs,
         group => hadoop,
     }
 
     file { '/place/hadoop/pid':
         ensure => directory,
-        mode => 775,
+        mode => '775',
         owner => hdfs,
         group => hadoop,
     }
 
     file { '/place/hadoop/run':
         ensure => directory,
-        mode => 775,
+        mode => '775',
         owner => mapred,
         group => hadoop,
     }
 
     file { '/place/hadoop/logs':
         ensure => directory,
-        mode => 775,
+        mode => '775',
         owner => mapred,
         group => hadoop,
     }
@@ -398,7 +395,7 @@ class hadoop_base inherits place {
 
 class hadoop_slave inherits hadoop_base {
     file { '/etc/hadoop/hdfs-site.xml':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/hadoop/hdfs-site-slave.xml',
@@ -483,7 +480,7 @@ class hadoop_slave inherits hadoop_base {
 
 class hadoop_master inherits hadoop_base {
     file { '/etc/hadoop/hdfs-site.xml':
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/hadoop/hdfs-site.xml',
@@ -493,7 +490,7 @@ class hadoop_master inherits hadoop_base {
         ensure => present,
         owner => root,
         group => root,
-        mode => 644,
+        mode => '644',
     }
 
     service { 'hadoop-namenode':
@@ -573,6 +570,22 @@ class hadoop_master inherits hadoop_base {
     }
 }
 
+class no_distcc {
+    package { 'distcc':
+        ensure => absent,
+    }
+
+    file { 'distcc.sh':
+        path => '/usr/local/bin/distcc.sh',
+        ensure => absent,
+    }
+
+    cron { 'distcc-hosts':
+        command => '/usr/local/bin/distcc.sh',
+        ensure => absent,
+    }
+}
+
 class distcc {
     package { 'distcc':
         ensure => installed,
@@ -580,7 +593,7 @@ class distcc {
 
     file { 'distcc.sh':
         path => '/usr/local/bin/distcc.sh',
-        mode => 500,
+        mode => '500',
         owner => root,
         group => root,
         source => 'puppet:///files/distcc.sh',
@@ -673,6 +686,36 @@ class pam_mount {
     }
 }
 
+class no_sp {
+    file { '/etc/sudoers.d/sp':
+        ensure => absent,
+    }
+
+    file { '/usr/local/bin/sp':
+        ensure => absent,
+    }
+
+    file { '/usr/local/bin/spa':
+        ensure => absent,
+    }
+
+    file { '/usr/local/bin/spc':
+        ensure => absent,
+    }
+
+    file { '/usr/local/bin/spd':
+        ensure => absent,
+    }
+
+    file { '/usr/local/bin/sps':
+        ensure => absent,
+    }
+
+    file { '/usr/local/bin/spsh':
+        ensure => absent,
+    }
+}
+
 class sp {
     file { '/usr/local/bin/sp':
         ensure => present,
@@ -680,6 +723,20 @@ class sp {
         owner => root,
         group => root,
         source => 'puppet:///files/sp',
+    }
+
+    file { '/usr/bin/screen':
+        ensure => present,
+        mode => '4755',
+        owner => root,
+        group => utmp,
+    }
+
+    file { '/var/run/screen':
+        ensure => directory,
+        mode => '755',
+        owner => root,
+        group => utmp,
     }
 
     file { '/etc/sudoers.d':
@@ -763,7 +820,7 @@ class exchange {
         require => [File['/exchange'], Package['cifs-utils']],
         ensure => mounted,
         atboot => true,
-        device => '//exchange/exchange',
+        device => '//stor1.urgu.org/exchange',
         fstype => 'cifs',
         options => 'guest,exec,file_mode=0766,dir_mode=0777',
     }
@@ -774,13 +831,17 @@ class hwraid {
         ensure => installed,
     }
 
+    package { 'apt-transport-https':
+        ensure => installed,
+    }
+
     apt::key { '23B3D3B4':
-        key_source => 'http://hwraid.le-vert.net/debian/hwraid.le-vert.net.gpg.key',
+        key_source => 'https://hwraid.le-vert.net/debian/hwraid.le-vert.net.gpg.key',
     }
 
     apt::source { 'hwraid':
-        location => 'http://hwraid.le-vert.net/debian',
-        release => 'wheezy',
+        location => 'https://hwraid.le-vert.net/debian',
+        release => 'buster',
         repos => 'main',
         require => Apt::Key['23B3D3B4'],
     }
@@ -794,7 +855,7 @@ class megaraid inherits hwraid {
 
     file { '/usr/lib/nagios/plugins/check_megaraid_sas':
         ensure => present,
-        mode => 755,
+        mode => '755',
         owner => root,
         group => root,
         source => "puppet:///files/check_megaraid_sas",
@@ -850,7 +911,7 @@ class smartmon {
     }
 
     file { '/usr/lib/nagios/plugins/check_smartmon':
-        mode => 755,
+        mode => '755',
         owner => root,
         group => root,
         source => "puppet:///files/check_smartmon",
@@ -869,7 +930,7 @@ class localtime {
 class timezone {
     file {'/etc/timezone':
         ensure => present,
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         content => 'Asia/Yekaterinburg
@@ -886,29 +947,46 @@ class timezone {
 }
 
 class ldap {
+    file { '/usr/local/share/ca-certificates/dc3.cer':
+        ensure => absent,
+    }
+
     file { '/etc/ssl/dc3.cer':
+        ensure => absent,
+    }
+
+    file { 'dc3.crt':
+        path => '/usr/local/share/ca-certificates/dc3.crt',
         ensure => present,
         mode => '644',
         owner => root,
         group => root,
-        source => 'puppet:///files/dc3.cer',
+        source => 'puppet:///files/dc3.crt',
     }
 
-    package { 'nslcd': ensure => installed }
+    exec { 'update-dc3-cert':
+        command => '/usr/sbin/update-ca-certificates -f',
+        subscribe => File['dc3.crt'],
+        refreshonly => true,
+    }
+
+    file { '/etc/nslcd.conf':
+        mode => '640',
+        owner => root,
+        group => nslcd,
+        source => 'puppet:///files/nslcd.conf',
+        notify => Service['nslcd'],
+    }
+
+    package { 'nslcd':
+        ensure => installed,
+        require => File['/etc/nslcd.conf'],
+    }
 
     service { 'nslcd':
         ensure => 'running',
         enable => 'true',
         require => Package['nslcd'],
-    }
-
-    file { '/etc/nslcd.conf':
-        require => Package['nslcd'],
-        mode => 640,
-        owner => root,
-        group => nslcd,
-        source => 'puppet:///files/nslcd.conf',
-        notify => Service['nslcd'],
     }
 
     package { 'nscd': ensure => installed }
@@ -921,7 +999,7 @@ class ldap {
 
     file { '/etc/nscd.conf':
         require => Package['nscd'],
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/nscd.conf',
@@ -931,17 +1009,17 @@ class ldap {
     augeas { 'ldap':
         require => [Package['nslcd']],
         context => '/files/etc/nsswitch.conf',
-        changes => ["set database[. = 'passwd']/service[1] files",
-                    "set database[. = 'passwd']/service[2] ldap",
-                    "set database[. = 'group']/service[1] files",
+        changes => ["set database[. = 'passwd']/service[2] ldap",
+                    "set database[. = 'passwd']/service[1] files",
                     "set database[. = 'group']/service[2] ldap",
-                    "set database[. = 'shadow']/service[1] files",
-                    "set database[. = 'shadow']/service[2] ldap"],
+                    "set database[. = 'group']/service[1] files",
+                    "set database[. = 'shadow']/service[2] ldap",
+                    "set database[. = 'shadow']/service[1] files"],
         notify => Service['nscd'],
     }
 }
 
-class no-ldap {
+class no_ldap {
     file { '/etc/ssl/dc3.cer':
         ensure => absent,
     }
@@ -967,14 +1045,14 @@ class ad inherits ldap {
 
     file { '/etc/krb5.conf':
         require => Package['krb5-user'],
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         source => 'puppet:///files/krb5.conf',
     }
 
      file { '/usr/share/pam-configs/mkhomedir':
-         mode => 644,
+         mode => '644',
          owner => root,
          group => root,
          notify => Exec['/usr/sbin/pam-auth-update'],
@@ -998,16 +1076,18 @@ class sensors {
 
 class essential_soft {
     {% for pkg in ['ntp', 'arping', 'telnet', 'tcpdump', 'mtr-tiny', 'ethtool',
-                   'curl',
-                   'vim', 'git', 'screen', 'augeas-tools', 'dnsutils', 'mc',
-                   'ca-certificates', 'atop', 'lsof', 'strace',
+                   'curl', 'httpie',
+                   'vim', 'git', 'screen', 'tmux', 'augeas-tools', 'dnsutils', 'mc',
+                   'ca-certificates', 'libnss3-tools', 'gnupg',
+                   'lsof', 'strace',
                    'jnettop', 'htop', 'iotop',
-                   'parted', 'gnu-fdisk', 'gdisk', 'lvm2', 'kpartx', 'ldmtool',
-                   'iperf', 'bridge-utils', 'vlan', 'ifenslave-2.6',
-                   'wireless-tools',
-                   'stress', 'hdparm', 'sysbench', 'pv', 'lshw',
+                   'util-linux', 'parted', 'gdisk', 'lvm2', 'kpartx', 'ldmtool',
+                   'iperf', 'bridge-utils', 'vlan', 'ifenslave',
+                   'wireless-tools', 'iw',
+                   'alsa-utils',
+                   'stress', 'hdparm', 'stress-ng', 'pv', 'lshw',
                    'minicom',
-                   'p7zip-full', 'gzip', 'lzma', 'zip', 'unzip'] %}
+                   'p7zip-full', 'gzip', 'lzma', 'zip', 'unzip', 'liblz4-tool', 'pigz'] %}
     package { '{{ pkg }}': ensure => installed }
     {% endfor %}
 }
@@ -1017,7 +1097,7 @@ class locale {
     file { '/etc/locale.gen':
         require => Package['locales'],
         ensure => present,
-        mode => 644,
+        mode => '644',
         owner => root,
         group => root,
         content => 'en_US.UTF-8 UTF-8
@@ -1032,25 +1112,57 @@ ru_RU.UTF-8 UTF-8
     }
 }
 
+class cleanup_puppet {
+    tidy { '/var/lib/puppet/clientbucket':
+        age     => '3d',
+        recurse => true,
+        rmdirs  => true,
+    }
+}
+
 class backup {
     file {'/usr/local/bin/backup.sh':
-        mode => 555,
+        mode => '555',
         owner => root,
         group => root,
         source => "puppet:///files/backup.sh",
     }
 }
 
+class nagios {
+    package { 'libmonitoring-plugin-perl':
+        ensure => installed,
+        install_options => ['--no-install-recommends'],
+    }
+
+    package { 'nagios-plugins-contrib':
+        ensure => installed,
+        install_options => ['--no-install-recommends'],
+    }
+}
+
+class routing {
+    exec { '/sbin/sysctl -p':
+        refreshonly => true,
+    }
+
+    augeas {'sysctl-routing':
+        context => '/files/etc/sysctl.conf',
+        changes => 'set net.ipv4.ip_forward 1',
+        notify => Exec['/sbin/sysctl -p'],
+    }
+}
+
 {% for host in state.hosts %}
 node '{{ host.name }}' {
-    include restart-puppet
+    include restart_puppet
 
     {% if 'hadoop-master' in host.props['services'] %}
         include hadoop_master
         $check_hadoop_master = 'true'
 
         file { '/etc/hadoop/rack.sh':
-          mode => 755,
+          mode => '755',
           owner => root,
           group => root,
           content => '#!/usr/bin/env bash
@@ -1081,7 +1193,7 @@ node '{{ host.name }}' {
                 ensure => directory,
                 owner => root,
                 group => backupers,
-                mode => 770,
+                mode => '770',
             }
 
             file { '/usr/local/bin/backuper.sh':
@@ -1089,11 +1201,11 @@ node '{{ host.name }}' {
                 ensure => present,
                 owner => root,
                 group => backupers,
-                mode => 755,
+                mode => '755',
                 source => 'puppet:///files/backuper.sh',
             }
 
-            {% for bhost, bprops in host.props['backups'][1].iteritems() %}
+            {% for bhost, bprops in host.props['backups'][1].items() %}
                 {% set backed_host = state.find(bhost) %}
                 {% set backup_user = 'backup-{}'.format(backed_host.name) %}
                 {% set backup_dir = '{}/{}'.format(backup_root,
@@ -1116,7 +1228,7 @@ node '{{ host.name }}' {
                     ensure => directory,
                     owner => '{{ backup_user }}',
                     group => backupers,
-                    mode => 700,
+                    mode => '700',
                 }
 
                 file { '{{ backup_dir }}/.ssh':
@@ -1124,7 +1236,7 @@ node '{{ host.name }}' {
                     ensure => directory,
                     owner => '{{ backup_user }}',
                     group => backupers,
-                    mode => 700,
+                    mode => '700',
                 }
             {% endfor %}
 
@@ -1150,7 +1262,7 @@ node '{{ host.name }}' {
                 ensure => present,
                 owner => root,
                 group => backupers,
-                mode => 750,
+                mode => '750',
                 content => '#!/usr/bin/env bash
 set -e
 case "$1" in
@@ -1162,7 +1274,7 @@ case "$1" in
     ;;
     *)
         for spec in {%- for bhost in
-                        host.props['backups'][1].iterkeys() -%}
+                        host.props['backups'][1].keys() -%}
                     {{ ' {}:{}'.format(
                         state.find(bhost).name,
                         state.find(bhost).props.get('ssh_port', 22)) }}
@@ -1202,7 +1314,7 @@ esac
         {% if 'sensors' in host.props %}
             $check_sensors = '{{ '+'.join(host.props['sensors']) }}'
             file { '/usr/lib/nagios/plugins/check_sensors.py':
-                mode => 755,
+                mode => '755',
                 owner => root,
                 group => root,
                 source => "puppet:///files/check_sensors.py",
@@ -1233,10 +1345,10 @@ esac
             $nrpe_procs_warn = '700'
             $nrpe_procs_crit = '1000'
         {% elif 'xen' in host.services %}
-            $nrpe_procs_warn = '300'
-            $nrpe_procs_crit = '500'
+            $nrpe_procs_warn = '500'
+            $nrpe_procs_crit = '600'
         {% else %}
-            $nrpe_procs_warn = '250'
+            $nrpe_procs_warn = '300'
             $nrpe_procs_crit = '400'
         {% endif %}
         {% if 'megaraid' in host.props['services'] %}
@@ -1269,10 +1381,11 @@ esac
             $check_smartmon = 'true'
 
             include exchange
-            include managed-apt
-            include managed-ssh
+            include managed_apt
+            include managed_ssh
             include pam_mount
             include smb
+            include sp
             include teachers
 
             package { 'cron-apt': ensure => absent }
@@ -1281,6 +1394,10 @@ esac
                 content => '{{ host.name }}',
                 notify => Service['exim4'],
             }
+
+            {% if 'routing' in host.services %}
+                include routing
+            {% endif %}
         {% else %}
             $cron_apt_admin = '{%- if 'admin' in host.props -%}
                                    {{ state.users[host.props['admin']].email }}
@@ -1291,7 +1408,8 @@ esac
             {% if 'autoupdate' in host.services %}
                 $autoupdate = 'true'
             {% endif %}
-            include cron-apt
+            include cron_apt
+            include no_sp
             include ssh
         {% endif %}
 
@@ -1300,7 +1418,7 @@ esac
         {% endif %}
 
         {% if 'managed-apt' in host.services %}
-            include managed-apt
+            include managed_apt
         {% endif %}
 
         {% if 'nagios' in host.services %}
@@ -1364,19 +1482,22 @@ esac
         {% elif 'ldap' in host.services %}
             include ldap
         {% else %}
-            include no-ldap
+            include no_ldap
         {% endif %}
 
         {% if 'slurm-master' in host.props['services'] %}
-            include slurm-master
-            $check_slurm_master = 'true'
+            # include slurm_master
+            # $check_slurm_master = 'true'
+            include no_slurm
         {% elif 'slurm-node' in host.props['services'] %}
-            include slurm-node
-            $check_slurm_node = 'true'
+            # include slurm_node
+            # $check_slurm_node = 'true'
+            include no_slurm
         {% elif 'slurm-client' in host.props['services'] %}
-            include slurm-client
+            # include slurm_client
+            include no_slurm
         {% else %}
-            include no-slurm
+            include no_slurm
         {% endif %}
 
         $host = '{{ state.get_canonical_hostname(host) }}'
@@ -1384,16 +1505,18 @@ esac
         $puppet_random_host = 'urgu.org'
         include random
 
-        include smartmon
+        include cleanup_puppet
         include backup
         include btsync
         include disk
         include keyboard
         include locale
+        include nagios
         include ndd
+        include no_distcc
         include nrpe
         include runc_ca
-        include sp
+        include smartmon
         include ssh_known_hosts
         include timezone
     {% endif %}
