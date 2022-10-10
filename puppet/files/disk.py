@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 import glob
@@ -10,13 +10,17 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import urllib2
+import urllib.error
+import urllib.parse
+import urllib.request
 
 
 def get_property(config_url, prop):
-    hostname = subprocess.check_output(['hostname', '-f']).strip().lower()
+    hostname_output = subprocess.check_output(['hostname', '-f'], text=True)
+    hostname = hostname_output.strip().lower()
     url = '{}/{}?{}'.format(config_url, hostname, prop)
-    return json.load(urllib2.urlopen(url))
+    logging.info('Getting %s property from %s', prop, url)
+    return json.load(urllib.request.urlopen(url))
 
 
 def get_pattern(config_url):
@@ -42,7 +46,7 @@ def find_disk(pattern):
     paths = glob.glob(full_pattern)
     if len(paths) != 1:
         logging.error('there must be exactly one disk with pattern %s, '
-                      ' got %s, exiting.'.format(full_pattern, len(paths)))
+                      ' got %s, exiting.', full_pattern, len(paths))
         sys.exit(1)
     return paths[0]
 
@@ -50,7 +54,8 @@ def find_disk(pattern):
 def dmsetup_used_devices():
     device_num_re = re.compile(r'.*\((\d+):(\d+)\).*')
     dmsetup_ls_cmd = ['dmsetup', 'ls', '--tree', '-o', 'ascii']
-    for line in subprocess.check_output(dmsetup_ls_cmd).splitlines():
+    dmsetup_ls_output = subprocess.check_output(dmsetup_ls_cmd, text=True)
+    for line in dmsetup_ls_output.splitlines():
         match = device_num_re.match(line)
         assert match, ('Did not parse device number from dmsetup '
                        'output line: {}'.format(line))
@@ -165,15 +170,16 @@ def get_boot(device, layout):
 
 def write_grub_config(destination, layout):
     with open(destination, 'w') as output:
-        output.write(  # noqa
-"""set menu_color_normal=cyan/blue
+        output.write(
+            """set menu_color_normal=cyan/blue
 set menu_color_highlight=white/blue
 set timeout=5
 
 menuentry 'Network boot' {
     linux16 /ipxe.lkrn
 }
-""")
+"""
+        )
         for num, part in enumerate(layout):
             if 'boot' in part:
                 boot = part['boot']
