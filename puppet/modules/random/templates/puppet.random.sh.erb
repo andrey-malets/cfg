@@ -1,8 +1,17 @@
 #!/bin/bash
 
-[ -f /usr/local/puppet.random ] && \
-    wget -O- <%= @puppet_random_host %>/random 2>/dev/null | \
-        cmp /usr/local/puppet.random &>/dev/null && \
-    /usr/sbin/send_nsca -H <%= @nsca_host %> -d , <<EOF >/dev/null
-<%= @host %>,Puppet client,0,OK
-EOF
+tries=3
+
+if [ -f /usr/local/puppet.random ]; then
+  if curl --retry "$tries" <%= @puppet_random_host %>/random 2>/dev/null | \
+      cmp /usr/local/puppet.random &>/dev/null; then
+    for _ in $(seq "$tries"); do
+      if echo -e "<%= @host %>\tPuppet client\t0\tOK" | \
+          /usr/sbin/send_nsca -H <%= @nsca_host %> >&2; then
+        exit 0
+      fi
+    done
+  fi
+fi
+
+exit 1
