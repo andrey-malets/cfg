@@ -1,7 +1,11 @@
 import os.path
 
 WEB_PATH = '/config'
-ACL = ['d', '212.193.68.251', '10.96.18.2']
+ACL = [
+    'd',
+    'h', 'hamming',
+    'r', 'ritchie',
+]
 
 CFG = os.path.join(os.path.dirname(__file__), os.path.pardir,
                    'cfg', 'conf.yaml')
