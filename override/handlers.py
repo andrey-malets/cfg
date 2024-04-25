@@ -1,6 +1,21 @@
 import config
 import os
 
+
+def get_boot_cfg(default):
+    return '\n'.join([
+        'set name ${hostname}.${domain}',
+        '',
+        f'set default {default}',
+        'isset ${default_${name}} && set default ${default_${name}} ||',
+        'set console console=tty0',
+        (
+            'isset ${console_${name}} && '
+            'set console ${console} console=${console_${name}} ||'
+        ),
+    ])
+
+
 def boot(output, default):
     def handler(state):
         tmp = '{}.new'.format(output)
@@ -13,15 +28,9 @@ def boot(output, default):
                 if 'console' in host.props:
                     print('set console_{} {}'.format(
                         host.name, host.props['console']), file=out)
-            print(f"""
-set name ${{hostname}}.${{domain}}
-
-set default {default}
-isset ${{default_${{name}}}} && set default ${{default_${{name}}}} ||
-
-set console
-isset ${{console_${{name}}}} && set console console=${{console_${{name}}}} ||""", file=out)
+            print(get_boot_cfg(default), file=out)
         os.rename(tmp, output)
     return handler
+
 
 HANDLERS = [boot(config.BOOT, config.BOOT_DEFAULT)]
