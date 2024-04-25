@@ -1,16 +1,17 @@
 import config
-
 import fcntl
-from flask import abort, Flask, request, Response
 from functools import wraps
-from werkzeug.contrib.cache import SimpleCache
-import handlers
+import hashlib
 import json
 import os
 import sys
 import socket
-import subprocess
+
+from flask import abort, Flask, request, Response
+from flask_caching import Cache
 import yaml
+
+import handlers
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
 from parse.group import Group
@@ -23,7 +24,9 @@ def quote_if_needed(value):
 
 application = Flask('override')
 application.debug = True
-cache = SimpleCache()
+
+cache = Cache(config={'CACHE_TYPE': 'simple'})
+cache.init_app(application)
 
 
 class authorized(object):
@@ -61,12 +64,11 @@ class locked(object):
         @wraps(f)
         def wrapper(*args, **kwargs):
             with open(self.lockfile, 'w' if self.write else 'r') as lockfile:
-                with locker(lockfile, fcntl.LOCK_EX if self.write
-                                      else fcntl.LOCK_SH) as lock:
+                mode = fcntl.LOCK_EX if self.write else fcntl.LOCK_SH
+                with locker(lockfile, mode):
                     return f(*args, **kwargs)
 
         return wrapper
-
 
 
 def load_state(state_fn, overrides_fn):
@@ -76,13 +78,15 @@ def load_state(state_fn, overrides_fn):
                      overrides=overrides), overrides
 
 
+def md5(filename):
+    with open(filename, 'rb') as input_:
+        return hashlib.md5(input_.read()).hexdigest()
+
+
 def get_state(state_fn, overrides_fn):
     if not os.path.exists(overrides_fn):
         return load_state(state_fn, overrides_fn)
 
-    def md5(filename):
-        return subprocess.check_output(
-            ['md5sum', filename]).strip().split(' ', 1)[0]
     key = '{}{}'.format(md5(state_fn), md5(overrides_fn))
     rv = cache.get(key)
     if rv is None:
@@ -126,10 +130,10 @@ def get(state, overrides, entity):
     else:
         result = {'props': entity.props, 'name': entity.name}
         if type(entity) is Group:
-            result['hosts'] = map(lambda (host, _): host.name, entity.hosts)
+            result['hosts'] = [spec[0].name for spec in entity.hosts]
         else:
             result['sname'] = entity.sname
-            result['groups'] = sorted(entity.groups)
+            result['groups'] = sorted(entity.groups, key=lambda g: g[0].name)
         return format_to_json(result)
 
 
@@ -139,7 +143,7 @@ def get(state, overrides, entity):
 @with_entity
 def post(state, overrides, entity):
     props = overrides.get(entity)
-    for prop, value in request.form.iteritems():
+    for prop, value in request.form.items():
         if value:
             props[prop] = json.loads(quote_if_needed(value))
         elif prop in props:
